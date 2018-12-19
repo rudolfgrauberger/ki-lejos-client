@@ -13,6 +13,8 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	private final static String COMMAND_LEFT = "LEFT";
 	private final static String COMMAND_RIGHT = "RIGHT";
 	private final static String COMMAND_SENSOR = "SENSOR";
+	private final static String COMMAND_LOOK = "LOOK";
+	private final static String COMMAND_DISCONNECT = "DISCONNECT";
 	
 	private Socket clientSocket;
 	private DataOutputStream outToServer;
@@ -22,6 +24,16 @@ public class LeJOSClient implements ILeJOSClientInterface {
 		clientSocket = new Socket(host, port);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		inFromServer.readLine();
+		/*Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while ( String l = inFromServer.readLine())
+				
+			}
+		};*/
 	}
 	
 	private ILeJOSResult sendCommand(String command, int param) throws IOException {
@@ -30,8 +42,10 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	}
 	
 	private ILeJOSResult sendCommand(String command, String param) throws IOException {
-		outToServer.writeBytes(String.format("%s %s", command, param));
-		String result = inFromServer.readLine();
+		outToServer.writeBytes(String.format("%s %s\r\n", command, param));
+		String line, result = "";
+		
+		while (inFromServer.ready() &&  (line = inFromServer.readLine()) != null) result += line;
 		
 		return LeJOSResultParser.getResult(result);
 	}
@@ -70,14 +84,32 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	}
 	
 	public void close() throws IOException {
-		clientSocket.close();
+		sendCommand(COMMAND_DISCONNECT, "");
 	}
 	
 	public String writeRawData(String data) throws IOException {
-		outToServer.writeBytes(data);
-		String result = inFromServer.readLine();
+		outToServer.writeBytes(data + "\r\n");
+		
+		String line, result = "";
+		
+		while (inFromServer.ready() && (line = inFromServer.readLine()) != null) result += line;
 		
 		return result;
+	}
+
+	@Override
+	public ILeJOSResult sendLookRight() throws IOException {
+		return sendCommand(COMMAND_LOOK, "RIGHT");
+	}
+
+	@Override
+	public ILeJOSResult sendLookCenter() throws IOException {
+		return sendCommand(COMMAND_LOOK, "CENTER");
+	}
+
+	@Override
+	public ILeJOSResult sendLookLeft() throws IOException {
+		return sendCommand(COMMAND_LOOK, "LEFT");
 	}
 
 }

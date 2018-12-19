@@ -8,4 +8,8 @@ public interface ILeJOSClientInterface {
 	ILeJOSResult sendLeft(int angle) throws IOException;
 	ILeJOSResult sendRight(int angle) throws IOException;
 	ILeJOSResult getSensor(String sensortype) throws IOException;
+	ILeJOSResult sendLookRight() throws IOException;
+	ILeJOSResult sendLookCenter() throws IOException;
+	ILeJOSResult sendLookLeft() throws IOException;
+	
 }

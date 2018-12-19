@@ -72,5 +72,12 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	public void close() throws IOException {
 		clientSocket.close();
 	}
+	
+	public String writeRawData(String data) throws IOException {
+		outToServer.writeBytes(data);
+		String result = inFromServer.readLine();
+		
+		return result;
+	}
 
 }

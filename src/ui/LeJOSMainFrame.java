@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -27,6 +28,10 @@ public class LeJOSMainFrame extends JFrame {
 	private JTextField tfHost, tfPort;
 	private JButton bConnect;
 	private JTextArea taLog;
+	
+	LeJOSClient myclient;
+	
+	private Boolean connected = false;
 	
 	public LeJOSMainFrame() {
 		BorderLayout frameLayout = new BorderLayout();
@@ -59,19 +64,42 @@ public class LeJOSMainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				connectToLeJOS();
 				
+				if (connected)
+					disconnectFromLeJOS();
+				else
+					connectToLeJOS();
 			}
 		});
 	}
 	
+	private void switchConnectedButton() {
+		if (connected)
+			bConnect.setText("Disconnect");
+		else
+			bConnect.setText("Connect");
+	}
+	
 	private void connectToLeJOS() {
 		try {
-			LeJOSClient myclient = new LeJOSClient(tfHost.getText(), Integer.parseInt(tfPort.getText()));
-			myclient.sendForward(10);
-			myclient.close();
+			myclient = new LeJOSClient(tfHost.getText(), Integer.parseInt(tfPort.getText()));
+			connected = true;
+
 		} catch (Exception e) {
-			taLog.append(e.getMessage());
+			taLog.append(e.getMessage() + "\n");
 		}
+		
+		switchConnectedButton();
+	}
+	
+	private void disconnectFromLeJOS() {
+		try {
+			myclient.close();
+			connected = false;
+		} catch (IOException e) {
+			taLog.append(e.getMessage() + "\n");
+		}
+		
+		switchConnectedButton();
 	}
 }

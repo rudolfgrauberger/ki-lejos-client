@@ -15,7 +15,7 @@ import lejos.robotics.SampleProvider;
 public class LeJOSMainFrame extends JFrame {
 	
 	public LeJOSMainFrame() {
-		RemoteEV3 ev3;
+		RemoteEV3 ev3 = null;
 		try {
 			ev3 = new RemoteEV3("10.0.1.9");
 		} catch (RemoteException e) {

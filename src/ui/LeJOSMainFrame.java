@@ -90,14 +90,6 @@ public class LeJOSMainFrame extends JFrame {
 		bSend = new JButton("Send");
 		commandPanel.add(bSend, d);
 		
-		/*GridLayout glCommand = new GridLayout(2, 1);
-		commandPanel.setLayout(glCommand);
-		
-		commandPanel.add(taCommands);
-		
-		commandPanel.add(bSend);*/
-		
-		
 		centerPanel.add(commandPanel);
 		taLog = new JTextArea();
 		centerPanel.add(taLog);

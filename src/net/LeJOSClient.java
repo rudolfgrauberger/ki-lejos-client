@@ -2,10 +2,17 @@ package net;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class LeJOSClient implements ILeJOSClientInterface {
+	
+	private final static String COMMAND_FORWARD = "FORWARD";
+	private final static String COMMAND_BACKWARD = "BACKWARD";
+	private final static String COMMAND_LEFT = "LEFT";
+	private final static String COMMAND_RIGHT = "RIGHT";
+	private final static String COMMAND_SENSOR = "SENSOR";
 	
 	private Socket clientSocket;
 	private DataOutputStream outToServer;
@@ -17,35 +24,49 @@ public class LeJOSClient implements ILeJOSClientInterface {
 		inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 	}
 	
+	private ILeJOSResult sendCommand(String command, int param) throws IOException {
+		
+		return sendCommand(command, Integer.toString(param));
+	}
+	
+	private ILeJOSResult sendCommand(String command, String param) throws IOException {
+		outToServer.writeBytes(String.format("%s %s", command, param));
+		String result = inFromServer.readLine();
+		
+		return LeJOSResultParser.getResult(result);
+	}
+	
 	
 	@Override
-	public ILeJOSResult sendForward(int distance) {
+	public ILeJOSResult sendForward(int distance) throws IOException {
 		
-		return new LeJOSFailureResult();
+		return sendCommand(COMMAND_FORWARD, distance);
 	}
 
 
 	@Override
-	public ILeJOSResult sendBackward(int distance) {
-		return new LeJOSFailureResult();
+	public ILeJOSResult sendBackward(int distance) throws IOException {
+		
+		return sendCommand(COMMAND_BACKWARD, distance);
 	}
 
 
 	@Override
-	public ILeJOSResult sendLeft(int angle) {
-		return new LeJOSFailureResult();
+	public ILeJOSResult sendLeft(int angle) throws IOException {
+		
+		return sendCommand(COMMAND_LEFT, angle);
 	}
 
 
 	@Override
-	public ILeJOSResult sendRight(int angle) {
-		return new LeJOSFailureResult();
+	public ILeJOSResult sendRight(int angle) throws IOException {
+		return sendCommand(COMMAND_RIGHT, angle);
 	}
 
 
 	@Override
-	public ILeJOSResult getSensor(String sensortype) {
-		return new LeJOSFailureResult();
+	public ILeJOSResult getSensor(String sensortype) throws IOException {
+		return sendCommand(COMMAND_SENSOR, sensortype);
 	}
 
 }

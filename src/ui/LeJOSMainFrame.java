@@ -15,7 +15,7 @@ import lejos.robotics.SampleProvider;
 public class LeJOSMainFrame extends JFrame {
 	
 	public LeJOSMainFrame() {
-		RemoteEV3 ev3;
+		RemoteEV3 ev3 = null;
 		try {
 			ev3 = new RemoteEV3("10.0.1.9");
 		} catch (RemoteException e) {
@@ -28,15 +28,17 @@ public class LeJOSMainFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Port p = ev3.getPort("S2");
-		SensorModes sensor = new EV3UltrasonicSensor(p);
-		
-		SampleProvider distance = sensor.getMode("Distance");
-		float[] sample = new float[distance.sampleSize()];
-		
-		while(true) {
-			distance.fetchSample(sample, 0);
-			System.out.println(Float.toString(sample[0]));
+		if ( ev3 != null) {
+			Port p = ev3.getPort("S2");
+			SensorModes sensor = new EV3UltrasonicSensor(p);
+			
+			SampleProvider distance = sensor.getMode("Distance");
+			float[] sample = new float[distance.sampleSize()];
+			
+			while(true) {
+				distance.fetchSample(sample, 0);
+				System.out.println(Float.toString(sample[0]));
+			}
 		}
 	}
 }

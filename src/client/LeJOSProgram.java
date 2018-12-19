@@ -1,6 +1,5 @@
 package client;
 
-import lejos.remote.ev3.RemoteEV3;
 import ui.LeJOSMainFrame;
 
 public class LeJOSProgram {

@@ -68,5 +68,9 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	public ILeJOSResult getSensor(String sensortype) throws IOException {
 		return sendCommand(COMMAND_SENSOR, sensortype);
 	}
+	
+	public void close() throws IOException {
+		clientSocket.close();
+	}
 
 }

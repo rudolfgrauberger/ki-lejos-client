@@ -8,26 +8,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import net.LeJOSClient;
+import util.ILeJOSLogger;
 
-public class LeJOSMainFrame extends JFrame {
+public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 	
 	private JTextField tfHost, tfPort;
 	private JButton bConnect, bSend;
@@ -114,10 +106,7 @@ public class LeJOSMainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if (connected)
-					executeScript();
-				else
-					taLog.append("Please connect to LeOS first...\n");
+				executeScript();
 			}
 		});
 	}
@@ -130,14 +119,18 @@ public class LeJOSMainFrame extends JFrame {
 	}
 	
 	private void connectToLeJOS() {
+		
+		String host = tfHost.getText();
+		int port = Integer.parseInt(tfPort.getText());
 		try {
-			myclient = new LeJOSClient(tfHost.getText(), Integer.parseInt(tfPort.getText()));
+			myclient = new LeJOSClient(host, port, this);
 			connected = true;
 
 		} catch (Exception e) {
-			taLog.append(e.getMessage() + "\n");
+			error(e.getMessage());
 		}
 		
+		info(String.format("Conntection established to %s on Port %d...", host, port));
 		switchConnectedButton();
 	}
 	
@@ -146,29 +139,46 @@ public class LeJOSMainFrame extends JFrame {
 			myclient.close();
 			connected = false;
 		} catch (IOException e) {
-			taLog.append(e.getMessage() + "\n");
+			error(e.getMessage());
 		}
 		
 		switchConnectedButton();
 	}
 	
 	private void executeScript() {
-		String[] commands = taCommands.getText().split("\r\n");
+		if (!connected)
+			info("Please connect to LeOS first...");
+		
+		String[] commands = taCommands.getText().split("\r\n|\n");
+		
+		info(String.format("> Script execution started at %s ####",  new java.util.Date().toString()));
 		
 		for (String c : commands) {
 			String result = "";
-			if (c.isEmpty())
+			if (c.trim().isEmpty())
 				continue;
 			
 			try {
-				result = myclient.writeRawData(c);
+				result = myclient.writeRawData(c.trim());
 			} catch (IOException e) {
-				taLog.append(e + "\n");
+				error(e.getMessage());
 			} catch (Exception e) {
-				taLog.append(e + "\n");
+				error(e.getMessage());
 			}
 			
-			taLog.append(result + "\n");
+			info(String.format("%s -> %s", c, result));
 		}
+		
+		info(String.format("> Script execution ended at %s ####", new java.util.Date().toString()));
+	}
+
+	@Override
+	public void info(String message) {
+		taLog.append(message + "\r\n");
+	}
+	
+	@Override
+	public void error(String message) {
+		taLog.append(message + "\r\n");
 	}
 }

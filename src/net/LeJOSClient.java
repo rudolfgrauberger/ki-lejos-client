@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import util.ILeJOSLogger;
+
 public class LeJOSClient implements ILeJOSClientInterface {
 	
 	private final static String COMMAND_FORWARD = "FORWARD";
@@ -19,21 +21,16 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	private Socket clientSocket;
 	private DataOutputStream outToServer;
 	private BufferedReader inFromServer;
+	private ILeJOSLogger logger;
 	
-	public LeJOSClient(String host, int port) throws Exception {
+	public LeJOSClient(String host, int port, ILeJOSLogger logger) throws Exception {
 		clientSocket = new Socket(host, port);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		inFromServer.readLine();
-		/*Runnable r = new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				while ( String l = inFromServer.readLine())
-				
-			}
-		};*/
+		this.logger = logger;
+		
+		String message = getMessageFromServer(true);
+		this.logger.info(message);
 	}
 	
 	private ILeJOSResult sendCommand(String command, int param) throws IOException {
@@ -43,9 +40,8 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	
 	private ILeJOSResult sendCommand(String command, String param) throws IOException {
 		outToServer.writeBytes(String.format("%s %s\r\n", command, param));
-		String line, result = "";
 		
-		while (inFromServer.ready() &&  (line = inFromServer.readLine()) != null) result += line;
+		String result = getMessageFromServer(true);
 		
 		return LeJOSResultParser.getResult(result);
 	}
@@ -87,16 +83,13 @@ public class LeJOSClient implements ILeJOSClientInterface {
 		sendCommand(COMMAND_DISCONNECT, "");
 	}
 	
+	@Override
 	public String writeRawData(String data) throws IOException {
 		outToServer.writeBytes(data + "\r\n");
 		
-		String line, result = "";
-		
-		while (inFromServer.ready() && (line = inFromServer.readLine()) != null) result += line;
-		
-		return result;
+		return getMessageFromServer(true);
 	}
-
+	
 	@Override
 	public ILeJOSResult sendLookRight() throws IOException {
 		return sendCommand(COMMAND_LOOK, "RIGHT");
@@ -110,6 +103,21 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	@Override
 	public ILeJOSResult sendLookLeft() throws IOException {
 		return sendCommand(COMMAND_LOOK, "LEFT");
+	}
+	
+	private String getMessageFromServer(Boolean waitForAnwser) throws IOException {
+		String line, result = "";
+		Boolean firstMessage = !waitForAnwser;
+		
+		while ((!firstMessage || inFromServer.ready()) && (line = inFromServer.readLine()) != null) {
+			if (line.trim().isEmpty())
+				continue;
+			
+			result += line.trim();
+			firstMessage = true;
+		}
+		
+		return result;
 	}
 
 }

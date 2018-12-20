@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -111,6 +112,16 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 				executeScript();
 			}
 		});
+		
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				if (connected)
+					disconnectFromLeJOS();
+				
+				System.exit(0);
+			}
+		});
 	}
 	
 	private void switchConnectedButton() {
@@ -183,4 +194,5 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 	public void error(String message) {
 		taLog.append(message + "\r\n");
 	}
+	
 }

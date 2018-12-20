@@ -84,7 +84,9 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 		
 		centerPanel.add(commandPanel);
 		taLog = new JTextArea();
-		centerPanel.add(taLog);
+		JScrollPane spLog = new JScrollPane(taLog);
+		spLog.setHorizontalScrollBar(null);
+		centerPanel.add(spLog);
 		
 
 		this.add(centerPanel, BorderLayout.CENTER);
@@ -151,7 +153,7 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 		
 		String[] commands = taCommands.getText().split("\r\n|\n");
 		
-		info(String.format("> Script execution started at %s ####",  new java.util.Date().toString()));
+		info(String.format("# Script execution started at %s #",  new java.util.Date().toString()));
 		
 		for (String c : commands) {
 			String result = "";
@@ -169,7 +171,7 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 			info(String.format("%s -> %s", c, result));
 		}
 		
-		info(String.format("> Script execution ended at %s ####", new java.util.Date().toString()));
+		info(String.format("# Script execution ended at %s #", new java.util.Date().toString()));
 	}
 
 	@Override

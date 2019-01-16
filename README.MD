@@ -24,4 +24,4 @@ Einmal zu der LeJOSProgram.java-Datei navigieren und wie im Screenshot einmal da
 
 Anschließend erscheint automatisch die Konfiguration (vgl. 1) und man kann wie gewohnt über die Schaltflächen (vgl. 2) das Programm ausführen oder Debuggen.
 
-![Configuration](doc/img/Config.PNG)
+![Configuration](doc/img/Config.png)

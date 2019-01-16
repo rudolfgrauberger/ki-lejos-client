@@ -1,8 +1,6 @@
-package net;
+package client.net;
 
 public class LeJOSFailureResult implements ILeJOSResult {
-
-	@Override
 	public Boolean isSuccess() {
 		return false;
 	}

@@ -1,4 +1,4 @@
-package net;
+package client.net;
 
 import java.io.IOException;
 

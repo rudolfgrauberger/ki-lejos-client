@@ -1,4 +1,4 @@
-package net;
+package client.net;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import util.ILeJOSLogger;
+import client.util.ILeJOSLogger;
 
 public class LeJOSClient implements ILeJOSClientInterface {
 	
@@ -45,36 +45,26 @@ public class LeJOSClient implements ILeJOSClientInterface {
 		
 		return LeJOSResultParser.getResult(result);
 	}
-	
-	
-	@Override
+
 	public ILeJOSResult sendForward(int distance) throws IOException {
 		
 		return sendCommand(COMMAND_FORWARD, distance);
 	}
 
-
-	@Override
 	public ILeJOSResult sendBackward(int distance) throws IOException {
 		
 		return sendCommand(COMMAND_BACKWARD, distance);
 	}
 
-
-	@Override
 	public ILeJOSResult sendLeft(int angle) throws IOException {
 		
 		return sendCommand(COMMAND_LEFT, angle);
 	}
 
-
-	@Override
 	public ILeJOSResult sendRight(int angle) throws IOException {
 		return sendCommand(COMMAND_RIGHT, angle);
 	}
 
-
-	@Override
 	public ILeJOSResult getSensor(String sensortype) throws IOException {
 		return sendCommand(COMMAND_SENSOR, sensortype);
 	}
@@ -82,25 +72,22 @@ public class LeJOSClient implements ILeJOSClientInterface {
 	public void close() throws IOException {
 		sendCommand(COMMAND_DISCONNECT, "");
 	}
-	
-	@Override
+
 	public String writeRawData(String data) throws IOException {
 		outToServer.writeBytes(data + "\r\n");
 		
 		return getMessageFromServer(true);
 	}
-	
-	@Override
+
 	public ILeJOSResult sendLookRight() throws IOException {
 		return sendCommand(COMMAND_LOOK, "RIGHT");
 	}
 
-	@Override
 	public ILeJOSResult sendLookCenter() throws IOException {
 		return sendCommand(COMMAND_LOOK, "CENTER");
 	}
 
-	@Override
+
 	public ILeJOSResult sendLookLeft() throws IOException {
 		return sendCommand(COMMAND_LOOK, "LEFT");
 	}

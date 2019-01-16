@@ -1,4 +1,4 @@
-package util;
+package client.util;
 
 public interface ILeJOSLogger {
 	

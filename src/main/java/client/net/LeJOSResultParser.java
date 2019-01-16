@@ -1,4 +1,4 @@
-package net;
+package client.net;
 
 public class LeJOSResultParser {
 	

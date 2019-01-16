@@ -1,4 +1,4 @@
-package ui;
+package client.ui;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -16,8 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import net.LeJOSClient;
-import util.ILeJOSLogger;
+import client.net.LeJOSClient;
+import client.util.ILeJOSLogger;
 
 public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 	
@@ -92,8 +92,7 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 		this.add(centerPanel, BorderLayout.CENTER);
 		
 		bConnect.addActionListener(new ActionListener() {
-			
-			@Override
+
 			public void actionPerformed(ActionEvent e) {
 				
 				if (connected)
@@ -104,8 +103,7 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 		});
 		
 		bSend.addActionListener(new ActionListener() {
-			
-			@Override
+
 			public void actionPerformed(ActionEvent e) {
 				
 				executeScript();
@@ -184,12 +182,10 @@ public class LeJOSMainFrame extends JFrame implements ILeJOSLogger {
 		info(String.format("# Script execution ended at %s #", new java.util.Date().toString()));
 	}
 
-	@Override
 	public void info(String message) {
 		taLog.append(message + "\r\n");
 	}
-	
-	@Override
+
 	public void error(String message) {
 		taLog.append(message + "\r\n");
 	}

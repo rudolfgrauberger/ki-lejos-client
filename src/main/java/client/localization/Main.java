@@ -3,9 +3,6 @@ package client.localization;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,24 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 
 /**
@@ -77,6 +62,8 @@ public class Main extends Application  implements IMoveController{
     {
         VBox vLayout = new VBox();
         HBox inputs = new HBox();
+        inputs.setPadding(new Insets(15, 12, 15, 12));
+        inputs.setSpacing(10);
 
         inputs.getChildren().add(new Label("Host:"));
         tfHost = new TextField("10.0.1.9");
@@ -89,14 +76,11 @@ public class Main extends Application  implements IMoveController{
         bConnect = new Button("Connect");
         inputs.getChildren().add(bConnect);
 
-        bConnect.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (connected)
-                    disconnectFromLeJOS();
-                else
-                    connectToLeJOS();
-            }
+        bConnect.setOnAction(event -> {
+            if (connected)
+                disconnectFromLeJOS();
+            else
+                connectToLeJOS();
         });
 
 
@@ -111,15 +95,15 @@ public class Main extends Application  implements IMoveController{
     {
         if (connected)
             disconnectFromLeJOS();
-        else
-            connectToLeJOS();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("MCL GUI - D_GELB");
+        primaryStage.setTitle("LeJOS - Client (Team: D_GELB)");
         Group root = new Group();
         canvas = new Canvas(CANVAS_WITDH, CANVAS_HEIGHT);
+        canvas.setFocusTraversable(true);
+        canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
         drawMap();
 
@@ -129,31 +113,27 @@ public class Main extends Application  implements IMoveController{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent event) {
-                //System.out.println("press");
-                KeyCode w = KeyCode.W;
-                KeyCode a = KeyCode.A;
-                KeyCode s = KeyCode.S;
-                KeyCode d = KeyCode.D;
-                if ( w.equals(event.getCode())){
-                    moveForward(5);
-                }
-                if ( s.equals(event.getCode())){
-                    moveBackward(5);
-                }
-                if ( a.equals(event.getCode())){
-                    turnLeft(Helper.degreeToRadiand(5));
-                }
-                if ( d.equals(event.getCode())){
-                    turnRight(Helper.degreeToRadiand(5));
-                }
-
-                reDraw();
+        scene.setOnKeyPressed(event -> {
+            //System.out.println("press");
+            KeyCode w = KeyCode.W;
+            KeyCode a = KeyCode.A;
+            KeyCode s = KeyCode.S;
+            KeyCode d = KeyCode.D;
+            if ( w.equals(event.getCode())){
+                moveForward(5);
             }
-        });
+            if ( s.equals(event.getCode())){
+                moveBackward(5);
+            }
+            if ( a.equals(event.getCode())){
+                turnLeft(Helper.degreeToRadiand(5));
+            }
+            if ( d.equals(event.getCode())){
+                turnRight(Helper.degreeToRadiand(5));
+            }
 
+            reDraw();
+        });
     }
 
     private void reDraw(){

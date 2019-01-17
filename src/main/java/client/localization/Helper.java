@@ -166,4 +166,12 @@ public class Helper {
         }
         return shortest;
     }
+    public static double getAngleOffset(double angle){
+        if ( angle>=0){
+            return angle % 360;
+        }else{
+            return (Math.PI * 2 ) - Math.abs(angle) % (Math.PI * 2);
+        }
+
+    }
 }

@@ -49,6 +49,7 @@ public class Particle implements IMoveController {
     @Override
     public void turnLeft(double angle) {
         this.rotation -= angle;
+
     }
 
     @Override

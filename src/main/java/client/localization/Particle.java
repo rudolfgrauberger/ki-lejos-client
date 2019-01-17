@@ -35,7 +35,7 @@ public class Particle implements IMoveController {
     }
 
     @Override
-    public void moveForward(int cm) {
+    public void moveForward(double cm) {
         Point currentAbsPosition = Helper.absRealPoint(centerPoint);
         Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , rotation);
         Point newRealPoint = Helper.vectorAdd(currentAbsPosition , maginalizedRotationalPoint);
@@ -43,7 +43,7 @@ public class Particle implements IMoveController {
     }
 
     @Override
-    public void moveBackward(int cm) {
+    public void moveBackward(double cm) {
         Point currentAbsPosition = Helper.absRealPoint(centerPoint);
         Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , rotation);
         Point newRealPoint = Helper.vectorSub(currentAbsPosition , maginalizedRotationalPoint);
@@ -51,13 +51,13 @@ public class Particle implements IMoveController {
     }
 
     @Override
-    public void turnLeft(int angle) {
+    public void turnLeft(double angle) {
         this.rotation -= angle;
 
     }
 
     @Override
-    public void turnRight(int angle) {
+    public void turnRight(double angle) {
         this.rotation+=angle;
         this.rotation = this.rotation % (2*Math.PI);
     }

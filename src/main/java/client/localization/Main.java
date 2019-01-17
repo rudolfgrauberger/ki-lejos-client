@@ -153,10 +153,10 @@ public class Main extends Application{
                 moveBackward(5);
             }
             if ( a.equals(event.getCode())){
-                turnLeft(Helper.degreeToRadiand(5));
+                turnLeft(90);
             }
             if ( d.equals(event.getCode())){
-                turnRight(Helper.degreeToRadiand(5));
+                turnRight(90);
             }
 
             reDraw();
@@ -181,15 +181,15 @@ public class Main extends Application{
         gc.setLineDashes(10);
         for ( Particle particle : m.getParticles()) {
             Point absCenter = particle.centerPoint;
-            Point lineA = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation );
-            Point lineB = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation+ Math.PI);
-
+            Point lineA = Helper.getRotationPoint(particle.centerPoint,5,particle.currentRotation );
+            Point lineB = Helper.getRotationPoint(particle.centerPoint,5,particle.currentRotation+ Math.PI);
+            System.out.println("Rotation: " + particle.currentRotation);
             gc.strokeLine(lineA.x*SCALE_FACTOR, lineA.y*SCALE_FACTOR, lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR);
             gc.fillOval(absCenter.x*SCALE_FACTOR-3, absCenter.y*SCALE_FACTOR-3, 6, 6);
-            gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineB.y*SCALE_FACTOR-2 , 4,4 );
-            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
-            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.leftIntersect.point.x*SCALE_FACTOR,particle.leftIntersect.point.y*SCALE_FACTOR);
-            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.rightIntersect.point.x*SCALE_FACTOR,particle.rightIntersect.point.y*SCALE_FACTOR);
+            gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineA.y*SCALE_FACTOR-2 , 4,4 );
+            gc.strokeLine(absCenter.x*SCALE_FACTOR,absCenter.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
+            gc.strokeLine(absCenter.x*SCALE_FACTOR,absCenter.y*SCALE_FACTOR , particle.leftIntersect.point.x*SCALE_FACTOR,particle.leftIntersect.point.y*SCALE_FACTOR);
+            gc.strokeLine(absCenter.x*SCALE_FACTOR,absCenter.y*SCALE_FACTOR , particle.rightIntersect.point.x*SCALE_FACTOR,particle.rightIntersect.point.y*SCALE_FACTOR);
         }
     }
 

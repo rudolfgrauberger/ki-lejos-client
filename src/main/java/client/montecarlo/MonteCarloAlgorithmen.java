@@ -52,7 +52,7 @@ public class MonteCarloAlgorithmen {
                     partikel.turnRight(90);
                 }
                 looksInDriveDirection = !looksInDriveDirection;
-                System.out.println("right");
+                System.out.println("fuck off");
                 break;
             //turn around
             case 3:

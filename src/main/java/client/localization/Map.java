@@ -116,7 +116,6 @@ public class Map {
                 //double randRotation = (Math.PI *2) * (160.0/360.0);
                 Particle particle = new Particle(this , particleCenter , randRotation);
                 particles.add(particle);
-                addParticle(particle);
                 i++;
             }
         }

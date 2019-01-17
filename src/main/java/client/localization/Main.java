@@ -2,6 +2,7 @@ package client.localization;
 
 import client.montecarlo.IMoveController;
 import client.montecarlo.ActionException;
+import client.montecarlo.MonteCarloAlgorithmen;
 import client.montecarlo.SensorDataSet;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
@@ -22,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
@@ -52,9 +54,12 @@ public class Main extends Application{
     TextField tfPort;
 
     Button bConnect;
+    Button bLocate;
 
     LeJOSClient myclient;
-    private Boolean connected = false;
+    NoLogger logger = new NoLogger();
+
+    MonteCarloAlgorithmen monte;
 
     private VBox getMainLayout()
     {
@@ -74,8 +79,21 @@ public class Main extends Application{
         bConnect = new Button("Connect");
         inputs.getChildren().add(bConnect);
 
+        bLocate = new Button("Locate");
+        bLocate.setOnAction(event -> {
+           try {
+              monte.run(new ArrayList<IMoveController>());
+           } catch (ActionException e) {
+              new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+           }
+        });
+
+       switchConnectedButton();
+
+        inputs.getChildren().add(bLocate);
+
         bConnect.setOnAction(event -> {
-            if (connected)
+            if (myclient.isConnected())
                 disconnectFromLeJOS();
             else
                 connectToLeJOS();
@@ -91,7 +109,7 @@ public class Main extends Application{
     @Override
     public void stop()
     {
-        if (connected)
+        if (myclient.isConnected())
             disconnectFromLeJOS();
     }
 
@@ -99,6 +117,10 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LeJOS - Client (Team: D_GELB)");
         Group root = new Group();
+
+        myclient = new LeJOSClient(logger);
+        monte = new MonteCarloAlgorithmen(myclient);
+
         canvas = new Canvas(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
@@ -212,7 +234,10 @@ public class Main extends Application{
     }
 
     private void switchConnectedButton() {
-        if (connected)
+
+        bLocate.setDisable(!myclient.isConnected());
+
+        if (myclient.isConnected())
             bConnect.setText("Disconnect");
         else
             bConnect.setText("Connect");
@@ -223,9 +248,7 @@ public class Main extends Application{
         String host = tfHost.getText();
         int port = Integer.parseInt(tfPort.getText());
         try {
-            NoLogger logger = new NoLogger();
-            myclient = new LeJOSClient(host, port, logger);
-            connected = true;
+            myclient.connect(host, port);
 
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
@@ -236,8 +259,7 @@ public class Main extends Application{
 
     private void disconnectFromLeJOS() {
         try {
-            myclient.close();
-            connected = false;
+            myclient.disconnect();
         } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }

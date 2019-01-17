@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Handler;
 
 public class Map {
 
@@ -109,8 +110,7 @@ public class Map {
     private void initParticles ( ){
         Random rand = new Random();
         for (int i = 0; i < PARTICLE_COUNT;) {
-            Point particleCenter = new Point(rand.nextDouble(), rand.nextDouble());//rand.nextInt(150));
-            //Point particleCenter = new Point(0.65, 0.15);//rand.nextInt(150));
+            Point particleCenter = new Point(rand.nextInt(Helper.BUILDING_WIDTH_CM), rand.nextInt(Helper.BUILDING_HEIGHT_CM));//rand.nextInt(150));
             if (checkPointInsidePolygon(particleCenter)) {
                 double randRotation = rand.nextDouble() * Math.PI  * 2;
                 //double randRotation = (Math.PI *2) * (160.0/360.0);

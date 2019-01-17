@@ -89,6 +89,7 @@ public class Main extends Application{
                   movables.add(m);
               }
               monte.run(movables);
+              reDraw();
            } catch (ActionException e) {
               new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
            }
@@ -187,6 +188,8 @@ public class Main extends Application{
             gc.fillOval(absCenter.x*SCALE_FACTOR-3, absCenter.y*SCALE_FACTOR-3, 6, 6);
             gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineB.y*SCALE_FACTOR-2 , 4,4 );
             gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
+            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.leftIntersect.point.x*SCALE_FACTOR,particle.leftIntersect.point.y*SCALE_FACTOR);
+            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.rightIntersect.point.x*SCALE_FACTOR,particle.rightIntersect.point.y*SCALE_FACTOR);
         }
     }
 

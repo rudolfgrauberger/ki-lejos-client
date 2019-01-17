@@ -80,7 +80,7 @@ public class Helper {
         return new Point( real.x / BUILDING_WIDTH_CM, real.y / BUILDING_HEIGHT_CM );
     }
     static double degreeToRadiand(int degree){
-        return ( (double) degree/360.0) * Math.PI * 2;
+        return ( (double) degree/360.0) * (Math.PI * 2);
     }
 
     public static ArrayList<Point> rayCast (Point from , Point to , ArrayList<Line> lines){

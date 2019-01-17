@@ -14,7 +14,7 @@ import java.util.logging.Handler;
 
 public class Map {
 
-    public static final int PARTICLE_COUNT = 3;
+    public static final int PARTICLE_COUNT = 1;
 
 
 

@@ -83,14 +83,17 @@ public class Particle implements IMoveController {
 
     @Override
     public void turnLeft(double angle) {
-        this.currentRotation -= angle;
+        double radiand = Helper.degreeToRadiand((int)angle);
+        this.currentRotation+=radiand;
+        //this.currentRotation -= angle;
         move();
     }
 
     @Override
     public void turnRight(double angle) {
-        this.currentRotation+=angle;
-        this.currentRotation = this.currentRotation % (2*Math.PI);
+        double radiand = Helper.degreeToRadiand((int)angle);
+        this.currentRotation+=radiand;
+        //this.currentRotation = this.currentRotation % (2*Math.PI);
         move();
     }
     @Override

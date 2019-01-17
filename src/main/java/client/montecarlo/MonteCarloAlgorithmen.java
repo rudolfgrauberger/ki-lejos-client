@@ -34,6 +34,7 @@ public class MonteCarloAlgorithmen {
             //case forward
             case 0:
                 moveForward();
+                System.out.println("forward");
                 break;
             //turn left
             case 1:
@@ -42,6 +43,7 @@ public class MonteCarloAlgorithmen {
                     partikel.turnLeft(90);
                 }
                 looksInDriveDirection = !looksInDriveDirection;
+                System.out.println("left");
                 break;
             //turn right
             case 2:
@@ -50,6 +52,7 @@ public class MonteCarloAlgorithmen {
                     partikel.turnRight(90);
                 }
                 looksInDriveDirection = !looksInDriveDirection;
+                System.out.println("right");
                 break;
             //turn around
             case 3:
@@ -57,6 +60,7 @@ public class MonteCarloAlgorithmen {
                 for (IMoveController partikel: partikels) {
                     partikel.turnRight(180);
                 }
+                System.out.println("back");
                 break;
         }
     }

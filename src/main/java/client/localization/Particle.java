@@ -4,7 +4,6 @@ import client.montecarlo.ActionException;
 import client.montecarlo.IMoveController;
 
 import java.util.ArrayList;
-import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
 
 public class Particle implements IMoveController {

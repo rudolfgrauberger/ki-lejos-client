@@ -63,6 +63,10 @@ public class MonteCarloAlgorithmen {
     private void compareSensorDatas() throws ActionException{
         this.latestRoboterDataSet = roboter.getSensorDataSet();
 
+        System.out.println("Front"+latestRoboterDataSet.getDistanceFront());
+        System.out.println("Left"+latestRoboterDataSet.getDistanceLeft());
+        System.out.println("Right"+latestRoboterDataSet.getDistanceRight());
+
         for (IMoveController partikel: partikels) {
             SensorDataSet partikelDataSet = partikel.getSensorDataSet();
             //compare and set new Belife
@@ -94,9 +98,9 @@ public class MonteCarloAlgorithmen {
             looksInDriveDirection = true;
         }
         //get distance
-        int distance = 190;
+        int distance = 50;
         if(latestRoboterDataSet.getDistanceFront() < distance)
-            distance = (int)latestRoboterDataSet.getDistanceFront() - 10;
+            distance = (int)latestRoboterDataSet.getDistanceFront() - 5;
         //move
         roboter.moveForward(distance);
         for (IMoveController partikel: partikels) {

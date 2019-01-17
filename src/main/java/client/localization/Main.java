@@ -1,5 +1,6 @@
 package client.localization;
 
+import client.montecarlo.IMoveController;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
 import javafx.application.Application;
@@ -37,7 +38,7 @@ import java.io.IOException;
  *          Ein Sample wird zufällig aus der Menge genommen
  *          Der importance factor gibt die Auswahlwahrscheinlichkeit.
  */
-public class Main extends Application  implements IMoveController{
+public class Main extends Application {
     //private static final int SCALE_FACTOR = 1;
     public static final int CANVAS_WITDH = 1200;
     public static final int CANVAS_HEIGHT = 300;
@@ -170,7 +171,6 @@ public class Main extends Application  implements IMoveController{
     }
 
 
-    @Override
     public void moveForward(int cm) {
         for ( Particle particle : m.getParticles()){
             particle.moveForward(cm);
@@ -179,7 +179,6 @@ public class Main extends Application  implements IMoveController{
         }
     }
 
-    @Override
     public void moveBackward(int cm) {
         for ( Particle particle : m.getParticles()){
             particle.moveBackward(cm);
@@ -187,18 +186,16 @@ public class Main extends Application  implements IMoveController{
         }
     }
 
-    @Override
     public void turnLeft(double angle) {
         for ( Particle particle : m.getParticles()){
-            particle.turnLeft(angle);
+            particle.turnLeft((int)angle);
             particle.calculateIntersect(m.getLines());
         }
     }
 
-    @Override
     public void turnRight(double angle) {
         for ( Particle particle : m.getParticles()){
-            particle.turnRight(angle);
+            particle.turnRight((int)angle);
             particle.calculateIntersect(m.getLines());
         }
     }

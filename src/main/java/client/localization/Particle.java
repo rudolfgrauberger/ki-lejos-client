@@ -1,6 +1,11 @@
 package client.localization;
 
+import client.montecarlo.ActionException;
+import client.montecarlo.IMoveController;
+
 import java.util.ArrayList;
+import client.montecarlo.IMoveController;
+import client.montecarlo.SensorDataSet;
 
 public class Particle implements IMoveController {
 
@@ -47,15 +52,20 @@ public class Particle implements IMoveController {
     }
 
     @Override
-    public void turnLeft(double angle) {
+    public void turnLeft(int angle) {
         this.rotation -= angle;
 
     }
 
     @Override
-    public void turnRight(double angle) {
+    public void turnRight(int angle) {
         this.rotation+=angle;
         this.rotation = this.rotation % (2*Math.PI);
+    }
+
+    @Override
+    public SensorDataSet getSensorDataSet() throws ActionException {
+        return null;
     }
 
     class Intersect{

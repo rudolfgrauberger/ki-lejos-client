@@ -9,9 +9,9 @@ import java.net.Socket;
 import client.montecarlo.ActionException;
 import client.montecarlo.SensorDataSet;
 import client.util.ILeJOSLogger;
-import client.montecarlo.IRobotController;
+import client.montecarlo.IMoveController;
 
-public class LeJOSClient implements ILeJOSClientInterface, IRobotController {
+public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 	
 	private final static String COMMAND_FORWARD = "FORWARD";
 	private final static String COMMAND_BACKWARD = "BACKWARD";

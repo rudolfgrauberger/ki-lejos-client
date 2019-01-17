@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import client.montecarlo.ActionException;
+import client.montecarlo.SensorDataSet;
 import client.util.ILeJOSLogger;
+import client.montecarlo.IRobotController;
 
-public class LeJOSClient implements ILeJOSClientInterface {
+public class LeJOSClient implements ILeJOSClientInterface, IRobotController {
 	
 	private final static String COMMAND_FORWARD = "FORWARD";
 	private final static String COMMAND_BACKWARD = "BACKWARD";
@@ -107,4 +110,89 @@ public class LeJOSClient implements ILeJOSClientInterface {
 		return result;
 	}
 
+	@Override
+	public SensorDataSet getSensorDataSet() throws ActionException {
+		String sensorType = "DISTANCE";
+		Double distLeft;
+		Double distRight;
+		Double distCenter;
+		ILeJOSResult moveResult;
+		try {
+			//center
+			moveResult = sendLookCenter();
+			if(!moveResult.isSuccess())
+				throw new ActionException("Robot move");
+			distCenter = getDoubleFromResult(getSensor(sensorType));
+			//left
+			moveResult = sendLookLeft();
+			if(!moveResult.isSuccess())
+				throw new ActionException("Robot move");
+			distLeft = getDoubleFromResult(getSensor(sensorType));
+			//right
+			moveResult = sendLookRight();
+			if(!moveResult.isSuccess())
+				throw new ActionException("Robot move");
+			distRight = getDoubleFromResult(getSensor(sensorType));
+			return new SensorDataSet(distCenter,distLeft,distRight);
+		}
+		catch (IOException ex){
+			throw new ActionException("Connection");
+		}
+	}
+
+	@Override
+	public void moveForward(int cm) throws ActionException {
+
+		try {
+			ILeJOSResult result = sendForward(cm);
+			if(!result.isSuccess())
+				throw new ActionException("Robot move");
+		}
+		catch (IOException ex){
+			throw new ActionException("Connection");
+		}
+	}
+
+	@Override
+	public void moveBackward(int cm) throws ActionException {
+		try {
+			ILeJOSResult result = sendBackward(cm);
+			if(!result.isSuccess())
+				throw new ActionException("Robot move");
+		}
+		catch (IOException ex){
+			throw new ActionException("Connection");
+		}
+	}
+
+	@Override
+	public void turnLeft(int angle) throws ActionException {
+		try {
+			ILeJOSResult result = sendLeft(angle);
+			if(!result.isSuccess())
+				throw new ActionException("Robot move");
+		}
+		catch (IOException ex){
+			throw new ActionException("Connection");
+		}
+	}
+
+	@Override
+	public void turnRight(int angle) throws ActionException {
+		try {
+			ILeJOSResult result = sendRight(angle);
+			if(!result.isSuccess())
+				throw new ActionException("Robot move");
+		}
+		catch (IOException ex){
+			throw new ActionException("Connection");
+		}
+	}
+
+	private double getDoubleFromResult(ILeJOSResult result) throws ActionException {
+		if(!result.isSuccess())
+			throw new ActionException("Robot sensor");
+		else
+			return ((LeJOSDoubleResult) result).getValue();
+	}
 }

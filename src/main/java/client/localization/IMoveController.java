@@ -5,5 +5,4 @@ public interface IMoveController {
     void moveBackward ( int cm);
     void turnLeft ( double angle );
     void turnRight ( double angle );
-
 }

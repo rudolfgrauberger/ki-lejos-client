@@ -8,7 +8,7 @@ public class MonteCarloAlgorithmen {
 
     public boolean running;
 
-    public void run (IRobotController roboter, ArrayList<IMoveController> partikels){
+    public void run (IMoveController roboter, ArrayList<IMoveController> partikels){
 
     }
 }

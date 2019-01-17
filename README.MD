@@ -18,7 +18,7 @@ git clone https://github.com/rudolfgrauberger/ki-lejos-client.git
 
 ## 4. Konfiguration anlegen
 
-Einmal zu der LeJOSProgram.java-Datei navigieren und wie im Screenshot einmal das Ausführen.
+Einmal zu der Main.java-Datei navigieren und wie im Screenshot einmal das Ausführen.
 
 ![Add Config](doc/img/AddConfig.PNG)
 

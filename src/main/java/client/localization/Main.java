@@ -41,14 +41,8 @@ import java.io.IOException;
  *          Der importance factor gibt die Auswahlwahrscheinlichkeit.
  */
 public class Main extends Application{
-    //private static final int SCALE_FACTOR = 1;
-    public static final int CANVAS_WITDH = 1200;
-    public static final int CANVAS_HEIGHT = 300;
 
-    public static final int SVG_MAX_WIDTH = 600;
-    public static final int SVG_MAX_HEIGHT = 150;
-
-    Map m = new Map(SVG_MAX_WIDTH, SVG_MAX_HEIGHT);
+    Map m = new Map(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
 
     GraphicsContext gc;
     Canvas canvas;
@@ -104,7 +98,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LeJOS - Client (Team: D_GELB)");
         Group root = new Group();
-        canvas = new Canvas(CANVAS_WITDH, CANVAS_HEIGHT);
+        canvas = new Canvas(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
@@ -140,7 +134,7 @@ public class Main extends Application{
     }
 
     private void reDraw(){
-        gc.clearRect(0,0,CANVAS_WITDH,CANVAS_HEIGHT);
+        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM,Helper.BUILDING_HEIGHT_CM);
         drawMap();
     }
     private void drawMap() {

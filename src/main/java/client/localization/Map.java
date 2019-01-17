@@ -13,9 +13,6 @@ import java.util.Random;
 
 public class Map {
 
-
-    public static final int SVG_MAX_WIDTH = 600;
-    public static final int SVG_MAX_HEIGHT = 150;
     public static final int PARTICLE_COUNT = 1;
 
 

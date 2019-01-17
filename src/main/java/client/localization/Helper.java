@@ -5,9 +5,6 @@ import java.util.ArrayList;
 public class Helper {
 
 
-    public static final int CANVAS_WITDH = 1200;
-    public static final int CANVAS_HEIGHT = 300;
-
     public static final int BUILDING_WIDTH_CM = 600;
     public static final int BUILDING_HEIGHT_CM = 150;
 

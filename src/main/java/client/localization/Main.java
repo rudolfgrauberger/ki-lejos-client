@@ -2,6 +2,7 @@ package client.localization;
 
 import client.montecarlo.IMoveController;
 import client.montecarlo.ActionException;
+import client.montecarlo.MonteCarloAlgorithmen;
 import client.montecarlo.SensorDataSet;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
@@ -11,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -21,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
@@ -51,10 +54,12 @@ public class Main extends Application{
     TextField tfPort;
 
     Button bConnect;
+    Button bLocate;
 
     LeJOSClient myclient;
-    private Boolean connected = false;
-    private final static int SCALE_FACTOR = 2;
+    NoLogger logger = new NoLogger();
+
+    MonteCarloAlgorithmen monte;
 
     private VBox getMainLayout()
     {
@@ -74,8 +79,21 @@ public class Main extends Application{
         bConnect = new Button("Connect");
         inputs.getChildren().add(bConnect);
 
+        bLocate = new Button("Locate");
+        bLocate.setOnAction(event -> {
+           try {
+              monte.run(new ArrayList<IMoveController>());
+           } catch (ActionException e) {
+              new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+           }
+        });
+
+       switchConnectedButton();
+
+        inputs.getChildren().add(bLocate);
+
         bConnect.setOnAction(event -> {
-            if (connected)
+            if (myclient.isConnected())
                 disconnectFromLeJOS();
             else
                 connectToLeJOS();
@@ -91,7 +109,7 @@ public class Main extends Application{
     @Override
     public void stop()
     {
-        if (connected)
+        if (myclient.isConnected())
             disconnectFromLeJOS();
     }
 
@@ -99,7 +117,11 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LeJOS - Client (Team: D_GELB)");
         Group root = new Group();
-        canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
+
+        myclient = new LeJOSClient(logger);
+        monte = new MonteCarloAlgorithmen(myclient);
+
+        canvas = new Canvas(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
@@ -135,7 +157,7 @@ public class Main extends Application{
     }
 
     private void reDraw(){
-        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM*SCALE_FACTOR,Helper.BUILDING_HEIGHT_CM*SCALE_FACTOR);
+        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM,Helper.BUILDING_HEIGHT_CM);
         drawMap();
     }
     private void drawMap() {
@@ -146,7 +168,7 @@ public class Main extends Application{
         gc.setLineDashes(0);
 
         for ( Line l : m.getLines()){
-            gc.strokeLine(l.x1*SCALE_FACTOR , l.y1*SCALE_FACTOR , l.x2*SCALE_FACTOR , l.y2*SCALE_FACTOR);
+            gc.strokeLine(l.x1 , l.y1 , l.x2 , l.y2);
         }
 
         gc.setLineDashes(10);
@@ -155,10 +177,10 @@ public class Main extends Application{
             Point lineA = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation );
             Point lineB = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation+ Math.PI);
 
-            gc.strokeLine(lineA.x*SCALE_FACTOR, lineA.y*SCALE_FACTOR, lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR);
-            gc.fillOval(absCenter.x*SCALE_FACTOR-3, absCenter.y*SCALE_FACTOR-3, 6, 6);
-            gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineB.y*SCALE_FACTOR-2 , 4,4 );
-            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
+            gc.strokeLine(lineA.x, lineA.y, lineB.x,lineB.y);
+            gc.fillOval(absCenter.x-3, absCenter.y-3, 6, 6);
+            gc.fillOval( lineA.x-2 , lineB.y-2 , 4,4 );
+            gc.strokeLine(lineB.x,lineB.y , particle.forwardIntersect.point.x,particle.forwardIntersect.point.y);
         }
     }
 
@@ -172,11 +194,10 @@ public class Main extends Application{
         for ( Particle particle : m.getParticles()){
             try {
                 particle.moveForward(cm);
-                //particle.calculateIntersect(particle.currentRotation, m.getLines());
             } catch (ActionException e) {
                 e.printStackTrace();
             }
-
+            particle.calculateIntersect(particle.currentRotation, m.getLines());
 
         }
     }
@@ -185,11 +206,10 @@ public class Main extends Application{
         for ( Particle particle : m.getParticles()){
             try {
                 particle.moveBackward(cm);
-                //particle.calculateIntersect(particle.currentRotation, m.getLines());
             } catch (ActionException e) {
                 e.printStackTrace();
             }
-
+            particle.calculateIntersect(particle.currentRotation, m.getLines());
         }
     }
 
@@ -197,14 +217,14 @@ public class Main extends Application{
     public void turnLeft(double angle){
         for ( Particle particle : m.getParticles()){
             particle.turnLeft(angle);
-            //particle.calculateIntersects();
+            particle.calculateIntersects(m.getLines());
         }
     }
 
     public void turnRight(double angle)  {
         for ( Particle particle : m.getParticles()){
             particle.turnRight(angle);
-            //particle.calculateIntersects();
+            particle.calculateIntersects(m.getLines());
         }
     }
 
@@ -214,7 +234,10 @@ public class Main extends Application{
     }
 
     private void switchConnectedButton() {
-        if (connected)
+
+        bLocate.setDisable(!myclient.isConnected());
+
+        if (myclient.isConnected())
             bConnect.setText("Disconnect");
         else
             bConnect.setText("Connect");
@@ -225,25 +248,20 @@ public class Main extends Application{
         String host = tfHost.getText();
         int port = Integer.parseInt(tfPort.getText());
         try {
-            NoLogger logger = new NoLogger();
-            myclient = new LeJOSClient(host, port, logger);
-            connected = true;
+            myclient.connect(host, port);
 
         } catch (Exception e) {
-            //console.log(e.getMessage());
-            //error(e.getMessage());
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
 
-        //info(String.format("Conntection established to %s on Port %d...", host, port));
         switchConnectedButton();
     }
 
     private void disconnectFromLeJOS() {
         try {
-            myclient.close();
-            connected = false;
+            myclient.disconnect();
         } catch (IOException e) {
-            //error(e.getMessage());
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
 
         switchConnectedButton();

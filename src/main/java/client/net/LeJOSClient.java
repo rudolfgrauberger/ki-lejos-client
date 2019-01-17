@@ -26,14 +26,8 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 	private BufferedReader inFromServer;
 	private ILeJOSLogger logger;
 
-	public LeJOSClient(String host, int port, ILeJOSLogger logger) throws Exception {
-		clientSocket = new Socket(host, port);
-		outToServer = new DataOutputStream(clientSocket.getOutputStream());
-		inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+	public LeJOSClient(ILeJOSLogger logger) throws Exception {
 		this.logger = logger;
-
-		String message = getMessageFromServer(true);
-		this.logger.info(message);
 	}
 
 	private ILeJOSResult sendCommand(String command, int param) throws IOException {
@@ -70,10 +64,6 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 
 	public ILeJOSResult getSensor(String sensortype) throws IOException {
 		return sendCommand(COMMAND_SENSOR, sensortype);
-	}
-
-	public void close() throws IOException {
-		sendCommand(COMMAND_DISCONNECT, "");
 	}
 
 	public String writeRawData(String data) throws IOException {
@@ -195,5 +185,29 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 			throw new ActionException("Robot sensor");
 		else
 			return ((LeJOSDoubleResult) result).getValue();
+	}
+
+	@Override
+	public void connect(String host, int port) throws IOException {
+		clientSocket = new Socket(host, port);
+		outToServer = new DataOutputStream(clientSocket.getOutputStream());
+		inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		this.logger = logger;
+
+		String message = getMessageFromServer(true);
+		this.logger.info(message);
+	}
+
+	@Override
+	public void disconnect() throws IOException {
+		ILeJOSResult result = sendCommand(COMMAND_DISCONNECT, "");
+		clientSocket = null;
+		outToServer = null;
+		inFromServer = null;
+	}
+
+	@Override
+	public boolean isConnected() {
+		return clientSocket != null;
 	}
 }

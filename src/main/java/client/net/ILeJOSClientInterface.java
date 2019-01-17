@@ -11,5 +11,9 @@ public interface ILeJOSClientInterface {
 	ILeJOSResult sendLookRight() throws IOException;
 	ILeJOSResult sendLookCenter() throws IOException;
 	ILeJOSResult sendLookLeft() throws IOException;
-	String writeRawData(String data) throws IOException;	
+	String writeRawData(String data) throws IOException;
+
+	void connect(String host, int port) throws IOException;
+	void disconnect() throws IOException;
+	boolean isConnected();
 }

@@ -37,9 +37,6 @@ public class Particle implements IMoveController {
         return  intersect;
         //System.out.println("Distance: "+  realIntersectDistance );
     }
-    /*public void setIntersect( Point relPoint, Point absPoint , double absDistance){
-        intersectPoint = new Intersect(relPoint , absPoint , absDistance);
-    }*/
     private Point absRealPoint ( Point relPoint ){
         return new Point(relPoint.x , relPoint.y);
     }
@@ -52,22 +49,6 @@ public class Particle implements IMoveController {
             this.distance = distance;
         }
     }
-
-    /*@Override
-    void moveForward ( double cm ) throws ActionException;{
-        Point currentAbsPosition = centerPoint;
-        Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
-        Point newRealPoint = Helper.vectorAdd(currentAbsPosition , maginalizedRotationalPoint);
-        centerPoint = Helper.getRelByRealPoint(newRealPoint);
-    }*/
-
-    /*@Override
-    public void moveBackward(double cm) {
-        Point currentAbsPosition = centerPoint;
-        Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
-        Point newRealPoint = Helper.vectorSub(currentAbsPosition , maginalizedRotationalPoint);
-        centerPoint = Helper.getRelByRealPoint(newRealPoint);
-    }*/
 
     @Override
     public void moveForward(double cm) throws ActionException {

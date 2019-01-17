@@ -1,0 +1,42 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="150px" width="600px" style="zoom: 1;" >
+  <g id="main_group">
+    <line stroke="#000000" y1="50px" x1="0px" y2="50px" x2="100px"></line>
+    <line stroke="#000000" y1="50px" x1="100px" y2="0px" x2="100px"></line>
+    <line stroke="#000000" y1="0px" x1="100px" y2="0px" x2="150px"></line>
+    <line stroke="#000000" y1="0px" x1="150px" y2="50px" x2="150px"></line>
+    <line stroke="#000000" y1="50px" x1="150px" y2="50px" x2="200px"></line>  
+    <line stroke="#000000" y1="50px" x1="200px" y2="0px" x2="200px"></line>  
+    <line stroke="#000000" y1="0px" x1="200px" y2="0px" x2="300px"></line>  
+    <line stroke="#000000" y1="0px" x1="300px" y2="50px" x2="300px"></line>  
+    <line stroke="#000000" y1="50px" x1="300px" y2="50px" x2="350px"></line>  
+    <line stroke="#000000" y1="50px" x1="350px" y2="0px" x2="350px"></line>  
+    <line stroke="#000000" y1="0px" x1="350px" y2="0px" x2="400px"></line>  
+    <line stroke="#000000" y1="0px" x1="400px" y2="50px" x2="400px"></line>  
+    <line stroke="#000000" y1="50px" x1="400px" y2="50px" x2="450px"></line>  
+    <line stroke="#000000" y1="50px" x1="450px" y2="0px" x2="450px"></line>  
+    <line stroke="#000000" y1="0px" x1="450px" y2="0px" x2="550px"></line>  
+    <line stroke="#000000" y1="0px" x1="550px" y2="50px" x2="550px"></line>  
+    <line stroke="#000000" y1="50px" x1="550px" y2="50px" x2="600px"></line>  
+    <line stroke="#000000" y1="50px" x1="600px" y2="100px" x2="600px"></line>  
+    <line stroke="#000000" y1="100px" x1="600px" y2="100px" x2="500px"></line>  
+    <line stroke="#000000" y1="100px" x1="500px" y2="150px" x2="500px"></line>  
+    <line stroke="#000000" y1="150px" x1="500px" y2="150px" x2="450px"></line>  
+    <line stroke="#000000" y1="150px" x1="450px" y2="100px" x2="450px"></line>  
+    <line stroke="#000000" y1="100px" x1="450px" y2="100px" x2="400px"></line>  
+    <line stroke="#000000" y1="100px" x1="400px" y2="150px" x2="400px"></line>  
+    <line stroke="#000000" y1="150px" x1="400px" y2="150px" x2="300px"></line>  
+    <line stroke="#000000" y1="150px" x1="300px" y2="100px" x2="300px"></line>  
+    <line stroke="#000000" y1="100px" x1="300px" y2="100px" x2="250px"></line>  
+    <line stroke="#000000" y1="100px" x1="250px" y2="150px" x2="250px"></line>  
+    <line stroke="#000000" y1="150px" x1="250px" y2="150px" x2="200px"></line>  
+    <line stroke="#000000" y1="150px" x1="200px" y2="100px" x2="200px"></line>  
+    <line stroke="#000000" y1="100px" x1="200px" y2="100px" x2="100px"></line>  
+    <line stroke="#000000" y1="100px" x1="100px" y2="150px" x2="100px"></line>  
+    <line stroke="#000000" y1="150px" x1="100px" y2="150px" x2="50px"></line>  
+    <line stroke="#000000" y1="150px" x1="50px" y2="100px" x2="50px"></line>  
+    <line stroke="#000000" y1="100px" x1="50px" y2="100px" x2="0px"></line>  
+    <line stroke="#000000" y1="100px" x1="0px" y2="50px" x2="0px"></line>  
+</g>
+
+</svg>

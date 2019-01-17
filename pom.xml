@@ -24,7 +24,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>LeJOSProgram</mainClass>
+                            <mainClass>client.localization.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

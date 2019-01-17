@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -227,11 +228,9 @@ public class Main extends Application{
             connected = true;
 
         } catch (Exception e) {
-            //console.log(e.getMessage());
-            //error(e.getMessage());
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
 
-        //info(String.format("Conntection established to %s on Port %d...", host, port));
         switchConnectedButton();
     }
 
@@ -240,7 +239,7 @@ public class Main extends Application{
             myclient.close();
             connected = false;
         } catch (IOException e) {
-            //error(e.getMessage());
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
         }
 
         switchConnectedButton();

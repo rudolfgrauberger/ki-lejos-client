@@ -13,9 +13,6 @@ import java.util.Random;
 
 public class Map {
 
-
-    public static final int SVG_MAX_WIDTH = 600;
-    public static final int SVG_MAX_HEIGHT = 150;
     public static final int PARTICLE_COUNT = 1;
 
 
@@ -100,8 +97,8 @@ public class Map {
                     int y1 = Integer.parseInt(nnm.getNamedItem("y1").getNodeValue().replace("px", ""));
                     int x2 = Integer.parseInt(nnm.getNamedItem("x2").getNodeValue().replace("px", ""));
                     int y2 = Integer.parseInt(nnm.getNamedItem("y2").getNodeValue().replace("px", ""));
-                    addLine(new Line(Helper.rel(SVG_MAX_WIDTH, x1), Helper.rel(SVG_MAX_HEIGHT , y1), Helper.rel(SVG_MAX_WIDTH , x2), Helper.rel(SVG_MAX_HEIGHT , y2)));
-                    addPoint(new Point(Helper.rel(SVG_MAX_WIDTH , x1), Helper.rel(SVG_MAX_HEIGHT , y1)));
+                    addLine(new Line(x1, y1,x2, y2));
+                    addPoint(new Point(x1, y1));
                 }
             }
         } catch (Exception e) {
@@ -118,7 +115,7 @@ public class Map {
                 double randRotation = rand.nextDouble() * Math.PI  * 2;
                 //double randRotation = (Math.PI *2) * (160.0/360.0);
                 Particle particle = new Particle(particleCenter , randRotation);
-                particle.calculateIntersect(getLines());
+                particle.calculateIntersects(getLines());
                 particles.add(particle);
                 addParticle(particle);
                 i++;

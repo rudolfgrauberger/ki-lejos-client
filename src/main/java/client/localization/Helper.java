@@ -5,35 +5,33 @@ import java.util.ArrayList;
 public class Helper {
 
 
-    public static final int CANVAS_WITDH = 1200;
-    public static final int CANVAS_HEIGHT = 300;
-
-    public static final int SVG_MAX_WIDTH = 600;
-    public static final int SVG_MAX_HEIGHT = 150;
-    public static final int PARTICLE_COUNT = 1;
     public static final int BUILDING_WIDTH_CM = 600;
     public static final int BUILDING_HEIGHT_CM = 150;
-    public static final int PARTICLE_LENGTH = 7;
+
+
+    // Math constancs
+
+    public static final double QUARTER_CIRCLE = Math.PI / 2.0;
 
     /*
         Helpers´ by the master himself ;)
      */
-    public static double rel ( int max , int cur){
+    /*public static double rel ( int max , int cur){
         return ( (double) cur / (double) max);
-    }
-    public static int abs ( int  max , double rel){
+    }/*
+    /*public static int abs ( int  max , double rel){
         return  ( int ) ((double)max * (double)rel);
-    }
-    public static int absMapX ( double rel){
+    }*/
+    /*public static int absMapX ( double rel){
         int a = abs(CANVAS_WITDH ,rel);
         return  a;
-    }
-    public static int absMapY ( double rel){
+    }*/
+    /*public static int absMapY ( double rel){
         return  abs(CANVAS_HEIGHT, rel);
-    }
-    static public Point absMapPoint ( Point point){
+    }*/
+    /*static public Point absMapPoint ( Point point){
         return new Point(abs(CANVAS_WITDH , point.x) , abs(CANVAS_HEIGHT , point.y));
-    }
+    }*/
     static public double distance ( Point a , Point b ){
         return Math.sqrt(Math.pow(b.x - a.x , 2) + Math.pow(b.y - a.y , 2) );
     }
@@ -43,21 +41,21 @@ public class Helper {
         return dPoint <= dline;
     }
     static public double getAbsDistance(Point relA , Point relB){
-        int pixelsA_X = absMapX(relA.x);
-        int pixelsA_Y = absMapY(relA.y);
-        int pixelsB_X = absMapX(relB.x);
-        int pixelsB_Y = absMapX(relB.y);
+        double pixelsA_X = relA.x;
+        double pixelsA_Y = relA.y;
+        double pixelsB_X = relB.x;
+        double pixelsB_Y = relB.y;
         return distance(new Point(pixelsA_X , pixelsA_Y) ,  new Point(pixelsB_X , pixelsB_Y));
     }
-    static public double absRealX ( double rel){
+    /*static public double absRealX ( double rel){
         return rel * (double)BUILDING_WIDTH_CM;
-    }
-    static public double absRealY ( double rel){
+    }*/
+    /*static public double absRealY ( double rel){
         return rel * (double)BUILDING_HEIGHT_CM;
-    }
-    static public Point absRealPoint ( Point relPoint ){
+    }*/
+    /*static public Point absRealPoint ( Point relPoint ){
         return new Point(absRealX(relPoint.x) , absRealY(relPoint.y));
-    }
+    }*/
     static public double length(Point v){
         return Math.sqrt( Math.pow(v.x , 2) + Math.pow(v.y , 2) );
     }
@@ -165,5 +163,13 @@ public class Helper {
             }
         }
         return shortest;
+    }
+    public static double getAngleOffset(double angle){
+        if ( angle>=0){
+            return angle % 360;
+        }else{
+            return (Math.PI * 2 ) - Math.abs(angle) % (Math.PI * 2);
+        }
+
     }
 }

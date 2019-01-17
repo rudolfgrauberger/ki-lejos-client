@@ -1,5 +1,8 @@
 package client.localization;
 
+import client.montecarlo.IMoveController;
+import client.montecarlo.ActionException;
+import client.montecarlo.SensorDataSet;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
 import javafx.application.Application;
@@ -38,15 +41,9 @@ import java.io.IOException;
  *          Ein Sample wird zufällig aus der Menge genommen
  *          Der importance factor gibt die Auswahlwahrscheinlichkeit.
  */
-public class Main extends Application  implements IMoveController{
-    //private static final int SCALE_FACTOR = 1;
-    public static final int CANVAS_WITDH = 1200;
-    public static final int CANVAS_HEIGHT = 300;
+public class Main extends Application{
 
-    public static final int SVG_MAX_WIDTH = 600;
-    public static final int SVG_MAX_HEIGHT = 150;
-
-    Map m = new Map(SVG_MAX_WIDTH, SVG_MAX_HEIGHT);
+    Map m = new Map(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
 
     GraphicsContext gc;
     Canvas canvas;
@@ -102,7 +99,7 @@ public class Main extends Application  implements IMoveController{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LeJOS - Client (Team: D_GELB)");
         Group root = new Group();
-        canvas = new Canvas(CANVAS_WITDH, CANVAS_HEIGHT);
+        canvas = new Canvas(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
@@ -138,7 +135,7 @@ public class Main extends Application  implements IMoveController{
     }
 
     private void reDraw(){
-        gc.clearRect(0,0,CANVAS_WITDH,CANVAS_HEIGHT);
+        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM,Helper.BUILDING_HEIGHT_CM);
         drawMap();
     }
     private void drawMap() {
@@ -149,19 +146,19 @@ public class Main extends Application  implements IMoveController{
         gc.setLineDashes(0);
 
         for ( Line l : m.getLines()){
-            gc.strokeLine(Helper.absMapX(l.x1) , Helper.absMapY(l.y1) , Helper.absMapX(l.x2 ), Helper.absMapY(l.y2));
+            gc.strokeLine(l.x1 , l.y1 , l.x2 , l.y2);
         }
 
         gc.setLineDashes(10);
         for ( Particle particle : m.getParticles()) {
-            Point absCenter = Helper.absMapPoint(particle.centerPoint);
-            Point lineA = Helper.getRotationPoint(Helper.absMapPoint(particle.centerPoint),0.005,particle.rotation);
-            Point lineB = Helper.getRotationPoint(Helper.absMapPoint(particle.centerPoint),0.005,particle.rotation + Math.PI);
+            Point absCenter = particle.centerPoint;
+            Point lineA = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation );
+            Point lineB = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation+ Math.PI);
 
             gc.strokeLine(lineA.x, lineA.y, lineB.x,lineB.y);
             gc.fillOval(absCenter.x-3, absCenter.y-3, 6, 6);
             gc.fillOval( lineA.x-2 , lineB.y-2 , 4,4 );
-            gc.strokeLine(lineB.x,lineB.y , Helper.absMapPoint(particle.intersectPoint.relPoint).x,Helper.absMapPoint(particle.intersectPoint.relPoint).y);
+            gc.strokeLine(lineB.x,lineB.y , particle.forwardIntersect.point.x,particle.forwardIntersect.point.y);
         }
     }
 
@@ -171,37 +168,47 @@ public class Main extends Application  implements IMoveController{
     }
 
 
-    @Override
-    public void moveForward(int cm) {
+    public void moveForward(double cm) {
         for ( Particle particle : m.getParticles()){
-            particle.moveForward(cm);
-            particle.calculateIntersect(m.getLines());
+            try {
+                particle.moveForward(cm);
+            } catch (ActionException e) {
+                e.printStackTrace();
+            }
+            particle.calculateIntersect(particle.currentRotation, m.getLines());
 
         }
     }
 
-    @Override
-    public void moveBackward(int cm) {
+    public void moveBackward(double cm) {
         for ( Particle particle : m.getParticles()){
-            particle.moveBackward(cm);
-            particle.calculateIntersect(m.getLines());
+            try {
+                particle.moveBackward(cm);
+            } catch (ActionException e) {
+                e.printStackTrace();
+            }
+            particle.calculateIntersect(particle.currentRotation, m.getLines());
         }
     }
 
-    @Override
-    public void turnLeft(double angle) {
+
+    public void turnLeft(double angle){
         for ( Particle particle : m.getParticles()){
             particle.turnLeft(angle);
-            particle.calculateIntersect(m.getLines());
+            particle.calculateIntersects(m.getLines());
         }
     }
 
-    @Override
-    public void turnRight(double angle) {
+    public void turnRight(double angle)  {
         for ( Particle particle : m.getParticles()){
             particle.turnRight(angle);
-            particle.calculateIntersect(m.getLines());
+            particle.calculateIntersects(m.getLines());
         }
+    }
+
+
+    public SensorDataSet getSensorDataSet() throws ActionException {
+        return null;
     }
 
     private void switchConnectedButton() {

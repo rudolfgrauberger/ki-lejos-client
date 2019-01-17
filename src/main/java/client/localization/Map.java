@@ -14,7 +14,7 @@ import java.util.logging.Handler;
 
 public class Map {
 
-    public static final int PARTICLE_COUNT = 1;
+    public static final int PARTICLE_COUNT = 3;
 
 
 
@@ -114,8 +114,7 @@ public class Map {
             if (checkPointInsidePolygon(particleCenter)) {
                 double randRotation = rand.nextDouble() * Math.PI  * 2;
                 //double randRotation = (Math.PI *2) * (160.0/360.0);
-                Particle particle = new Particle(particleCenter , randRotation);
-                particle.calculateIntersects(getLines());
+                Particle particle = new Particle(this , particleCenter , randRotation);
                 particles.add(particle);
                 addParticle(particle);
                 i++;

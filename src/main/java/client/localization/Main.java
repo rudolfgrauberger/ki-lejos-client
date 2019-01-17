@@ -54,6 +54,7 @@ public class Main extends Application{
 
     LeJOSClient myclient;
     private Boolean connected = false;
+    private final static int SCALE_FACTOR = 2;
 
     private VBox getMainLayout()
     {
@@ -98,7 +99,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LeJOS - Client (Team: D_GELB)");
         Group root = new Group();
-        canvas = new Canvas(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
+        canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
@@ -134,7 +135,7 @@ public class Main extends Application{
     }
 
     private void reDraw(){
-        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM,Helper.BUILDING_HEIGHT_CM);
+        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM*SCALE_FACTOR,Helper.BUILDING_HEIGHT_CM*SCALE_FACTOR);
         drawMap();
     }
     private void drawMap() {
@@ -145,7 +146,7 @@ public class Main extends Application{
         gc.setLineDashes(0);
 
         for ( Line l : m.getLines()){
-            gc.strokeLine(l.x1 , l.y1 , l.x2 , l.y2);
+            gc.strokeLine(l.x1*SCALE_FACTOR , l.y1*SCALE_FACTOR , l.x2*SCALE_FACTOR , l.y2*SCALE_FACTOR);
         }
 
         gc.setLineDashes(10);
@@ -154,10 +155,10 @@ public class Main extends Application{
             Point lineA = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation );
             Point lineB = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation+ Math.PI);
 
-            gc.strokeLine(lineA.x, lineA.y, lineB.x,lineB.y);
-            gc.fillOval(absCenter.x-3, absCenter.y-3, 6, 6);
-            gc.fillOval( lineA.x-2 , lineB.y-2 , 4,4 );
-            gc.strokeLine(lineB.x,lineB.y , particle.forwardIntersect.point.x,particle.forwardIntersect.point.y);
+            gc.strokeLine(lineA.x*SCALE_FACTOR, lineA.y*SCALE_FACTOR, lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR);
+            gc.fillOval(absCenter.x*SCALE_FACTOR-3, absCenter.y*SCALE_FACTOR-3, 6, 6);
+            gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineB.y*SCALE_FACTOR-2 , 4,4 );
+            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
         }
     }
 
@@ -171,10 +172,11 @@ public class Main extends Application{
         for ( Particle particle : m.getParticles()){
             try {
                 particle.moveForward(cm);
+                //particle.calculateIntersect(particle.currentRotation, m.getLines());
             } catch (ActionException e) {
                 e.printStackTrace();
             }
-            particle.calculateIntersect(particle.currentRotation, m.getLines());
+
 
         }
     }
@@ -183,10 +185,11 @@ public class Main extends Application{
         for ( Particle particle : m.getParticles()){
             try {
                 particle.moveBackward(cm);
+                //particle.calculateIntersect(particle.currentRotation, m.getLines());
             } catch (ActionException e) {
                 e.printStackTrace();
             }
-            particle.calculateIntersect(particle.currentRotation, m.getLines());
+
         }
     }
 
@@ -194,14 +197,14 @@ public class Main extends Application{
     public void turnLeft(double angle){
         for ( Particle particle : m.getParticles()){
             particle.turnLeft(angle);
-            particle.calculateIntersects(m.getLines());
+            //particle.calculateIntersects();
         }
     }
 
     public void turnRight(double angle)  {
         for ( Particle particle : m.getParticles()){
             particle.turnRight(angle);
-            particle.calculateIntersects(m.getLines());
+            //particle.calculateIntersects();
         }
     }
 

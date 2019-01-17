@@ -26,6 +26,9 @@ public class Particle implements IMoveController {
         Intersect forwardIntersect = calculateIntersect(Helper.getAngleOffset(currentRotation) ,lines );
         Intersect rightIntersect = calculateIntersect(Helper.getAngleOffset(currentRotation + Helper.QUARTER_CIRCLE) ,lines );
 
+        this.forwardIntersect = forwardIntersect;
+        this.leftIntersect = leftIntersect;
+        this.rightIntersect= rightIntersect;
     }
     public Intersect calculateIntersect(double rotation, ArrayList<Line> lines ){
         Point direction = (Helper.getRotationPoint(centerPoint,0.050 , rotation));

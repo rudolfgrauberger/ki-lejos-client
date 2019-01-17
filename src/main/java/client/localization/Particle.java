@@ -5,6 +5,7 @@ import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Particle implements IMoveController {
 
@@ -14,6 +15,9 @@ public class Particle implements IMoveController {
     Intersect forwardIntersect;
     Intersect leftIntersect;
     Intersect rightIntersect;
+
+    Random r = new Random();
+    double belief = r.nextDouble();
 
 
 

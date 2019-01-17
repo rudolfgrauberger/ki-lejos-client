@@ -1,5 +1,7 @@
 package client.montecarlo;
 
+import client.localization.Helper;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -66,12 +68,24 @@ public class MonteCarloAlgorithmen {
     }
     private void compareSensorDatas() throws ActionException{
         this.latestRoboterDataSet = roboter.getSensorDataSet();
-
         System.out.println("Front"+latestRoboterDataSet.getDistanceFront());
         System.out.println("Left"+latestRoboterDataSet.getDistanceLeft());
         System.out.println("Right"+latestRoboterDataSet.getDistanceRight());
 
+        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft() , 200);
+        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront() , 200);
+        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight() , 200);
+
+        /**
+         *  TODO: fill getSensorData
+         */
+
         for (IMoveController partikel: partikels) {
+            double partikeLeft =  Helper.lerp(partikel.getSensorDataSet().getDistanceLeft() , 200);
+            double partikeFront = Helper.lerp(partikel.getSensorDataSet().getDistanceFront() , 200);
+            double partikeRight = Helper.lerp(partikel.getSensorDataSet().getDistanceRight() , 200);
+
+            double bel = 00000000000000000;
             SensorDataSet partikelDataSet = partikel.getSensorDataSet();
             //compare and set new Belife
         }

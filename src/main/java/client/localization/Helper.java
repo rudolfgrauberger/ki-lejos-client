@@ -174,4 +174,7 @@ public class Helper {
         }
 
     }
+    public static double lerp ( double value , double max ){
+        return Math.min(value , max) / max;
+    }
 }

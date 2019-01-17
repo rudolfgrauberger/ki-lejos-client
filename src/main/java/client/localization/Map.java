@@ -80,9 +80,9 @@ public class Map {
         return c;
     }
     private void initWall(){
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        //ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
-        File map = new File(classLoader.getResource("map.svg").getFile());
+        File map = new File("map.svg");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         Document doc;
         Random rand = new Random();

@@ -1,6 +1,7 @@
 package client.localization;
 
 import client.montecarlo.ActionException;
+import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
 
 import java.util.ArrayList;
@@ -42,9 +43,34 @@ public class Particle implements IMoveController {
     private Point absRealPoint ( Point relPoint ){
         return new Point(relPoint.x , relPoint.y);
     }
+    class Intersect{
+        Point point;
+        double distance;
+
+        public Intersect(Point point, double distance) {
+            this.point = point;
+            this.distance = distance;
+        }
+    }
+
+    /*@Override
+    void moveForward ( double cm ) throws ActionException;{
+        Point currentAbsPosition = centerPoint;
+        Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
+        Point newRealPoint = Helper.vectorAdd(currentAbsPosition , maginalizedRotationalPoint);
+        centerPoint = Helper.getRelByRealPoint(newRealPoint);
+    }*/
+
+    /*@Override
+    public void moveBackward(double cm) {
+        Point currentAbsPosition = centerPoint;
+        Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
+        Point newRealPoint = Helper.vectorSub(currentAbsPosition , maginalizedRotationalPoint);
+        centerPoint = Helper.getRelByRealPoint(newRealPoint);
+    }*/
 
     @Override
-    public void moveForward(int cm) {
+    public void moveForward(double cm) throws ActionException {
         Point currentAbsPosition = centerPoint;
         Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
         Point newRealPoint = Helper.vectorAdd(currentAbsPosition , maginalizedRotationalPoint);
@@ -52,7 +78,7 @@ public class Particle implements IMoveController {
     }
 
     @Override
-    public void moveBackward(int cm) {
+    public void moveBackward(double cm) throws ActionException {
         Point currentAbsPosition = centerPoint;
         Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
         Point newRealPoint = Helper.vectorSub(currentAbsPosition , maginalizedRotationalPoint);
@@ -74,15 +100,5 @@ public class Particle implements IMoveController {
     @Override
     public SensorDataSet getSensorDataSet() throws ActionException {
         return null;
-    }
-
-    class Intersect{
-        Point point;
-        double distance;
-
-        public Intersect(Point point, double distance) {
-            this.point = point;
-            this.distance = distance;
-        }
     }
 }

@@ -100,5 +100,8 @@ public class Particle implements IMoveController {
 
     public void move(){
         boolean inPolygon = map.checkPointInsidePolygon(this.centerPoint);
+        if ( inPolygon) {
+            calculateIntersects();
+        }
     }
 }

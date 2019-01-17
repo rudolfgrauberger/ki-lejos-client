@@ -45,7 +45,8 @@ import java.util.ArrayList;
  */
 public class Main extends Application{
 
-    Map m = new Map(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
+    public static int SCALE_FACTOR = 2;
+    Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
     GraphicsContext gc;
     Canvas canvas;
@@ -69,7 +70,7 @@ public class Main extends Application{
         inputs.setSpacing(10);
 
         inputs.getChildren().add(new Label("Host:"));
-        tfHost = new TextField("10.0.1.9");
+        tfHost = new TextField("10.0.1.15");
         inputs.getChildren().add(tfHost);
 
         inputs.getChildren().add(new Label("Port:"));
@@ -82,7 +83,12 @@ public class Main extends Application{
         bLocate = new Button("Locate");
         bLocate.setOnAction(event -> {
            try {
-              monte.run(new ArrayList<IMoveController>());
+              ArrayList<IMoveController> movables = new ArrayList<>();
+              for ( Particle p : m.getParticles()){
+                  IMoveController m = p;
+                  movables.add(m);
+              }
+              monte.run(movables);
            } catch (ActionException e) {
               new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
            }
@@ -121,7 +127,7 @@ public class Main extends Application{
         myclient = new LeJOSClient(logger);
         monte = new MonteCarloAlgorithmen(myclient);
 
-        canvas = new Canvas(Helper.BUILDING_WIDTH_CM, Helper.BUILDING_HEIGHT_CM);
+        canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
@@ -157,7 +163,7 @@ public class Main extends Application{
     }
 
     private void reDraw(){
-        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM,Helper.BUILDING_HEIGHT_CM);
+        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM*SCALE_FACTOR,Helper.BUILDING_HEIGHT_CM*SCALE_FACTOR);
         drawMap();
     }
     private void drawMap() {
@@ -168,7 +174,7 @@ public class Main extends Application{
         gc.setLineDashes(0);
 
         for ( Line l : m.getLines()){
-            gc.strokeLine(l.x1 , l.y1 , l.x2 , l.y2);
+            gc.strokeLine(l.x1*SCALE_FACTOR , l.y1*SCALE_FACTOR , l.x2*SCALE_FACTOR , l.y2*SCALE_FACTOR);
         }
 
         gc.setLineDashes(10);
@@ -177,10 +183,10 @@ public class Main extends Application{
             Point lineA = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation );
             Point lineB = Helper.getRotationPoint(particle.centerPoint,0.005,particle.currentRotation+ Math.PI);
 
-            gc.strokeLine(lineA.x, lineA.y, lineB.x,lineB.y);
-            gc.fillOval(absCenter.x-3, absCenter.y-3, 6, 6);
-            gc.fillOval( lineA.x-2 , lineB.y-2 , 4,4 );
-            gc.strokeLine(lineB.x,lineB.y , particle.forwardIntersect.point.x,particle.forwardIntersect.point.y);
+            gc.strokeLine(lineA.x*SCALE_FACTOR, lineA.y*SCALE_FACTOR, lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR);
+            gc.fillOval(absCenter.x*SCALE_FACTOR-3, absCenter.y*SCALE_FACTOR-3, 6, 6);
+            gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineB.y*SCALE_FACTOR-2 , 4,4 );
+            gc.strokeLine(lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
         }
     }
 
@@ -217,14 +223,14 @@ public class Main extends Application{
     public void turnLeft(double angle){
         for ( Particle particle : m.getParticles()){
             particle.turnLeft(angle);
-            particle.calculateIntersects(m.getLines());
+            particle.calculateIntersects();
         }
     }
 
     public void turnRight(double angle)  {
         for ( Particle particle : m.getParticles()){
             particle.turnRight(angle);
-            particle.calculateIntersects(m.getLines());
+            particle.calculateIntersects();
         }
     }
 

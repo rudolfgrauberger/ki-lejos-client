@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import client.localization.IMoveController;
 import client.montecarlo.ActionException;
 import client.montecarlo.SensorDataSet;
 import client.util.ILeJOSLogger;
+import client.montecarlo.IMoveController;
 
-public class LeJOSClient implements ILeJOSClientInterface, IMoveController{
+public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 	
 	private final static String COMMAND_FORWARD = "FORWARD";
 	private final static String COMMAND_BACKWARD = "BACKWARD";
@@ -166,9 +166,9 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController{
 	}
 
 	@Override
-	public void turnLeft(double angle) throws ActionException {
+	public void turnLeft(int angle) throws ActionException {
 		try {
-			ILeJOSResult result = sendLeft((int)angle);
+			ILeJOSResult result = sendLeft(angle);
 			if(!result.isSuccess())
 				throw new ActionException("Robot move");
 		}
@@ -178,9 +178,9 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController{
 	}
 
 	@Override
-	public void turnRight(double angle) throws ActionException {
+	public void turnRight(int angle) throws ActionException {
 		try {
-			ILeJOSResult result = sendRight((int)angle);
+			ILeJOSResult result = sendRight(angle);
 			if(!result.isSuccess())
 				throw new ActionException("Robot move");
 		}
@@ -188,7 +188,6 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController{
 			throw new ActionException("Connection");
 		}
 	}
-
 
 	private double getDoubleFromResult(ILeJOSResult result) throws ActionException {
 		if(!result.isSuccess())

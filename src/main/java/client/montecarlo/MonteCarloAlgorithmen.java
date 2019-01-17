@@ -1,7 +1,5 @@
 package client.montecarlo;
 
-import client.localization.IMoveController;
-
 import java.util.ArrayList;
 
 public class MonteCarloAlgorithmen {

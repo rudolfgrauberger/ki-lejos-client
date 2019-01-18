@@ -13,11 +13,9 @@ public class MonteCarloAlgorithmen {
     private IMoveController roboter;
     private ArrayList<IMoveController> partikels;
     private SensorDataSet latestRoboterDataSet;
-    private boolean looksInDriveDirection;
 
     public MonteCarloAlgorithmen(IMoveController roboter) {
         this.roboter = roboter;
-        looksInDriveDirection = true;
     }
 
     public ArrayList<IMoveController> run (ArrayList<IMoveController> partikels) throws ActionException{
@@ -27,7 +25,6 @@ public class MonteCarloAlgorithmen {
         moveCommand();
         compareSensorDatas();
         removePartikels();
-        addPartikels();
 
         return  this.partikels;
     }
@@ -35,6 +32,7 @@ public class MonteCarloAlgorithmen {
     private void moveCommand() throws ActionException{
         Random random = new Random();
         int commandNumber = random.nextInt(1);
+        int angle;
         switch (commandNumber){
             //case forward
             case 0:
@@ -43,34 +41,21 @@ public class MonteCarloAlgorithmen {
                 break;
             //turn left
             case 1:
-                roboter.turnLeft(90);
+                angle = random.nextInt(180);
+                roboter.turnLeft(angle);
                 for (IMoveController partikel: partikels) {
-                    partikel.turnLeft(90);
+                    partikel.turnLeft(angle);
                 }
-                looksInDriveDirection = !looksInDriveDirection;
                 System.out.println("left");
                 break;
             //turn right
             case 2:
-                roboter.turnRight(90);
+                angle = random.nextInt(180);
+                roboter.turnRight(angle);
                 for (IMoveController partikel: partikels) {
-                    partikel.turnRight(90);
+                    partikel.turnRight(angle);
                 }
-                looksInDriveDirection = !looksInDriveDirection;
-                System.out.println("fuck off");
-                break;
-            //turn around
-            case 3:
-                roboter.turnRight(180);
-                for (IMoveController partikel: partikels) {
-                    partikel.turnRight(180);
-                }
-                System.out.println("around");
-                break;
-            //case forward
-            case 4:
-                moveForward();
-                System.out.println("forward");
+                System.out.println("right");
                 break;
         }
     }
@@ -103,32 +88,23 @@ public class MonteCarloAlgorithmen {
     private void removePartikels(){
 
     }
-    private void addPartikels(){
-
-    }
     //move controlles
     private void moveForward() throws ActionException{
-        Random random = new Random();
-        //turn to forward direction
-        if(!looksInDriveDirection){
-            if( random.nextInt(2) > 0) {
-                roboter.turnLeft(90);
-                for (IMoveController partikel: partikels) {
-                    partikel.turnLeft(90);
-                }
-            }
-            else {
-                roboter.turnRight(90);
-                for (IMoveController partikel: partikels) {
-                    partikel.turnRight(90);
-                }
-            }
-            looksInDriveDirection = true;
-        }
         //get distance
-        int distance = 50;
-        if((latestRoboterDataSet.getDistanceFront()*100) < distance)
-            distance = (int)((latestRoboterDataSet.getDistanceFront() - 0.05)*100);
+        int distance = 30;
+        //if at end turn around
+        if((latestRoboterDataSet.getDistanceFront()*100) < 10)
+        {
+            roboter.turnRight(180);
+            for (IMoveController partikel: partikels) {
+                partikel.turnRight(180);
+            }
+            System.out.println("around");
+        }
+        else if((latestRoboterDataSet.getDistanceFront()*100) < distance-5)
+        {
+            distance = (int)((latestRoboterDataSet.getDistanceFront()*100)-5);
+        }
         //move
         roboter.moveForward(distance);
         for (IMoveController partikel: partikels) {

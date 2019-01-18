@@ -29,7 +29,7 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        int commandNumber = random.nextInt(5);
+        int commandNumber = random.nextInt(1);
         switch (commandNumber){
             //case forward
             case 0:
@@ -108,12 +108,13 @@ public class MonteCarloAlgorithmen {
         }
         //get distance
         int distance = 50;
-        if(latestRoboterDataSet.getDistanceFront() < distance)
-            distance = (int)latestRoboterDataSet.getDistanceFront() - 5;
+        if((latestRoboterDataSet.getDistanceFront()*100) < distance)
+            distance = (int)((latestRoboterDataSet.getDistanceFront() - 0.05)*100);
         //move
         roboter.moveForward(distance);
         for (IMoveController partikel: partikels) {
             partikel.moveForward(distance);
         }
+        System.out.println("distance"+distance+"; rob "+latestRoboterDataSet.getDistanceFront());
     }
 }

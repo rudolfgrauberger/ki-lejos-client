@@ -80,9 +80,9 @@ public class MonteCarloAlgorithmen {
         System.out.println("Left"+latestRoboterDataSet.getDistanceLeft());
         System.out.println("Right"+latestRoboterDataSet.getDistanceRight());
 
-        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft() , MAX_DISTANCE_FORWARD);
-        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront() , MAX_DISTANCE_FORWARD);
-        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight() , MAX_DISTANCE_FORWARD);
+        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft()*100 , MAX_DISTANCE_FORWARD);
+        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront()*100 , MAX_DISTANCE_FORWARD);
+        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight()*100 , MAX_DISTANCE_FORWARD);
 
         /**
          *  TODO: fill getSensorData
@@ -93,7 +93,10 @@ public class MonteCarloAlgorithmen {
             double particleFront = Helper.lerp(particle.getSensorDataSet().getDistanceFront() , MAX_DISTANCE_FORWARD);
             double particleRight = Helper.lerp(particle.getSensorDataSet().getDistanceRight() , MAX_DISTANCE_FORWARD);
 
-            double bel = particleLeft * robotLeft + particleFront * robotFront + particleRight * robotRight;
+            double q1 = Math.min(particleLeft , robotLeft) / Math.max(particleLeft , robotLeft);
+            double q2 = Math.min(particleFront , robotFront) / Math.max(particleFront , robotFront);
+            double q3 = Math.min(particleRight , robotRight) / Math.max(particleRight , robotRight);
+            double bel = q1 * q2 * q3;
             particle.setBelief(bel);
         }
     }

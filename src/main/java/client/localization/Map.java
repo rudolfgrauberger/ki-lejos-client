@@ -14,8 +14,7 @@ import java.util.logging.Handler;
 
 public class Map {
 
-    public static final int PARTICLE_COUNT = 1000;
-
+    public static final int PARTICLE_COUNT = 10;
 
 
     private ArrayList<Line> lines = new ArrayList<Line>();
@@ -30,54 +29,55 @@ public class Map {
 
         initWall();
         initParticles();
+        System.out.println("Initialized Particles");
     }
 
-    public void addLine(Line l){
+    public void addLine(Line l) {
         lines.add(l);
     }
 
-    public void addPoint(Point p){
+    public void addPoint(Point p) {
         polygon.add(p);
     }
 
-    public void addParticle(Particle p){
+    public void addParticle(Particle p) {
         particles.add(p);
     }
 
-    public ArrayList<Line> getLines(){
+    public ArrayList<Line> getLines() {
         return lines;
     }
 
-    public ArrayList<Particle> getParticles(){
+    public ArrayList<Particle> getParticles() {
         return particles;
     }
 
-    public ArrayList<Point> getPolygon(){
+    public ArrayList<Point> getPolygon() {
         return polygon;
     }
 
-    public int getPolygonPointCount(){
+    public int getPolygonPointCount() {
         return polygon.size();
     }
 
-    public boolean checkPointInsidePolygon(Point p){
+    public boolean checkPointInsidePolygon(Point p) {
         int i, j, vertNum;
         boolean c = false;
         vertNum = polygon.size();
         double testx = p.x;
         double testy = p.y;
 
-        for (i=0, j=vertNum-1; i < vertNum; j = i++){
-            if(  ((polygon.get(i).y > p.y) != (polygon.get(j).y > p.y))
-                    && (testx < (polygon.get(j).x - polygon.get(i).x) * (testy-polygon.get(i).y) / (polygon.get(j).y-polygon.get(i).y) + polygon.get(i).x) )
-            {
+        for (i = 0, j = vertNum - 1; i < vertNum; j = i++) {
+            if (((polygon.get(i).y > p.y) != (polygon.get(j).y > p.y))
+                    && (testx < (polygon.get(j).x - polygon.get(i).x) * (testy - polygon.get(i).y) / (polygon.get(j).y - polygon.get(i).y) + polygon.get(i).x)) {
                 c = !c;
             }
         }
 
         return c;
     }
-    private void initWall(){
+
+    private void initWall() {
         //ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
         File map = new File("map.svg");
@@ -98,7 +98,7 @@ public class Map {
                     int y1 = Integer.parseInt(nnm.getNamedItem("y1").getNodeValue().replace("px", ""));
                     int x2 = Integer.parseInt(nnm.getNamedItem("x2").getNodeValue().replace("px", ""));
                     int y2 = Integer.parseInt(nnm.getNamedItem("y2").getNodeValue().replace("px", ""));
-                    addLine(new Line(x1, y1,x2, y2));
+                    addLine(new Line(x1, y1, x2, y2));
                     addPoint(new Point(x1, y1));
                 }
             }
@@ -107,17 +107,27 @@ public class Map {
         }
     }
 
-    private void initParticles ( ){
+    Point getPointInPolygon() {
+
+        Random rand = new Random();
+        while (true) {
+            Point p = new Point(rand.nextInt(Helper.BUILDING_WIDTH_CM), rand.nextInt(Helper.BUILDING_HEIGHT_CM));//rand.nextInt(150));
+            if (checkPointInsidePolygon(p)) {
+                return p;
+            }
+        }
+    }
+
+    private void initParticles() {
         Random rand = new Random();
         for (int i = 0; i < PARTICLE_COUNT;) {
-            Point particleCenter = new Point(rand.nextInt(Helper.BUILDING_WIDTH_CM), rand.nextInt(Helper.BUILDING_HEIGHT_CM));//rand.nextInt(150));
-            if (checkPointInsidePolygon(particleCenter)) {
-                double randRotation = rand.nextDouble() * Math.PI  * 2;
-                //double randRotation = (Math.PI *2) * (160.0/360.0);
-                Particle particle = new Particle(this , particleCenter , randRotation);
-                particles.add(particle);
-                i++;
-            }
+            Particle particle = Particle.createParticle(this);
+            /*if ( particle == null){
+                continue;
+            }*/
+           // Particle particle = new Particle(this, particleCenter, randRotation);
+            particles.add(particle);
+            i++;
         }
 
     }

@@ -47,7 +47,7 @@ import java.util.ArrayList;
 public class Main extends Application {
 
     public static int SCALE_FACTOR = 2;
-    public static boolean ANALYSE_MODE = false;
+    public static boolean ANALYSE_MODE = true;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
     GraphicsContext gc;
@@ -212,8 +212,6 @@ public class Main extends Application {
             } catch (ActionException e) {
                 e.printStackTrace();
             }
-            particle.calculateIntersect(particle.currentRotation, m.getLines());
-
         }
     }
 
@@ -224,7 +222,6 @@ public class Main extends Application {
             } catch (ActionException e) {
                 e.printStackTrace();
             }
-            particle.calculateIntersect(particle.currentRotation, m.getLines());
         }
     }
 
@@ -232,14 +229,12 @@ public class Main extends Application {
     public void turnLeft(double angle) {
         for (Particle particle : m.getParticles()) {
             particle.turnLeft(angle);
-            particle.calculateIntersects();
         }
     }
 
     public void turnRight(double angle) {
         for (Particle particle : m.getParticles()) {
             particle.turnRight(angle);
-            particle.calculateIntersects();
         }
     }
 

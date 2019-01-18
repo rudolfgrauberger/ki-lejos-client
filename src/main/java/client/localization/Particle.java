@@ -19,25 +19,41 @@ public class Particle implements IMoveController {
     Random r = new Random();
     double belief = r.nextDouble();
 
+    boolean isValid = true;
 
 
+
+    public static Particle createParticle(Map map){
+        Point particleCenter = map.getPointInPolygon();
+        Random rand = new Random();
+        double randRotation = rand.nextDouble() * Math.PI * 2;
+        Particle p = new Particle(map,particleCenter,randRotation);
+
+        boolean valid = p.hasValidPosition();
+        if ( !valid ) {
+            return Particle.createParticle(map);
+        }
+        return p;
+    }
 
     public Particle(Map map, Point centerPoint, double rotation){
         this.map = map;
         this.centerPoint = centerPoint;
         this.currentRotation = rotation;
-        calculateIntersects();
 
     }
-    public void calculateIntersects(){
+    public boolean calculateIntersects(){
         //Helper.getRotationPoint(centerPoint , 1 , -Helper.QUARTER_CIRCLE);
         Intersect leftIntersect = calculateIntersect(Helper.getAngleOffset(currentRotation - Helper.QUARTER_CIRCLE) ,map.getLines() );
         Intersect forwardIntersect = calculateIntersect(Helper.getAngleOffset(currentRotation) ,map.getLines() );
         Intersect rightIntersect = calculateIntersect(Helper.getAngleOffset(currentRotation + Helper.QUARTER_CIRCLE) ,map.getLines() );
-
+        if ( leftIntersect == null || forwardIntersect == null || rightIntersect == null){
+            return false;
+        }
         this.forwardIntersect = forwardIntersect;
         this.leftIntersect = leftIntersect;
         this.rightIntersect= rightIntersect;
+        return true;
     }
     public Intersect calculateIntersect(double rotation, ArrayList<Line> lines ){
         Point direction = (Helper.getRotationPoint(centerPoint,1 , rotation));
@@ -48,6 +64,7 @@ public class Particle implements IMoveController {
             Intersect intersect = new Intersect(shortestIntersect , realIntersectDistance);
             return  intersect;
         }
+        //System.out.println(centerPoint.toString() + " rotation: " + rotation);
         //System.out.println("ERROR DAMN!");
         //this.intersectPoint = intersect;
         return null;
@@ -72,7 +89,7 @@ public class Particle implements IMoveController {
         Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation);
         //Point newRealPoint = Helper.vectorAdd(currentAbsPosition , maginalizedRotationalPoint);
         centerPoint = maginalizedRotationalPoint;
-        move();
+        afterMoveEvent();
 
     }
 
@@ -82,21 +99,19 @@ public class Particle implements IMoveController {
         Point maginalizedRotationalPoint = Helper.getRotationPoint(centerPoint , cm , currentRotation + 2*Helper.QUARTER_CIRCLE);
         //Point newRealPoint = Helper.vectorSub(currentAbsPosition , maginalizedRotationalPoint);
         centerPoint = maginalizedRotationalPoint;
-        move();
+        afterMoveEvent();
     }
 
     @Override
     public void turnLeft(double angle) {
         this.currentRotation-=Helper.degreeToRadiand(angle);
-        move();
+        afterMoveEvent();
     }
 
     @Override
     public void turnRight(double angle) {
-        System.out.println("here");
-        this.currentRotation+=Helper.degreeToRadiand(angle);;
-        //this.currentRotation = this.currentRotation % (2*Math.PI);
-        move();
+        this.currentRotation+=Helper.degreeToRadiand(angle);
+        afterMoveEvent();
     }
     @Override
     public SensorDataSet getSensorDataSet() throws ActionException {
@@ -115,10 +130,25 @@ public class Particle implements IMoveController {
     }
 
 
-    public void move(){
+    public boolean hasValidPosition(){
         boolean inPolygon = map.checkPointInsidePolygon(this.centerPoint);
-        if ( inPolygon) {
-            calculateIntersects();
+        boolean intersects = calculateIntersects();
+        return inPolygon && intersects;
+    }
+    public boolean afterMoveEvent(){
+        boolean valPos = hasValidPosition();
+        // Generate new Position
+        if ( ! valPos ){
+            Particle p = Particle.createParticle(map);
+
+            this.map = p.map;
+            this.centerPoint = p.centerPoint;
+            this.currentRotation = p.currentRotation;
+            this.forwardIntersect = p.forwardIntersect;
+            this.leftIntersect = p.leftIntersect;
+            this.rightIntersect = p.rightIntersect;
+            this.belief = p.belief;
         }
+        return valPos;
     }
 }

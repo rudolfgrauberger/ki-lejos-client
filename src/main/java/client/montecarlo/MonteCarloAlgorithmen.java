@@ -34,7 +34,7 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        int commandNumber = random.nextInt(4);
+        int commandNumber = random.nextInt(1);
         switch (commandNumber){
             //case forward
             case 0:
@@ -65,7 +65,12 @@ public class MonteCarloAlgorithmen {
                 for (IMoveController partikel: partikels) {
                     partikel.turnRight(180);
                 }
-                System.out.println("back");
+                System.out.println("around");
+                break;
+            //case forward
+            case 4:
+                moveForward();
+                System.out.println("forward");
                 break;
         }
     }
@@ -75,9 +80,9 @@ public class MonteCarloAlgorithmen {
         System.out.println("Left"+latestRoboterDataSet.getDistanceLeft());
         System.out.println("Right"+latestRoboterDataSet.getDistanceRight());
 
-        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft() , MAX_DISTANCE_FORWARD);
-        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront() , MAX_DISTANCE_FORWARD);
-        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight() , MAX_DISTANCE_FORWARD);
+        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft()*100 , MAX_DISTANCE_FORWARD);
+        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront()*100 , MAX_DISTANCE_FORWARD);
+        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight()*100 , MAX_DISTANCE_FORWARD);
 
         /**
          *  TODO: fill getSensorData
@@ -88,7 +93,10 @@ public class MonteCarloAlgorithmen {
             double particleFront = Helper.lerp(particle.getSensorDataSet().getDistanceFront() , MAX_DISTANCE_FORWARD);
             double particleRight = Helper.lerp(particle.getSensorDataSet().getDistanceRight() , MAX_DISTANCE_FORWARD);
 
-            double bel = particleLeft * robotLeft + particleFront * robotFront + particleRight * robotRight;
+            double q1 = Math.min(particleLeft , robotLeft) / Math.max(particleLeft , robotLeft);
+            double q2 = Math.min(particleFront , robotFront) / Math.max(particleFront , robotFront);
+            double q3 = Math.min(particleRight , robotRight) / Math.max(particleRight , robotRight);
+            double bel = q1 * q2 * q3;
             particle.setBelief(bel);
         }
     }
@@ -119,12 +127,13 @@ public class MonteCarloAlgorithmen {
         }
         //get distance
         int distance = 50;
-        if(latestRoboterDataSet.getDistanceFront() < distance)
-            distance = (int)latestRoboterDataSet.getDistanceFront() - 5;
+        if((latestRoboterDataSet.getDistanceFront()*100) < distance)
+            distance = (int)((latestRoboterDataSet.getDistanceFront() - 0.05)*100);
         //move
         roboter.moveForward(distance);
         for (IMoveController partikel: partikels) {
             partikel.moveForward(distance);
         }
+        System.out.println("distance"+distance+"; rob "+latestRoboterDataSet.getDistanceFront());
     }
 }

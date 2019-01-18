@@ -85,8 +85,11 @@ public class MonteCarloAlgorithmen {
             double partikeFront = Helper.lerp(partikel.getSensorDataSet().getDistanceFront() , 200);
             double partikeRight = Helper.lerp(partikel.getSensorDataSet().getDistanceRight() , 200);
 
-            double bel = 00000000000000000;
+
             SensorDataSet partikelDataSet = partikel.getSensorDataSet();
+
+            double bel = 00000000000000000;
+
             //compare and set new Belife
         }
     }

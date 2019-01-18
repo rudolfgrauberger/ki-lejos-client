@@ -100,7 +100,8 @@ public class Particle implements IMoveController {
     }
     @Override
     public SensorDataSet getSensorDataSet() throws ActionException {
-        return null;
+        SensorDataSet sds = new SensorDataSet(forwardIntersect.distance , leftIntersect.distance , rightIntersect.distance);
+        return sds;
     }
 
     public void move(){

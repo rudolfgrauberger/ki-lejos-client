@@ -79,8 +79,10 @@ public class Helper {
     static Point getRelByRealPoint(Point real){
         return new Point( real.x / BUILDING_WIDTH_CM, real.y / BUILDING_HEIGHT_CM );
     }
-    static double degreeToRadiand(int degree){
-        return ( (double) degree/360.0) * (Math.PI * 2);
+    static double degreeToRadiand(double degree){
+        double q = ( degree/360.0);
+        double p = (Math.PI * 2.0);
+        return p * q;
     }
 
     public static ArrayList<Point> rayCast (Point from , Point to , ArrayList<Line> lines){
@@ -171,5 +173,8 @@ public class Helper {
             return (Math.PI * 2 ) - Math.abs(angle) % (Math.PI * 2);
         }
 
+    }
+    public static double lerp ( double value , double max ){
+        return Math.min(value , max) / max;
     }
 }

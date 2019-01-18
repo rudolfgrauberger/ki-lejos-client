@@ -1,9 +1,14 @@
 package client.montecarlo;
 
+import client.localization.Helper;
+import client.localization.Particle;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MonteCarloAlgorithmen {
+
+    public static double MAX_DISTANCE_FORWARD = 250.0;
 
     private IMoveController roboter;
     private ArrayList<IMoveController> partikels;
@@ -52,7 +57,7 @@ public class MonteCarloAlgorithmen {
                     partikel.turnRight(90);
                 }
                 looksInDriveDirection = !looksInDriveDirection;
-                System.out.println("right");
+                System.out.println("fuck off");
                 break;
             //turn around
             case 3:
@@ -71,14 +76,25 @@ public class MonteCarloAlgorithmen {
     }
     private void compareSensorDatas() throws ActionException{
         this.latestRoboterDataSet = roboter.getSensorDataSet();
-
         System.out.println("Front"+latestRoboterDataSet.getDistanceFront());
         System.out.println("Left"+latestRoboterDataSet.getDistanceLeft());
         System.out.println("Right"+latestRoboterDataSet.getDistanceRight());
 
-        for (IMoveController partikel: partikels) {
-            SensorDataSet partikelDataSet = partikel.getSensorDataSet();
-            //compare and set new Belife
+        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft() , MAX_DISTANCE_FORWARD);
+        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront() , MAX_DISTANCE_FORWARD);
+        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight() , MAX_DISTANCE_FORWARD);
+
+        /**
+         *  TODO: fill getSensorData
+         */
+
+        for (IMoveController particle: partikels) {
+            double particleLeft =  Helper.lerp(particle.getSensorDataSet().getDistanceLeft() , MAX_DISTANCE_FORWARD);
+            double particleFront = Helper.lerp(particle.getSensorDataSet().getDistanceFront() , MAX_DISTANCE_FORWARD);
+            double particleRight = Helper.lerp(particle.getSensorDataSet().getDistanceRight() , MAX_DISTANCE_FORWARD);
+
+            double bel = particleLeft * robotLeft + particleFront * robotFront + particleRight * robotRight;
+            particle.setBelief(bel);
         }
     }
     private void removePartikels(){

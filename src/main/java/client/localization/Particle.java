@@ -5,6 +5,7 @@ import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Particle implements IMoveController {
 
@@ -14,6 +15,9 @@ public class Particle implements IMoveController {
     Intersect forwardIntersect;
     Intersect leftIntersect;
     Intersect rightIntersect;
+
+    Random r = new Random();
+    double belief = r.nextDouble();
 
 
 
@@ -44,7 +48,7 @@ public class Particle implements IMoveController {
             Intersect intersect = new Intersect(shortestIntersect , realIntersectDistance);
             return  intersect;
         }
-        System.out.println("ERROR DAMN!");
+        //System.out.println("ERROR DAMN!");
         //this.intersectPoint = intersect;
         return null;
         //System.out.println("Distance: "+  realIntersectDistance );
@@ -83,23 +87,33 @@ public class Particle implements IMoveController {
 
     @Override
     public void turnLeft(double angle) {
-        double radiand = Helper.degreeToRadiand((int)angle);
-        this.currentRotation+=radiand;
-        //this.currentRotation -= angle;
+        this.currentRotation-=Helper.degreeToRadiand(angle);
         move();
     }
 
     @Override
     public void turnRight(double angle) {
-        double radiand = Helper.degreeToRadiand((int)angle);
-        this.currentRotation+=radiand;
+        System.out.println("here");
+        this.currentRotation+=Helper.degreeToRadiand(angle);;
         //this.currentRotation = this.currentRotation % (2*Math.PI);
         move();
     }
     @Override
     public SensorDataSet getSensorDataSet() throws ActionException {
-        return null;
+        SensorDataSet sds = new SensorDataSet(forwardIntersect.distance , leftIntersect.distance , rightIntersect.distance);
+        return sds;
     }
+
+    @Override
+    public double getBelief() {
+        return this.belief;
+    }
+
+    @Override
+    public void setBelief(double belief) {
+        this.belief = belief;
+    }
+
 
     public void move(){
         boolean inPolygon = map.checkPointInsidePolygon(this.centerPoint);

@@ -14,7 +14,7 @@ import java.util.logging.Handler;
 
 public class Map {
 
-    public static final int PARTICLE_COUNT = 1;
+    public static final int PARTICLE_COUNT = 25000;
 
 
 
@@ -116,7 +116,6 @@ public class Map {
                 //double randRotation = (Math.PI *2) * (160.0/360.0);
                 Particle particle = new Particle(this , particleCenter , randRotation);
                 particles.add(particle);
-                addParticle(particle);
                 i++;
             }
         }

@@ -9,4 +9,7 @@ public interface IMoveController {
     void turnLeft ( double angle )throws ActionException;
     void turnRight ( double angle )throws ActionException;
     SensorDataSet getSensorDataSet() throws ActionException;
+
+    double getBelief();
+    void setBelief(double belief);
 }

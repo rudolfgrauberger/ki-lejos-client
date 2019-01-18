@@ -130,6 +130,16 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 		}
 	}
 
+	@Override
+	public double getBelief() {
+		return 0;
+	}
+
+	@Override
+	public void setBelief(double belief) {
+
+	}
+
 
 	@Override
 	public void moveForward(double cm) throws ActionException {

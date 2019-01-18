@@ -48,7 +48,7 @@ public class Particle implements IMoveController {
             Intersect intersect = new Intersect(shortestIntersect , realIntersectDistance);
             return  intersect;
         }
-        System.out.println("ERROR DAMN!");
+        //System.out.println("ERROR DAMN!");
         //this.intersectPoint = intersect;
         return null;
         //System.out.println("Distance: "+  realIntersectDistance );
@@ -103,6 +103,17 @@ public class Particle implements IMoveController {
         SensorDataSet sds = new SensorDataSet(forwardIntersect.distance , leftIntersect.distance , rightIntersect.distance);
         return sds;
     }
+
+    @Override
+    public double getBelief() {
+        return this.belief;
+    }
+
+    @Override
+    public void setBelief(double belief) {
+        this.belief = belief;
+    }
+
 
     public void move(){
         boolean inPolygon = map.checkPointInsidePolygon(this.centerPoint);

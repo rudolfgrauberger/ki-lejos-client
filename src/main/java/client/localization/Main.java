@@ -22,30 +22,32 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 
 /**
- *  SAMPLE -->
- *
- *
- *
- *  Ablauf:
- *      1. Initialer Belief
- *         k Samples auf dem Bildschirm erstellen, die Gleichverteilt auf allen Möglichen Positionen verteilt sind
- *         Der importance factor ist 1/k.
- *         Ein Partikel ( Sample ) repräsentiert eine Position
- *
- *         Ziel: Partikel ( Samples ) zu generieren, welche am ( Hochpunkt ) der Wahrscheinlichkeitsdichte liegen
- *
- *      2. Belief aktualisieren
- *          Ein Sample wird zufällig aus der Menge genommen
- *          Der importance factor gibt die Auswahlwahrscheinlichkeit.
+ * SAMPLE -->
+ * <p>
+ * <p>
+ * <p>
+ * Ablauf:
+ * 1. Initialer Belief
+ * k Samples auf dem Bildschirm erstellen, die Gleichverteilt auf allen Möglichen Positionen verteilt sind
+ * Der importance factor ist 1/k.
+ * Ein Partikel ( Sample ) repräsentiert eine Position
+ * <p>
+ * Ziel: Partikel ( Samples ) zu generieren, welche am ( Hochpunkt ) der Wahrscheinlichkeitsdichte liegen
+ * <p>
+ * 2. Belief aktualisieren
+ * Ein Sample wird zufällig aus der Menge genommen
+ * Der importance factor gibt die Auswahlwahrscheinlichkeit.
  */
-public class Main extends Application{
+public class Main extends Application {
 
     public static int SCALE_FACTOR = 2;
+    public static boolean ANALYSE_MODE = false;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
     GraphicsContext gc;
@@ -62,8 +64,7 @@ public class Main extends Application{
 
     MonteCarloAlgorithmen monte;
 
-    private VBox getMainLayout()
-    {
+    private VBox getMainLayout() {
         VBox vLayout = new VBox();
         HBox inputs = new HBox();
         inputs.setPadding(new Insets(15, 12, 15, 12));
@@ -82,20 +83,20 @@ public class Main extends Application{
 
         bLocate = new Button("Locate");
         bLocate.setOnAction(event -> {
-           try {
-              ArrayList<IMoveController> movables = new ArrayList<>();
-              for ( Particle p : m.getParticles()){
-                  IMoveController m = p;
-                  movables.add(m);
-              }
-              monte.run(movables);
-              reDraw();
-           } catch (ActionException e) {
-              new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
-           }
+            try {
+                ArrayList<IMoveController> movables = new ArrayList<>();
+                for (Particle p : m.getParticles()) {
+                    IMoveController m = p;
+                    movables.add(m);
+                }
+                monte.run(movables);
+                reDraw();
+            } catch (ActionException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            }
         });
 
-       switchConnectedButton();
+        switchConnectedButton();
 
         inputs.getChildren().add(bLocate);
 
@@ -114,8 +115,7 @@ public class Main extends Application{
     }
 
     @Override
-    public void stop()
-    {
+    public void stop() {
         if (myclient.isConnected())
             disconnectFromLeJOS();
     }
@@ -146,16 +146,16 @@ public class Main extends Application{
             KeyCode a = KeyCode.A;
             KeyCode s = KeyCode.S;
             KeyCode d = KeyCode.D;
-            if ( w.equals(event.getCode())){
+            if (w.equals(event.getCode())) {
                 moveForward(5);
             }
-            if ( s.equals(event.getCode())){
+            if (s.equals(event.getCode())) {
                 moveBackward(5);
             }
-            if ( a.equals(event.getCode())){
+            if (a.equals(event.getCode())) {
                 turnLeft(90);
             }
-            if ( d.equals(event.getCode())){
+            if (d.equals(event.getCode())) {
                 turnRight(90);
             }
 
@@ -163,10 +163,11 @@ public class Main extends Application{
         });
     }
 
-    private void reDraw(){
-        gc.clearRect(0,0,Helper.BUILDING_WIDTH_CM*SCALE_FACTOR,Helper.BUILDING_HEIGHT_CM*SCALE_FACTOR);
+    private void reDraw() {
+        gc.clearRect(0, 0, Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         drawMap();
     }
+
     private void drawMap() {
 
         gc.setFill(Color.BLACK);
@@ -174,22 +175,27 @@ public class Main extends Application{
         gc.setLineWidth(2);
         gc.setLineDashes(0);
 
-        for ( Line l : m.getLines()){
-            gc.strokeLine(l.x1*SCALE_FACTOR , l.y1*SCALE_FACTOR , l.x2*SCALE_FACTOR , l.y2*SCALE_FACTOR);
+        for (Line l : m.getLines()) {
+            gc.strokeLine(l.x1 * SCALE_FACTOR, l.y1 * SCALE_FACTOR, l.x2 * SCALE_FACTOR, l.y2 * SCALE_FACTOR);
         }
 
         gc.setLineDashes(10);
-        for ( Particle particle : m.getParticles()) {
+        for (Particle particle : m.getParticles()) {
             Point absCenter = particle.centerPoint;
-            Point lineA = Helper.getRotationPoint(particle.centerPoint,5,particle.currentRotation );
-            Point lineB = Helper.getRotationPoint(particle.centerPoint,5,particle.currentRotation+ Math.PI);
-            System.out.println("Rotation: " + particle.currentRotation);
-            gc.strokeLine(lineA.x*SCALE_FACTOR, lineA.y*SCALE_FACTOR, lineB.x*SCALE_FACTOR,lineB.y*SCALE_FACTOR);
-            gc.fillOval(absCenter.x*SCALE_FACTOR-3, absCenter.y*SCALE_FACTOR-3, 6, 6);
-            gc.fillOval( lineA.x*SCALE_FACTOR-2 , lineA.y*SCALE_FACTOR-2 , 4,4 );
-            gc.strokeLine(absCenter.x*SCALE_FACTOR,absCenter.y*SCALE_FACTOR , particle.forwardIntersect.point.x*SCALE_FACTOR,particle.forwardIntersect.point.y*SCALE_FACTOR);
-            gc.strokeLine(absCenter.x*SCALE_FACTOR,absCenter.y*SCALE_FACTOR , particle.leftIntersect.point.x*SCALE_FACTOR,particle.leftIntersect.point.y*SCALE_FACTOR);
-            gc.strokeLine(absCenter.x*SCALE_FACTOR,absCenter.y*SCALE_FACTOR , particle.rightIntersect.point.x*SCALE_FACTOR,particle.rightIntersect.point.y*SCALE_FACTOR);
+            Point lineA = Helper.getRotationPoint(particle.centerPoint, 5, particle.currentRotation);
+            Point lineB = Helper.getRotationPoint(particle.centerPoint, 5, particle.currentRotation + Math.PI);
+            //System.out.println("Rotation: " + particle.currentRotation);
+            double maxBeliefSize = 10;
+
+            gc.fillOval(absCenter.x * SCALE_FACTOR - ((particle.belief * maxBeliefSize)/2.0), absCenter.y * SCALE_FACTOR - ((maxBeliefSize*particle.belief)/2.0), maxBeliefSize*particle.belief, maxBeliefSize*particle.belief);
+            gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
+
+            if (ANALYSE_MODE) {
+                gc.strokeLine(lineA.x * SCALE_FACTOR, lineA.y * SCALE_FACTOR, lineB.x * SCALE_FACTOR, lineB.y * SCALE_FACTOR);
+                gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, particle.forwardIntersect.point.x * SCALE_FACTOR, particle.forwardIntersect.point.y * SCALE_FACTOR);
+                gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, particle.leftIntersect.point.x * SCALE_FACTOR, particle.leftIntersect.point.y * SCALE_FACTOR);
+                gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, particle.rightIntersect.point.x * SCALE_FACTOR, particle.rightIntersect.point.y * SCALE_FACTOR);
+            }
         }
     }
 
@@ -200,7 +206,7 @@ public class Main extends Application{
 
 
     public void moveForward(double cm) {
-        for ( Particle particle : m.getParticles()){
+        for (Particle particle : m.getParticles()) {
             try {
                 particle.moveForward(cm);
             } catch (ActionException e) {
@@ -212,7 +218,7 @@ public class Main extends Application{
     }
 
     public void moveBackward(double cm) {
-        for ( Particle particle : m.getParticles()){
+        for (Particle particle : m.getParticles()) {
             try {
                 particle.moveBackward(cm);
             } catch (ActionException e) {
@@ -223,15 +229,15 @@ public class Main extends Application{
     }
 
 
-    public void turnLeft(double angle){
-        for ( Particle particle : m.getParticles()){
+    public void turnLeft(double angle) {
+        for (Particle particle : m.getParticles()) {
             particle.turnLeft(angle);
             particle.calculateIntersects();
         }
     }
 
-    public void turnRight(double angle)  {
-        for ( Particle particle : m.getParticles()){
+    public void turnRight(double angle) {
+        for (Particle particle : m.getParticles()) {
             particle.turnRight(angle);
             particle.calculateIntersects();
         }

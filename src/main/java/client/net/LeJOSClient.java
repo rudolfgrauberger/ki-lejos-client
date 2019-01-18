@@ -130,7 +130,6 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 		}
 	}
 
-
 	@Override
 	public void moveForward(double cm) throws ActionException {
 		try {

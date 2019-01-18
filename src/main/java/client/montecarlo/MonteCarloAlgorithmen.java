@@ -29,7 +29,7 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        int commandNumber = random.nextInt(4);
+        int commandNumber = random.nextInt(5);
         switch (commandNumber){
             //case forward
             case 0:
@@ -60,7 +60,12 @@ public class MonteCarloAlgorithmen {
                 for (IMoveController partikel: partikels) {
                     partikel.turnRight(180);
                 }
-                System.out.println("back");
+                System.out.println("around");
+                break;
+            //case forward
+            case 4:
+                moveForward();
+                System.out.println("forward");
                 break;
         }
     }

@@ -81,6 +81,7 @@ public class Main extends Application {
         inputs.getChildren().add(tfPort);
 
         bConnect = new Button("Connect");
+        bConnect.setDisable(SIMULATE_MODE);
         inputs.getChildren().add(bConnect);
 
         bLocate = new Button("Locate");

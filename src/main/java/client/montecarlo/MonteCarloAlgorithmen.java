@@ -1,9 +1,6 @@
 package client.montecarlo;
 
 import client.localization.Helper;
-import client.localization.Particle;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 

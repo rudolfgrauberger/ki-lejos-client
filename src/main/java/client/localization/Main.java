@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -48,6 +49,7 @@ public class Main extends Application {
 
     public static int SCALE_FACTOR = 2;
     public static boolean ANALYSE_MODE = true;
+    public static boolean SIMULATE_MODE = true;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
     GraphicsContext gc;
@@ -89,7 +91,13 @@ public class Main extends Application {
                     IMoveController m = p;
                     movables.add(m);
                 }
-                monte.run(movables);
+                List<IMoveController> resampledParticles = monte.run(movables);
+
+                List<Particle> particles = new ArrayList<Particle>();
+                for (IMoveController c : resampledParticles) {
+                    particles.add((Particle)c);
+                }
+                m.setParticles(particles);
                 reDraw();
             } catch (ActionException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
@@ -126,13 +134,20 @@ public class Main extends Application {
         Group root = new Group();
 
         myclient = new LeJOSClient(logger);
-        monte = new MonteCarloAlgorithmen(myclient);
 
         canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
         drawMap();
+
+        // Simulation (damit man alles ohne den Robotor testen kann)
+        if (SIMULATE_MODE) {
+            Particle robot = Particle.createParticle(this.m);
+            monte = new MonteCarloAlgorithmen(robot, m);
+        } else {
+            monte = new MonteCarloAlgorithmen(myclient, m);
+        }
 
         root.getChildren().add(getMainLayout());
 
@@ -245,7 +260,10 @@ public class Main extends Application {
 
     private void switchConnectedButton() {
 
-        bLocate.setDisable(!myclient.isConnected());
+        if (SIMULATE_MODE)
+            bLocate.setDisable(false);
+        else
+            bLocate.setDisable(!myclient.isConnected());
 
         if (myclient.isConnected())
             bConnect.setText("Disconnect");

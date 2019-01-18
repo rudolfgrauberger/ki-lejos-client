@@ -4,32 +4,44 @@ import client.localization.Helper;
 import client.localization.Particle;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MonteCarloAlgorithmen {
 
     public static double MAX_DISTANCE_FORWARD = 250.0;
 
+    private static double REUSE_GRADE = 0.8d;
+
     private IMoveController roboter;
-    private ArrayList<IMoveController> partikels;
+    private List<IMoveController> partikels;
     private SensorDataSet latestRoboterDataSet;
     private boolean looksInDriveDirection;
 
-    public MonteCarloAlgorithmen(IMoveController roboter) {
+    private IResampler resampler;
+    private IParticleGenerator generator;
+
+    public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator, IResampler resampler) {
         this.roboter = roboter;
         looksInDriveDirection = true;
+        this.resampler = resampler;
+        this.generator = generator;
     }
 
-    public ArrayList<IMoveController> run (ArrayList<IMoveController> partikels) throws ActionException{
+    public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator) {
+        this(roboter, generator, new RouletteWheelResampler());
+    }
+
+    public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
         this.partikels = partikels;
 
         compareSensorDatas();
         moveCommand();
         compareSensorDatas();
-        removePartikels();
+        resamplePartikels();
         addPartikels();
 
-        return  this.partikels;
+        return this.partikels;
     }
 
     private void moveCommand() throws ActionException{
@@ -100,12 +112,27 @@ public class MonteCarloAlgorithmen {
             particle.setBelief(bel);
         }
     }
-    private void removePartikels(){
+    private void resamplePartikels(){
 
+        int reuseParticles = (int)(this.partikels.size() * REUSE_GRADE);
+        List<IMoveController> result = resampler.resample(this.partikels, reuseParticles);
+        this.partikels = result;
     }
+
     private void addPartikels(){
 
+        int renew = this.partikels.size() - (int)(this.partikels.size() * REUSE_GRADE);
+
+        System.out.println("Renewed count: " + renew);
+
+        while (renew > 0) {
+            this.partikels.add(generator.getRandomParticle());
+            --renew;
+        }
+
+        System.out.println("New particle count: " + this.partikels.size());
     }
+
     //move controlles
     private void moveForward() throws ActionException{
         Random random = new Random();

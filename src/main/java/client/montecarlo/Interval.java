@@ -1,0 +1,31 @@
+package client.montecarlo;
+
+import client.localization.Particle;
+
+public class Interval {
+   private double start;
+   private double end;
+   private IMoveController particle;
+
+   public Interval(double start, double end, IMoveController particle) {
+      this.start = start;
+      this.end = end;
+      this.particle = particle;
+   }
+
+   public double getStart() {
+      return this.start;
+   }
+
+   public double getEnd() {
+      return this.end;
+   }
+
+   public boolean isInRange(double value) {
+      return value > this.start  && value <= this.end;
+   }
+
+   public IMoveController getParticle() {
+      return this.particle;
+   }
+}

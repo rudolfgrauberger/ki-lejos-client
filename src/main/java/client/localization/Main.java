@@ -3,7 +3,6 @@ package client.localization;
 import client.montecarlo.IMoveController;
 import client.montecarlo.ActionException;
 import client.montecarlo.MonteCarloAlgorithmen;
-import client.montecarlo.SensorDataSet;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
 import javafx.application.Application;
@@ -45,7 +44,7 @@ import java.util.List;
  * Ein Sample wird zufällig aus der Menge genommen
  * Der importance factor gibt die Auswahlwahrscheinlichkeit.
  */
-public class Main extends Application {
+public class Main extends Application implements IMonteEventListener{
 
     public static int SCALE_FACTOR = 2;
     public static boolean ANALYSE_MODE = true;
@@ -65,6 +64,11 @@ public class Main extends Application {
     NoLogger logger = new NoLogger();
 
     MonteCarloAlgorithmen monte;
+
+    //Locate button
+    private boolean locate = false;
+
+    //Frame and Layout
 
     private VBox getMainLayout() {
         VBox vLayout = new VBox();
@@ -86,22 +90,14 @@ public class Main extends Application {
 
         bLocate = new Button("Locate");
         bLocate.setOnAction(event -> {
-            try {
-                ArrayList<IMoveController> movables = new ArrayList<>();
-                for (Particle p : m.getParticles()) {
-                    IMoveController m = p;
-                    movables.add(m);
-                }
-                List<IMoveController> resampledParticles = monte.run(movables);
-
-                List<Particle> particles = new ArrayList<Particle>();
-                for (IMoveController c : resampledParticles) {
-                    particles.add((Particle)c);
-                }
-                m.setParticles(particles);
-                reDraw();
-            } catch (ActionException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            if(!this.locate){
+                this.locate = true;
+                bLocate.setText("Stop");
+                runMonteAsync();
+            }
+            else{
+                this.locate = false;
+                bLocate.setText("Locate");
             }
         });
 
@@ -179,6 +175,7 @@ public class Main extends Application {
         });
     }
 
+    //Map
     private void reDraw() {
         gc.clearRect(0, 0, Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         drawMap();
@@ -220,7 +217,7 @@ public class Main extends Application {
         launch(args);
     }
 
-
+    //Moves
     public void moveForward(double cm) {
         for (Particle particle : m.getParticles()) {
             try {
@@ -241,7 +238,6 @@ public class Main extends Application {
         }
     }
 
-
     public void turnLeft(double angle) {
         for (Particle particle : m.getParticles()) {
             particle.turnLeft(angle);
@@ -254,11 +250,7 @@ public class Main extends Application {
         }
     }
 
-
-    public SensorDataSet getSensorDataSet() throws ActionException {
-        return null;
-    }
-
+    //Connect
     private void switchConnectedButton() {
 
         if (SIMULATE_MODE)
@@ -294,5 +286,43 @@ public class Main extends Application {
         }
 
         switchConnectedButton();
+    }
+
+    //Monte
+    private void runMonteAsync(){
+        if(this.locate){
+            ArrayList<IMoveController> movables = new ArrayList<>();
+            for (Particle p : m.getParticles()) {
+                IMoveController m = p;
+                movables.add(m);
+            }
+            //Create new Thread
+            IMonteEventListener lister = this;
+            new Thread(new Runnable() {
+                public void run()
+                {
+                    try {
+                        monte.runAsync(movables, lister);
+                    }
+                    catch (ActionException ex) {
+                        System.out.println("Roboter move Error!");
+                    }
+                }
+            }).start();
+        }
+    }
+
+    @Override
+    public void onMonteDone(List<IMoveController> moveables) {
+        //Transform to partikel map
+        List<Particle> particles = new ArrayList<Particle>();
+        for (IMoveController c : moveables) {
+            particles.add((Particle)c);
+        }
+        //redraw
+        m.setParticles(particles);
+        reDraw();
+        //run monte again
+        runMonteAsync();
     }
 }

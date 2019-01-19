@@ -1,6 +1,8 @@
 package client.montecarlo;
 
 import client.localization.Helper;
+import client.localization.IMonteEventListener;
+
 import java.util.List;
 import java.util.Random;
 
@@ -37,6 +39,10 @@ public class MonteCarloAlgorithmen {
 
         return this.partikels;
     }
+    public void runAsync (List<IMoveController> partikels, IMonteEventListener listner) throws ActionException{
+        List<IMoveController> newPartikels = run(partikels);
+        listner.onMonteDone(newPartikels);
+    }
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
@@ -70,9 +76,6 @@ public class MonteCarloAlgorithmen {
     }
     private void compareSensorDatas() throws ActionException{
         this.latestRoboterDataSet = roboter.getSensorDataSet();
-        System.out.println("Front"+latestRoboterDataSet.getDistanceFront());
-        System.out.println("Left"+latestRoboterDataSet.getDistanceLeft());
-        System.out.println("Right"+latestRoboterDataSet.getDistanceRight());
 
         double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft()*100 , MAX_DISTANCE_FORWARD);
         double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront()*100 , MAX_DISTANCE_FORWARD);
@@ -131,6 +134,5 @@ public class MonteCarloAlgorithmen {
         for (IMoveController partikel: partikels) {
             partikel.moveForward(distance);
         }
-        System.out.println("distance"+distance+"; rob "+latestRoboterDataSet.getDistanceFront());
     }
 }

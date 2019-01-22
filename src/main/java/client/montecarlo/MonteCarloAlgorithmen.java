@@ -57,31 +57,20 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        int commandNumber = random.nextInt(1);
+        int commandNumber = random.nextInt(3);
         int angle;
         switch (commandNumber){
             //case forward
             case 0:
                 moveForward();
-                System.out.println("forward");
                 break;
             //turn left
             case 1:
-                angle = random.nextInt(180);
-                roboter.turnLeft(angle);
-                for (IMoveController partikel: partikels) {
-                    partikel.turnLeft(angle);
-                }
-                System.out.println("left");
+                turnLeft();
                 break;
             //turn right
             case 2:
-                angle = random.nextInt(180);
-                roboter.turnRight(angle);
-                for (IMoveController partikel: partikels) {
-                    partikel.turnRight(angle);
-                }
-                System.out.println("right");
+                turnRight();
                 break;
         }
     }
@@ -126,10 +115,22 @@ public class MonteCarloAlgorithmen {
 
     //move controlles
     private void moveForward() throws ActionException{
+        System.out.println("forward");
         //get distance
         int distance = 30;
+
+        // Kann/Soll es auch so für den echten Robotor gemacht werden, oder
+        // sollten wir es wie vorher machen?
+        Particle tmp = ParticleFactory.createParticleClone((Particle)roboter);
+        tmp.moveForward(distance);
+
+        if (!tmp.hasValidPosition()) {
+            System.out.println("Distance is not large enough to make the movement.");
+            return;
+        }
+
         //if at end turn around
-        if((latestRoboterDataSet.getDistanceFront()*100) < 10)
+        /*if((latestRoboterDataSet.getDistanceFront()*100) < 10)
         {
             roboter.turnRight(180);
             for (IMoveController partikel: partikels) {
@@ -137,21 +138,36 @@ public class MonteCarloAlgorithmen {
             }
             System.out.println("around");
         }
-        else if((latestRoboterDataSet.getDistanceFront()*100) < distance-5)
+        else if((latestRoboterDataSet.getDistanceFront()) < distance-5)
         {
             distance = (int)((latestRoboterDataSet.getDistanceFront()*100)-5);
-        }
-
-        Particle tmp = ParticleFactory.createParticleClone((Particle)roboter);
-        tmp.moveForward(distance);
-
-        if (!tmp.hasValidPosition())
-           return;
+        }*/
 
         //move
         roboter.moveForward(distance);
         for (IMoveController partikel: partikels) {
             partikel.moveForward(distance);
+        }
+    }
+
+    private void turnLeft() throws ActionException {
+        System.out.println("left");
+        Random random = new Random();
+        int angle = random.nextInt(180);
+
+        roboter.turnLeft(angle);
+        for (IMoveController partikel: partikels) {
+            partikel.turnLeft(angle);
+        }
+    }
+
+    private void turnRight() throws ActionException {
+        System.out.println("right");
+        Random random = new Random();
+        int angle = random.nextInt(180);
+        roboter.turnRight(angle);
+        for (IMoveController partikel: partikels) {
+            partikel.turnRight(angle);
         }
     }
 }

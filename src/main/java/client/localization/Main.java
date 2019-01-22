@@ -60,6 +60,7 @@ public class Main extends Application implements IMonteEventListener{
     Button bConnect;
     Button bLocate;
 
+    Particle robot;
     LeJOSClient myclient;
     NoLogger logger = new NoLogger();
 
@@ -131,6 +132,7 @@ public class Main extends Application implements IMonteEventListener{
         Group root = new Group();
 
         myclient = new LeJOSClient(logger);
+        robot = ParticleFactory.createNewRobot(this.m);
 
         canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         canvas.setFocusTraversable(true);
@@ -140,7 +142,6 @@ public class Main extends Application implements IMonteEventListener{
 
         // Simulation (damit man alles ohne den Robotor testen kann)
         if (SIMULATE_MODE) {
-            Particle robot = Particle.createParticle(this.m);
             monte = new MonteCarloAlgorithmen(robot, m);
         } else {
             monte = new MonteCarloAlgorithmen(myclient, m);
@@ -194,22 +195,34 @@ public class Main extends Application implements IMonteEventListener{
 
         gc.setLineDashes(10);
         for (Particle particle : m.getParticles()) {
-            Point absCenter = particle.centerPoint;
-            Point lineA = Helper.getRotationPoint(particle.centerPoint, 5, particle.currentRotation);
-            Point lineB = Helper.getRotationPoint(particle.centerPoint, 5, particle.currentRotation + Math.PI);
-            //System.out.println("Rotation: " + particle.currentRotation);
-            double maxBeliefSize = 10;
-
-            gc.fillOval(absCenter.x * SCALE_FACTOR - ((particle.belief * maxBeliefSize)/2.0), absCenter.y * SCALE_FACTOR - ((maxBeliefSize*particle.belief)/2.0), maxBeliefSize*particle.belief, maxBeliefSize*particle.belief);
-            gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
-
-            if (ANALYSE_MODE) {
-                gc.strokeLine(lineA.x * SCALE_FACTOR, lineA.y * SCALE_FACTOR, lineB.x * SCALE_FACTOR, lineB.y * SCALE_FACTOR);
-                gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, particle.forwardIntersect.point.x * SCALE_FACTOR, particle.forwardIntersect.point.y * SCALE_FACTOR);
-                gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, particle.leftIntersect.point.x * SCALE_FACTOR, particle.leftIntersect.point.y * SCALE_FACTOR);
-                gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, particle.rightIntersect.point.x * SCALE_FACTOR, particle.rightIntersect.point.y * SCALE_FACTOR);
-            }
+            if (particle.isValid)
+                drawParticle(particle);
         }
+
+        if (SIMULATE_MODE) {
+           drawParticle(robot);
+        }
+    }
+
+    private void drawParticle(Particle p) {
+       gc.setStroke(p.getColor());
+       System.out.println("Farbe: " + p.getColor().toString());
+       Point absCenter = p.centerPoint;
+       Point lineA = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation);
+       Point lineB = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation + Math.PI);
+       //System.out.println("Rotation: " + particle.currentRotation);
+       double maxBeliefSize = 10;
+
+       gc.fillOval(absCenter.x * SCALE_FACTOR - ((p.belief * maxBeliefSize)/2.0), absCenter.y * SCALE_FACTOR - ((maxBeliefSize*p.belief)/2.0), maxBeliefSize*p.belief, maxBeliefSize*p.belief);
+       gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
+
+       if (ANALYSE_MODE) {
+          gc.strokeLine(lineA.x * SCALE_FACTOR, lineA.y * SCALE_FACTOR, lineB.x * SCALE_FACTOR, lineB.y * SCALE_FACTOR);
+          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.forwardIntersect.point.x * SCALE_FACTOR, p.forwardIntersect.point.y * SCALE_FACTOR);
+          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.leftIntersect.point.x * SCALE_FACTOR, p.leftIntersect.point.y * SCALE_FACTOR);
+          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.rightIntersect.point.x * SCALE_FACTOR, p.rightIntersect.point.y * SCALE_FACTOR);
+       }
+
     }
 
 
@@ -323,6 +336,6 @@ public class Main extends Application implements IMonteEventListener{
         m.setParticles(particles);
         reDraw();
         //run monte again
-        runMonteAsync();
+        //runMonteAsync();
     }
 }

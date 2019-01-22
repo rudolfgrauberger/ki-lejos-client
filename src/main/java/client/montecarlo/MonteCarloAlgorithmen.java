@@ -2,6 +2,8 @@ package client.montecarlo;
 
 import client.localization.Helper;
 import client.localization.IMonteEventListener;
+import client.localization.Particle;
+import client.localization.ParticleFactory;
 
 import java.util.List;
 import java.util.Random;
@@ -31,11 +33,20 @@ public class MonteCarloAlgorithmen {
 
     public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
         this.partikels = partikels;
+        for (IMoveController p: this.partikels) {
+           Particle particle = (Particle)p;
+           System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
+        }
 
         compareSensorDatas();
         moveCommand();
         compareSensorDatas();
         resamplePartikels();
+
+       for (IMoveController p: this.partikels) {
+          Particle particle = (Particle)p;
+          System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
+       }
 
         return this.partikels;
     }
@@ -94,12 +105,13 @@ public class MonteCarloAlgorithmen {
             double q2 = Math.min(particleFront , robotFront) / Math.max(particleFront , robotFront);
             double q3 = Math.min(particleRight , robotRight) / Math.max(particleRight , robotRight);
             double bel = q1 * q2 * q3;
-            particle.setBelief(bel);
+            particle.setBelief(Helper.getWeight(bel));
         }
     }
+
     private void resamplePartikels(){
 
-        int reuseParticleCount = (int)(this.partikels.size() * REUSE_GRADE);
+        int reuseParticleCount = (int)Math.ceil(this.partikels.size() * REUSE_GRADE);
         int renewParticleCount = this.partikels.size() - reuseParticleCount;
         List<IMoveController> result = resampler.resample(this.partikels, reuseParticleCount);
         this.partikels = result;
@@ -129,6 +141,13 @@ public class MonteCarloAlgorithmen {
         {
             distance = (int)((latestRoboterDataSet.getDistanceFront()*100)-5);
         }
+
+        Particle tmp = ParticleFactory.createParticleClone((Particle)roboter);
+        tmp.moveForward(distance);
+
+        if (!tmp.hasValidPosition())
+           return;
+
         //move
         roboter.moveForward(distance);
         for (IMoveController partikel: partikels) {

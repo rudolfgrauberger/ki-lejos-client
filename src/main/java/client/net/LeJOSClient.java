@@ -10,6 +10,7 @@ import client.montecarlo.ActionException;
 import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
 import client.util.ILeJOSLogger;
+import javafx.scene.paint.Color;
 
 public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 
@@ -128,6 +129,11 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 		catch (IOException ex){
 			throw new ActionException("Connection");
 		}
+	}
+
+	@Override
+	public Color getColor() {
+		return null;
 	}
 
 	@Override

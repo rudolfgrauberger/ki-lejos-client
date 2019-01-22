@@ -177,4 +177,9 @@ public class Helper {
     public static double lerp ( double value , double max ){
         return Math.min(value , max) / max;
     }
+
+    // Mit 4000 gibt es auch bei einer Abweichung von 2.49 einen - wenn auch sehr niedrigen - Wert
+    public static double getWeight(double x) {
+       return 1 / Math.exp(Math.pow(-x, 2) / 4000);
+    }
 }

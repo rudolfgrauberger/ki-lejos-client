@@ -3,14 +3,18 @@ package client.localization;
 import client.montecarlo.ActionException;
 import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 
 public class Particle implements IMoveController {
 
+    public UUID id = UUID.randomUUID();
+
     Map map;
-    Point centerPoint;
+    public Point centerPoint;
     double currentRotation;
     Intersect forwardIntersect;
     Intersect leftIntersect;
@@ -23,25 +27,12 @@ public class Particle implements IMoveController {
 
 
 
-    public static Particle createParticle(Map map){
-        Point particleCenter = map.getPointInPolygon();
-        Random rand = new Random();
-        double randRotation = rand.nextDouble() * Math.PI * 2;
-        Particle p = new Particle(map,particleCenter,randRotation);
-
-        boolean valid = p.hasValidPosition();
-        if ( !valid ) {
-            return Particle.createParticle(map);
-        }
-        return p;
-    }
-
     public Particle(Map map, Point centerPoint, double rotation){
         this.map = map;
         this.centerPoint = centerPoint;
         this.currentRotation = rotation;
-
     }
+
     public boolean calculateIntersects(){
         //Helper.getRotationPoint(centerPoint , 1 , -Helper.QUARTER_CIRCLE);
         Intersect leftIntersect = calculateIntersect(Helper.getAngleOffset(currentRotation - Helper.QUARTER_CIRCLE) ,map.getLines() );
@@ -120,6 +111,11 @@ public class Particle implements IMoveController {
     }
 
     @Override
+    public Color getColor() {
+        return Color.DARKRED;
+    }
+
+    @Override
     public double getBelief() {
         return this.belief;
     }
@@ -135,20 +131,8 @@ public class Particle implements IMoveController {
         boolean intersects = calculateIntersects();
         return inPolygon && intersects;
     }
-    public boolean afterMoveEvent(){
-        boolean valPos = hasValidPosition();
-        // Generate new Position
-        if ( ! valPos ){
-            Particle p = Particle.createParticle(map);
 
-            this.map = p.map;
-            this.centerPoint = p.centerPoint;
-            this.currentRotation = p.currentRotation;
-            this.forwardIntersect = p.forwardIntersect;
-            this.leftIntersect = p.leftIntersect;
-            this.rightIntersect = p.rightIntersect;
-            this.belief = p.belief;
-        }
-        return valPos;
+    private void afterMoveEvent(){
+        isValid = hasValidPosition();
     }
 }

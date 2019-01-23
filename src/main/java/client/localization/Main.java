@@ -48,7 +48,7 @@ import java.util.List;
 public class Main extends Application implements IMonteEventListener{
 
     public static int SCALE_FACTOR = 2;
-    public static boolean ANALYSE_MODE = true;
+    public static boolean ANALYSE_MODE = false;
     public static boolean SIMULATE_MODE = true;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
@@ -200,8 +200,8 @@ public class Main extends Application implements IMonteEventListener{
 
         gc.setLineDashes(10);
         for (Particle particle : m.getParticles()) {
-                gc.setStroke(new Color(1, 0, 0, 1));
-                gc.setFill(new Color(1, 0, 0, 1));
+                gc.setStroke(new Color(1, 0, 0,  particle.getBelief()));
+                gc.setFill(new Color(1, 0, 0,  particle.getBelief()));
                 drawParticle(particle);
         }
 

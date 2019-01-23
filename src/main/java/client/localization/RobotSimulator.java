@@ -10,5 +10,6 @@ public class RobotSimulator extends Particle {
       super(map, centerPoint, rotation);
       this.color = new Color(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue(), 0.8);
       this.centerPoint.y = 75;
+
    }
 }

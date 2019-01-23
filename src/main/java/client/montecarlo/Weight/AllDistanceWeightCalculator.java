@@ -26,6 +26,15 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
         System.out.println("Links: (" + r1 + ", " + p1 + ")");
 
 
+        System.out.println("Roboter Links: " + r1 +" IntersectAddr:");
+        System.out.println("Roboter Vorne: " + r2 +" IntersectAddr:");
+        System.out.println("Roboter Rechts: " + r3+" IntersectAddr:");
+
+        System.out.println("Partikel Links: " + r1 );
+        System.out.println("Partikel Vorne: " + r2 );
+        System.out.println("Partikel Rechts: " + r3);
+
+
         double delta1 = (r1 - p1);
         double delta2 = (r2 - p2);
         double delta3 = (r3 - p3);

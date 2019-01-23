@@ -8,7 +8,6 @@ import client.montecarlo.Resample.RouletteWheelResampler;
 import client.montecarlo.Weight.AllDistanceWeightCalculator;
 import client.montecarlo.Weight.FrontDistanceWeightCalculator;
 import client.montecarlo.Weight.IWeightCalculator;
-import com.sun.xml.internal.ws.model.ParameterImpl;
 
 import java.util.List;
 import java.util.Random;
@@ -59,11 +58,13 @@ public class MonteCarloAlgorithmen {
 
     public void setGenerator(IParticleGenerator generator) {
         this.generator = generator;
+        
     }
 
     public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
         this.partikels = partikels;
         for (IMoveController p: this.partikels) {
+            //partikels
            Particle particle = (Particle)p;
            //System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }

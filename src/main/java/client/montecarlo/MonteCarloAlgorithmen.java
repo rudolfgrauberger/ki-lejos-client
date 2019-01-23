@@ -86,8 +86,6 @@ public class MonteCarloAlgorithmen {
     private void moveCommand() throws ActionException{
         Random random = new Random();
         double commandNumber = random.nextDouble();
-        int angle;
-
         if ( commandNumber >= 0.0 && commandNumber <= 0.25){
             turnLeft();
         }
@@ -97,20 +95,6 @@ public class MonteCarloAlgorithmen {
         if ( commandNumber > 0.5 && commandNumber <= 1){
             moveForward();
         }
-        /*switch (commandNumber){
-            //case forward
-            case 0:
-                moveForward();
-                break;
-            //turn left
-            case 1:
-                turnLeft();
-                break;
-            //turn right
-            case 2:
-                turnRight();
-                break;
-        }*/
     }
 
     private void resamplePartikels(){
@@ -142,11 +126,6 @@ public class MonteCarloAlgorithmen {
         for (IMoveController partikel: partikels) {
             partikel.moveForward(distance);
         }
-        SensorDataSet mytestset = latestRoboterDataSet;
-        if(!roboter.isValid()) {
-            System.out.println("sad"+latestRoboterDataSet.toString());
-        }
-
     }
 
     private void turnLeft() throws ActionException {

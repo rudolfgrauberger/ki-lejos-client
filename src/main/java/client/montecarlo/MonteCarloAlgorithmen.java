@@ -2,11 +2,13 @@ package client.montecarlo;
 
 import client.localization.IMonteEventListener;
 import client.localization.Particle;
+import client.localization.RobotSimulator;
 import client.montecarlo.Resample.IResampler;
 import client.montecarlo.Resample.RouletteWheelResampler;
 import client.montecarlo.Weight.AllDistanceWeightCalculator;
 import client.montecarlo.Weight.FrontDistanceWeightCalculator;
 import client.montecarlo.Weight.IWeightCalculator;
+import com.sun.xml.internal.ws.model.ParameterImpl;
 
 import java.util.List;
 import java.util.Random;
@@ -179,8 +181,16 @@ public class MonteCarloAlgorithmen {
     }
 
     private void calculateWeights() throws ActionException {
+        RobotSimulator r = (RobotSimulator)roboter;
+        System.out.println("Robotor (" + r + ")");
+        System.out.println("Links: " + r.leftIntersect);
+        System.out.println("Rechts: " + r.rightIntersect);
         latestRoboterDataSet = roboter.getSensorDataSet();
         for (IMoveController particle: this.partikels) {
+            Particle p = (Particle)particle;
+            System.out.println("Partikel (" + p + ")");
+            System.out.println("Links: " + p.leftIntersect);
+            System.out.println("Rechts: " + p.rightIntersect);
             particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }
     }

@@ -16,9 +16,9 @@ public class Particle implements IMoveController {
     Map map;
     public Point centerPoint;
     double currentRotation;
-    Intersect forwardIntersect;
-    Intersect leftIntersect;
-    Intersect rightIntersect;
+    public Intersect forwardIntersect;
+    public Intersect leftIntersect;
+    public Intersect rightIntersect;
 
     Random r = new Random();
     double belief = 1d;

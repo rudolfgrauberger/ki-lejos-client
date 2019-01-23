@@ -166,9 +166,9 @@ public class MonteCarloAlgorithmen {
     }
 
     private void calculateWeights() throws ActionException {
-        SensorDataSet currentSensorData = roboter.getSensorDataSet();
+        latestRoboterDataSet = roboter.getSensorDataSet();
         for (IMoveController particle: this.partikels) {
-            particle.setBelief(calculator.calculateWeight(currentSensorData, particle));
+            particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }
     }
 }

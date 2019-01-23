@@ -146,6 +146,11 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 
 	}
 
+	@Override
+	public boolean isValid() {
+		return true;
+	}
+
 
 	@Override
 	public void moveForward(double cm) throws ActionException {

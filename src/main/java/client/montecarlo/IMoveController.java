@@ -14,4 +14,5 @@ public interface IMoveController {
     Color getColor();
     double getBelief();
     void setBelief(double belief);
+    boolean isValid();
 }

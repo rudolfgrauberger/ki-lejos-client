@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class MonteCarloAlgorithmen {
 
-    private static double REUSE_GRADE = 0.8d;
+    private static double REUSE_GRADE = 0.9d;
 
     private IMoveController roboter;
     private List<IMoveController> partikels;
@@ -63,7 +63,8 @@ public class MonteCarloAlgorithmen {
            System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }
 
-        //calculateWeights();
+        latestRoboterDataSet = roboter.getSensorDataSet();
+
         resamplePartikels();
         moveCommand();
         calculateWeights();
@@ -102,18 +103,9 @@ public class MonteCarloAlgorithmen {
 
     private void resamplePartikels(){
 
-        int particleCount = this.partikels.size();
-        int reuseParticleCount = (int)Math.ceil(particleCount * REUSE_GRADE);
-        List<IMoveController> result = resampler.resample(this.partikels, reuseParticleCount);
+        List<IMoveController> result = resampler.resample(this.partikels, REUSE_GRADE, generator);
         this.partikels = result;
 
-        int renewParticleCount = particleCount - this.partikels.size();
-        System.out.println("Renewed count: " + renewParticleCount);
-
-        while (renewParticleCount > 0) {
-            this.partikels.add(generator.getRandomParticle());
-            --renewParticleCount;
-        }
     }
 
     //move controlles
@@ -126,15 +118,11 @@ public class MonteCarloAlgorithmen {
         //if at end turn around
         if((latestRoboterDataSet.getDistanceFront()) < 10)
         {
-            roboter.turnRight(180);
-            for (IMoveController partikel: partikels) {
-                partikel.turnRight(180);
-            }
-            System.out.println("around");
+            return;
         }
         else if((latestRoboterDataSet.getDistanceFront()) < distance-5)
         {
-            distance = (int)((latestRoboterDataSet.getDistanceFront()*100)-5);
+            return;
         }
 
         //move
@@ -166,7 +154,7 @@ public class MonteCarloAlgorithmen {
     }
 
     private void calculateWeights() throws ActionException {
-        latestRoboterDataSet = roboter.getSensorDataSet();
+
         for (IMoveController particle: this.partikels) {
             particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }

@@ -5,6 +5,7 @@ import client.localization.Particle;
 import client.montecarlo.Resample.IResampler;
 import client.montecarlo.Resample.RouletteWheelResampler;
 import client.montecarlo.Weight.AllDistanceWeightCalculator;
+import client.montecarlo.Weight.FrontDistanceWeightCalculator;
 import client.montecarlo.Weight.IWeightCalculator;
 
 import java.util.List;
@@ -66,6 +67,7 @@ public class MonteCarloAlgorithmen {
         }
 
         latestRoboterDataSet = roboter.getSensorDataSet();
+
 
         moveCommand();
         calculateWeights();
@@ -177,7 +179,7 @@ public class MonteCarloAlgorithmen {
     }
 
     private void calculateWeights() throws ActionException {
-
+        latestRoboterDataSet = roboter.getSensorDataSet();
         for (IMoveController particle: this.partikels) {
             particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }

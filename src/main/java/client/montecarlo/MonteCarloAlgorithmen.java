@@ -120,9 +120,9 @@ public class MonteCarloAlgorithmen {
         {
             return;
         }
-        else if((latestRoboterDataSet.getDistanceFront()) < distance-5)
+        else if((latestRoboterDataSet.getDistanceFront())-5 < distance)
         {
-            return;
+            distance = (int) latestRoboterDataSet.getDistanceFront()-5;
         }
 
         //move

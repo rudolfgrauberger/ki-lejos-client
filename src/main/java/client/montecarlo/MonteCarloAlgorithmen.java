@@ -1,9 +1,11 @@
 package client.montecarlo;
 
-import client.localization.Helper;
 import client.localization.IMonteEventListener;
 import client.localization.Particle;
-import client.localization.ParticleFactory;
+import client.montecarlo.Resample.IResampler;
+import client.montecarlo.Resample.RouletteWheelResampler;
+import client.montecarlo.Weight.AllDistanceWeightCalculator;
+import client.montecarlo.Weight.IWeightCalculator;
 
 import java.util.List;
 import java.util.Random;
@@ -71,7 +73,7 @@ public class MonteCarloAlgorithmen {
 
        for (IMoveController p: this.partikels) {
           Particle particle = (Particle)p;
-          System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
+          //System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
        }
 
         return this.partikels;

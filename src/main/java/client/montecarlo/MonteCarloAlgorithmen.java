@@ -130,6 +130,11 @@ public class MonteCarloAlgorithmen {
         for (IMoveController partikel: partikels) {
             partikel.moveForward(distance);
         }
+        SensorDataSet mytestset = latestRoboterDataSet;
+        if(!roboter.isValid()) {
+            System.out.println("sad"+latestRoboterDataSet.toString());
+        }
+
     }
 
     private void turnLeft() throws ActionException {

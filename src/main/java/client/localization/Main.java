@@ -200,28 +200,28 @@ public class Main extends Application implements IMonteEventListener{
 
         gc.setLineDashes(10);
         for (Particle particle : m.getParticles()) {
-            if (particle.isValid)
-                gc.setStroke(new Color(1,0,0,particle.getBelief()));
-                gc.setFill(new Color(1,0,0,particle.getBelief()));
+                gc.setStroke(new Color(1, 0, 0, 1));
+                gc.setFill(new Color(1, 0, 0, 1));
                 drawParticle(particle);
         }
 
         if (SIMULATE_MODE) {
             gc.setStroke(Color.GREEN);
             gc.setFill(Color.GREEN);
-           drawParticle(robot);
+            drawParticle(robot);
         }
     }
 
     private void drawParticle(Particle p) {
        //gc.setStroke(p.getColor());
-
-       //System.out.println("Farbe: (Grün: " + p.getColor().getGreen() + ", Rot: " + p.getColor().getRed() + ")");
        Point absCenter = p.centerPoint;
        Point lineA = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation);
        Point lineB = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation + Math.PI);
        //System.out.println("Rotation: " + particle.currentRotation);
        double maxBeliefSize = 10;
+
+       System.out.println(absCenter.x * SCALE_FACTOR - 2.0);
+        System.out.println(absCenter.y * SCALE_FACTOR - 2.0);
 
        //gc.setFill(p.getColor());
        gc.fillOval(absCenter.x * SCALE_FACTOR - 2.0, absCenter.y * SCALE_FACTOR - 2.0, maxBeliefSize/**p.belief*/, maxBeliefSize/**p.belief*/);

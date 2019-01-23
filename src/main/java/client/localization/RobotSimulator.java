@@ -11,15 +11,4 @@ public class RobotSimulator extends Particle {
       this.color = new Color(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue(), 0.8);
       this.centerPoint.y = 75;
    }
-
-   /***
-    * The simulated particle returns intersect distance in cm, the real robot in m. At this point it is converted to meters.
-    * @return
-    * @throws ActionException
-    */
-   @Override
-   public SensorDataSet getSensorDataSet() throws ActionException {
-      SensorDataSet sds = new SensorDataSet(forwardIntersect.distance , leftIntersect.distance , rightIntersect.distance);
-      return sds;
-   }
 }

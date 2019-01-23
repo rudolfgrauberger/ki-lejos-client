@@ -11,24 +11,31 @@ public class RouletteWheelResampler implements IResampler {
    private Random r;
 
    @Override
-   public List<IMoveController> resample(List<IMoveController> particles, int reuse) {
+   public List<IMoveController> resample(List<IMoveController> particles, double reuseGrade, IParticleGenerator generator) {
       r = new Random();
+
+      int reuseCount = (int)Math.ceil(particles.size() * reuseGrade);
+      int renewCount = particles.size() - reuseCount;
+
 
       wheel = getIntervalsFromParticles(particles);
 
       List<IMoveController> resampled = new ArrayList<IMoveController>();
 
-      while (reuse > 0) {
+      while (reuseCount > 0) {
          double z = getRandomDouble();
 
          IMoveController p = getParticleFromRange(z);
+         resampled.add(p);
 
-         // Ist das notwendig?
-         // Laut dem Pseudocode in http://www-home.htwg-konstanz.de/~bittel/msi_robo/Vorlesung/08_MonteCarloLokalisierung.pdf schon...
-         if (!resampled.contains(p))
-            resampled.add(p);
+         reuseCount--;
+      }
 
-         reuse--;
+      System.out.println("Renewed count: " + renewCount);
+
+      while (renewCount > 0) {
+         resampled.add(generator.getRandomParticle());
+         --renewCount;
       }
 
       System.out.println("Resampled count: " + resampled.size());

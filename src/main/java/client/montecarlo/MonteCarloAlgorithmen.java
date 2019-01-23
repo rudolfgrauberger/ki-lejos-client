@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class MonteCarloAlgorithmen {
 
-    private static double REUSE_GRADE = 0.8d;
+    private static double REUSE_GRADE = 0.9d;
 
     private IMoveController roboter;
     private List<IMoveController> partikels;
@@ -18,6 +18,8 @@ public class MonteCarloAlgorithmen {
     private IResampler resampler;
     private IWeightCalculator calculator;
     private IParticleGenerator generator;
+
+    private SensorDataSet latestRoboterDataSet;
 
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator, IResampler resampler) {
         this.roboter = roboter;
@@ -61,7 +63,8 @@ public class MonteCarloAlgorithmen {
            //System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }
 
-        //calculateWeights();
+        latestRoboterDataSet = roboter.getSensorDataSet();
+
         resamplePartikels();
         moveCommand();
         calculateWeights();
@@ -100,18 +103,9 @@ public class MonteCarloAlgorithmen {
 
     private void resamplePartikels(){
 
-        int particleCount = this.partikels.size();
-        int reuseParticleCount = (int)Math.ceil(particleCount * REUSE_GRADE);
-        List<IMoveController> result = resampler.resample(this.partikels, reuseParticleCount);
+        List<IMoveController> result = resampler.resample(this.partikels, REUSE_GRADE, generator);
         this.partikels = result;
 
-        int renewParticleCount = particleCount - this.partikels.size();
-        System.out.println("Renewed count: " + renewParticleCount);
-
-        while (renewParticleCount > 0) {
-            this.partikels.add(generator.getRandomParticle());
-            --renewParticleCount;
-        }
     }
 
     //move controlles
@@ -120,29 +114,16 @@ public class MonteCarloAlgorithmen {
         //get distance
         int distance = 30;
 
-        // Kann/Soll es auch so für den echten Robotor gemacht werden, oder
-        // sollten wir es wie vorher machen?
-        Particle tmp = ParticleFactory.createParticleClone((Particle)roboter);
-        tmp.moveForward(distance);
-
-        if (!tmp.hasValidPosition()) {
-            System.out.println("Distance is not large enough to make the movement.");
-            return;
-        }
 
         //if at end turn around
-        /*if((latestRoboterDataSet.getDistanceFront()*100) < 10)
+        if((latestRoboterDataSet.getDistanceFront()) < 10)
         {
-            roboter.turnRight(180);
-            for (IMoveController partikel: partikels) {
-                partikel.turnRight(180);
-            }
-            System.out.println("around");
+            return;
         }
         else if((latestRoboterDataSet.getDistanceFront()) < distance-5)
         {
-            distance = (int)((latestRoboterDataSet.getDistanceFront()*100)-5);
-        }*/
+            return;
+        }
 
         //move
         roboter.moveForward(distance);
@@ -173,9 +154,9 @@ public class MonteCarloAlgorithmen {
     }
 
     private void calculateWeights() throws ActionException {
-        SensorDataSet currentSensorData = roboter.getSensorDataSet();
+
         for (IMoveController particle: this.partikels) {
-            particle.setBelief(calculator.calculateWeight(currentSensorData, particle));
+            particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }
     }
 }

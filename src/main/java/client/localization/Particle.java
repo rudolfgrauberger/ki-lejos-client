@@ -128,6 +128,11 @@ public class Particle implements IMoveController {
         this.belief = belief;
     }
 
+    @Override
+    public boolean isValid() {
+        return isValid;
+    }
+
 
     public boolean hasValidPosition(){
         boolean inPolygon = map.checkPointInsidePolygon(this.centerPoint);

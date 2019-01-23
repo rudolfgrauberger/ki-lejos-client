@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IResampler {
 
-   List<IMoveController> resample(List<IMoveController> particles, int reuse);
+   List<IMoveController> resample(List<IMoveController> particles, double reuseGrade, IParticleGenerator generator);
 }

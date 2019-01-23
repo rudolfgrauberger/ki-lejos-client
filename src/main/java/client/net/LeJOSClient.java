@@ -113,17 +113,17 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 			moveResult = sendLookCenter();
 			if(!moveResult.isSuccess())
 				throw new ActionException("Robot move");
-			distCenter = getDoubleFromResult(getSensor(sensorType));
+			distCenter = getDoubleFromResult(getSensor(sensorType))*100;
 			//left
 			moveResult = sendLookLeft();
 			if(!moveResult.isSuccess())
 				throw new ActionException("Robot move");
-			distLeft = getDoubleFromResult(getSensor(sensorType));
+			distLeft = getDoubleFromResult(getSensor(sensorType))*100;
 			//right
 			moveResult = sendLookRight();
 			if(!moveResult.isSuccess())
 				throw new ActionException("Robot move");
-			distRight = getDoubleFromResult(getSensor(sensorType));
+			distRight = getDoubleFromResult(getSensor(sensorType))*100;
 			return new SensorDataSet(distCenter,distLeft,distRight);
 		}
 		catch (IOException ex){
@@ -144,6 +144,11 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 	@Override
 	public void setBelief(double belief) {
 
+	}
+
+	@Override
+	public boolean isValid() {
+		return true;
 	}
 
 

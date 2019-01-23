@@ -6,6 +6,7 @@ import client.montecarlo.MonteCarloAlgorithmen;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -68,7 +69,7 @@ public class Main extends Application implements IMonteEventListener{
 
     //Locate button
     private boolean locate = false;
-
+    private int countLocate = 0;
     //Frame and Layout
 
     private VBox getMainLayout() {
@@ -179,8 +180,11 @@ public class Main extends Application implements IMonteEventListener{
 
     //Map
     private void reDraw() {
-        gc.clearRect(0, 0, Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
-        drawMap();
+        Platform.runLater(() ->
+        {
+            gc.clearRect(0, 0, Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
+            drawMap();
+        });
     }
 
     private void drawMap() {
@@ -329,6 +333,7 @@ public class Main extends Application implements IMonteEventListener{
                     }
                 }
             }).start();
+            System.out.println("Count: "+ countLocate++);
         }
     }
 
@@ -343,6 +348,12 @@ public class Main extends Application implements IMonteEventListener{
         m.setParticles(particles);
         reDraw();
         //run monte again
-        //runMonteAsync();
+        try {
+            Thread.sleep(1000);
+        }
+        catch (Exception e){
+
+        }
+        runMonteAsync();
     }
 }

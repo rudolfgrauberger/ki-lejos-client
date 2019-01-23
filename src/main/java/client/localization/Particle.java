@@ -40,6 +40,8 @@ public class Particle implements IMoveController {
         if ( rot == 1 ){
             this.currentRotation = 2* Helper.QUARTER_CIRCLE;
         }
+        //afterMoveEvent();
+        System.out.println("rotation: "+currentRotation);
         //this.currentRotation = rotation;
         //this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
     }
@@ -137,10 +139,22 @@ public class Particle implements IMoveController {
     public boolean hasValidPosition(){
         boolean inPolygon = map.checkPointInsidePolygon(this.centerPoint);
         boolean intersects = calculateIntersects();
+        /*try {
+            System.out.println("Partikel Links: " + getSensorDataSet().getDistanceLeft());
+            System.out.println("Partikel Vorne: " + getSensorDataSet().getDistanceFront());
+            System.out.println("Partikel Rechts: " + getSensorDataSet().getDistanceRight());
+        } catch (ActionException e) {
+            e.printStackTrace();
+        }*/
         return inPolygon && intersects;
+
+
+
+
     }
 
     private void afterMoveEvent(){
+
         isValid = hasValidPosition();
     }
 }

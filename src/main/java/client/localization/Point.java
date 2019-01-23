@@ -21,5 +21,4 @@ public class Point {
     public Point translate(){
         return new Point(this.x, 1 - this.y);
     }
-
 }

@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class MonteCarloAlgorithmen {
 
-    private static double REUSE_GRADE = 0.9d;
+    private static double REUSE_GRADE = 1d;
 
     private IMoveController roboter;
     private List<IMoveController> partikels;

@@ -180,6 +180,6 @@ public class Helper {
     }
 
     public static double getWeight(double x) {
-       return 1 / Math.exp(Math.pow(5*x, 2));
+       return 1 / Math.exp(20*Math.pow(x, 2));
     }
 }

@@ -1,6 +1,8 @@
-package client.montecarlo;
+package client.montecarlo.Resample;
 
 import client.localization.Particle;
+import client.montecarlo.IMoveController;
+import client.montecarlo.IParticleGenerator;
 
 import java.util.List;
 

@@ -1,6 +1,10 @@
-package client.montecarlo;
+package client.montecarlo.Weight;
 
 import client.localization.Helper;
+import client.montecarlo.ActionException;
+import client.montecarlo.IMoveController;
+import client.montecarlo.SensorDataSet;
+import client.montecarlo.Weight.IWeightCalculator;
 
 public class AllDistanceWeightCalculator implements IWeightCalculator {
     @Override

@@ -18,7 +18,7 @@ public class RobotSimulator extends Particle {
     */
    @Override
    public SensorDataSet getSensorDataSet() throws ActionException {
-      SensorDataSet sds = new SensorDataSet(forwardIntersect.distance / 100 , leftIntersect.distance / 100, rightIntersect.distance / 100);
+      SensorDataSet sds = new SensorDataSet(forwardIntersect.distance , leftIntersect.distance , rightIntersect.distance);
       return sds;
    }
 }

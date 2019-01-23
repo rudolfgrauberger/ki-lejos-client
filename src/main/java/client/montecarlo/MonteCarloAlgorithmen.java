@@ -23,7 +23,7 @@ public class MonteCarloAlgorithmen {
         this.roboter = roboter;
         this.resampler = resampler;
         this.generator = generator;
-        this.calculator = new FrontDistanceWeightCalculator();
+        this.calculator = new AllDistanceWeightCalculator();
     }
 
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator) {

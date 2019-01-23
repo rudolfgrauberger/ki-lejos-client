@@ -16,7 +16,7 @@ import java.util.logging.Handler;
 
 public class Map implements IParticleGenerator {
 
-    public static final int PARTICLE_COUNT = 10000;
+    public static final int PARTICLE_COUNT = 1000;
 
 
     private ArrayList<Line> lines = new ArrayList<Line>();

@@ -33,7 +33,7 @@ public class Particle implements IMoveController {
         this.map = map;
         this.centerPoint = centerPoint;
         this.currentRotation = rotation;
-        this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
+        //this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
     }
 
     public boolean calculateIntersects(){

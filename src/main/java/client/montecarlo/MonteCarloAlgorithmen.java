@@ -86,7 +86,18 @@ public class MonteCarloAlgorithmen {
     private void moveCommand() throws ActionException{
         Random random = new Random();
         double commandNumber = random.nextDouble();
-        int angle;
+
+        if ( commandNumber < 0.2){
+
+            turnLeft(180);
+        }
+        else{
+            moveForward((int) (commandNumber * 50.0));
+        }
+
+
+
+        /*int angle;
 
         if ( commandNumber >= 0.0 && commandNumber <= 0.25){
             turnLeft();
@@ -96,7 +107,7 @@ public class MonteCarloAlgorithmen {
         }
         if ( commandNumber > 0.5 && commandNumber <= 1){
             moveForward();
-        }
+        }*/
         /*switch (commandNumber){
             //case forward
             case 0:
@@ -121,10 +132,10 @@ public class MonteCarloAlgorithmen {
     }
 
     //move controlles
-    private void moveForward() throws ActionException{
+    private void moveForward(int distance) throws ActionException{
         System.out.println("forward");
         //get distance
-        int distance = 30;
+        //int distance = 30;
 
 
         //if at end turn around
@@ -144,10 +155,10 @@ public class MonteCarloAlgorithmen {
         }
     }
 
-    private void turnLeft() throws ActionException {
-        System.out.println("left");
+    private void turnLeft(int angle) throws ActionException {
+        /*System.out.println("left");
         Random random = new Random();
-        int angle = random.nextInt(180);
+        int angle = random.nextInt(180);*/
 
         roboter.turnLeft(angle);
         for (IMoveController partikel: partikels) {

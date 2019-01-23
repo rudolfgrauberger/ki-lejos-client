@@ -22,7 +22,7 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
         double delta1 = (r1 - p1);
         double delta2 = (r2 - p2);
         double delta3 = (r3 - p3);
-        double weight =Helper.getWeight(delta1) * Helper.getWeight(delta2) * Helper.getWeight(delta3);
+        double weight = ( Helper.getWeight(delta1) + Helper.getWeight(delta2) + Helper.getWeight(delta3))/3.0f;
 
         return weight;
         /*double distanceParticle = particle.getSensorDataSet().getDistanceFront();

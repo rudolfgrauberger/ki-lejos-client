@@ -1,5 +1,6 @@
 package client.montecarlo.Resample;
 
+import client.localization.Particle;
 import client.montecarlo.IMoveController;
 import client.montecarlo.IParticleGenerator;
 import client.montecarlo.Interval;
@@ -22,6 +23,12 @@ public class RouletteWheelResampler implements IResampler {
       int reuseCount = (int)Math.ceil(particles.size() * reuseGrade);
       int renewCount = particles.size() - reuseCount;
 
+      //List<IMoveController> particles = List<>(); // haöoasnsasadskdskdnkndjusbdkljjkljjhhjgghfjoipoipoiuzuztzvbvbnl.mölöälppilk
+      for (IMoveController p : particles){
+         if ( p.isValid() ){
+
+         }
+      }
 
       wheel = getIntervalsFromParticles(particles);
 

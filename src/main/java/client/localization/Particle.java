@@ -32,7 +32,15 @@ public class Particle implements IMoveController {
     public Particle(Map map, Point centerPoint, double rotation){
         this.map = map;
         this.centerPoint = centerPoint;
-        this.currentRotation = rotation;
+        int rot = r.nextInt(2);
+
+        if ( rot == 0) {
+            this.currentRotation = 0;
+        }
+        if ( rot == 1 ){
+            this.currentRotation = 2* Helper.QUARTER_CIRCLE;
+        }
+        //this.currentRotation = rotation;
         //this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
     }
 

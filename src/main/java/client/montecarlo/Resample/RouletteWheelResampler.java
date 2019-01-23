@@ -1,4 +1,9 @@
-package client.montecarlo;
+package client.montecarlo.Resample;
+
+import client.montecarlo.IMoveController;
+import client.montecarlo.IParticleGenerator;
+import client.montecarlo.Interval;
+import client.montecarlo.Resample.IResampler;
 
 import java.util.ArrayList;
 import java.util.List;

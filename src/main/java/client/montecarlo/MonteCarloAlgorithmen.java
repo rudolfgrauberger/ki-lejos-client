@@ -1,9 +1,11 @@
 package client.montecarlo;
 
-import client.localization.Helper;
 import client.localization.IMonteEventListener;
 import client.localization.Particle;
-import client.localization.ParticleFactory;
+import client.montecarlo.Resample.IResampler;
+import client.montecarlo.Resample.RouletteWheelResampler;
+import client.montecarlo.Weight.AllDistanceWeightCalculator;
+import client.montecarlo.Weight.IWeightCalculator;
 
 import java.util.List;
 import java.util.Random;
@@ -25,7 +27,7 @@ public class MonteCarloAlgorithmen {
         this.roboter = roboter;
         this.resampler = resampler;
         this.generator = generator;
-        this.calculator = new FrontDistanceWeightCalculator();
+        this.calculator = new AllDistanceWeightCalculator();
     }
 
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator) {
@@ -60,7 +62,7 @@ public class MonteCarloAlgorithmen {
         this.partikels = partikels;
         for (IMoveController p: this.partikels) {
            Particle particle = (Particle)p;
-           System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
+           //System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }
 
         latestRoboterDataSet = roboter.getSensorDataSet();
@@ -71,7 +73,7 @@ public class MonteCarloAlgorithmen {
 
        for (IMoveController p: this.partikels) {
           Particle particle = (Particle)p;
-          System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
+          //System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
        }
 
         return this.partikels;
@@ -83,9 +85,19 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        int commandNumber = random.nextInt(3);
+        double commandNumber = random.nextDouble();
         int angle;
-        switch (commandNumber){
+
+        if ( commandNumber >= 0.0 && commandNumber <= 0.25){
+            turnLeft();
+        }
+        if ( commandNumber > 0.25 && commandNumber <= 0.5){
+            turnRight();
+        }
+        if ( commandNumber > 0.5 && commandNumber <= 1){
+            moveForward();
+        }
+        /*switch (commandNumber){
             //case forward
             case 0:
                 moveForward();
@@ -98,7 +110,7 @@ public class MonteCarloAlgorithmen {
             case 2:
                 turnRight();
                 break;
-        }
+        }*/
     }
 
     private void resamplePartikels(){

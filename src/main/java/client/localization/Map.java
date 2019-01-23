@@ -16,7 +16,7 @@ import java.util.logging.Handler;
 
 public class Map implements IParticleGenerator {
 
-    public static final int PARTICLE_COUNT = 1;
+    public static final int PARTICLE_COUNT = 1000;
 
 
     private ArrayList<Line> lines = new ArrayList<Line>();
@@ -126,14 +126,9 @@ public class Map implements IParticleGenerator {
 
     private void initParticles() {
         Random rand = new Random();
-        for (int i = 0; i < PARTICLE_COUNT;) {
+        for (int i = 0; i < PARTICLE_COUNT; ++i) {
             Particle particle = ParticleFactory.createNewParticle(this);
-            /*if ( particle == null){
-                continue;
-            }*/
-           // Particle particle = new Particle(this, particleCenter, randRotation);
             particles.add(particle);
-            i++;
         }
 
     }

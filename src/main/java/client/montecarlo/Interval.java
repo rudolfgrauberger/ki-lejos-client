@@ -22,6 +22,10 @@ public class Interval {
    }
 
    public boolean isInRange(double value) {
+      if (this.start == .0d) {
+         return value >= this.start && value <= this.end;
+      }
+
       return value > this.start  && value <= this.end;
    }
 

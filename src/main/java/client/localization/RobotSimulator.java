@@ -8,6 +8,7 @@ public class RobotSimulator extends Particle {
 
    public RobotSimulator(Map map, Point centerPoint, double rotation) {
       super(map, centerPoint, rotation);
+      this.color = new Color(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue(), 0.8);
    }
 
    /***
@@ -19,10 +20,5 @@ public class RobotSimulator extends Particle {
    public SensorDataSet getSensorDataSet() throws ActionException {
       SensorDataSet sds = new SensorDataSet(forwardIntersect.distance / 100 , leftIntersect.distance / 100, rightIntersect.distance / 100);
       return sds;
-   }
-
-   @Override
-   public Color getColor() {
-      return Color.GREEN;
    }
 }

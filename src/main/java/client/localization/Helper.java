@@ -175,7 +175,7 @@ public class Helper {
 
     }
     public static double lerp ( double value , double max ){
-        return Math.min(value , max) / max;
+        return Math.min(value , max) / Math.max(value, max);
     }
 
     // Mit 4000 gibt es auch bei einer Abweichung von 2.49 einen - wenn auch sehr niedrigen - Wert

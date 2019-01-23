@@ -10,25 +10,48 @@ import java.util.Random;
 
 public class MonteCarloAlgorithmen {
 
-    public static double MAX_DISTANCE_FORWARD = 250.0;
-
     private static double REUSE_GRADE = 0.8d;
 
     private IMoveController roboter;
     private List<IMoveController> partikels;
-    private SensorDataSet latestRoboterDataSet;
 
     private IResampler resampler;
+    private IWeightCalculator calculator;
     private IParticleGenerator generator;
 
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator, IResampler resampler) {
         this.roboter = roboter;
         this.resampler = resampler;
         this.generator = generator;
+        this.calculator = new FrontDistanceWeightCalculator();
     }
 
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator) {
         this(roboter, generator, new RouletteWheelResampler());
+    }
+
+    public IResampler getResampler() {
+        return resampler;
+    }
+
+    public void setResampler(IResampler resampler) {
+        this.resampler = resampler;
+    }
+
+    public IWeightCalculator getCalculator() {
+        return calculator;
+    }
+
+    public void setCalculator(IWeightCalculator calculator) {
+        this.calculator = calculator;
+    }
+
+    public IParticleGenerator getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(IParticleGenerator generator) {
+        this.generator = generator;
     }
 
     public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
@@ -38,10 +61,10 @@ public class MonteCarloAlgorithmen {
            System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }
 
-        compareSensorDatas();
-        moveCommand();
-        compareSensorDatas();
+        calculateWeights();
         resamplePartikels();
+        moveCommand();
+        calculateWeights();
 
        for (IMoveController p: this.partikels) {
           Particle particle = (Particle)p;
@@ -74,37 +97,15 @@ public class MonteCarloAlgorithmen {
                 break;
         }
     }
-    private void compareSensorDatas() throws ActionException{
-        this.latestRoboterDataSet = roboter.getSensorDataSet();
-
-        double robotLeft = Helper.lerp(latestRoboterDataSet.getDistanceLeft()*100 , MAX_DISTANCE_FORWARD);
-        double robotFront = Helper.lerp(latestRoboterDataSet.getDistanceFront()*100 , MAX_DISTANCE_FORWARD);
-        double robotRight= Helper.lerp(latestRoboterDataSet.getDistanceRight()*100 , MAX_DISTANCE_FORWARD);
-
-        /**
-         *  TODO: fill getSensorData
-         */
-
-        for (IMoveController particle: partikels) {
-            double particleLeft =  Helper.lerp(particle.getSensorDataSet().getDistanceLeft() , MAX_DISTANCE_FORWARD);
-            double particleFront = Helper.lerp(particle.getSensorDataSet().getDistanceFront() , MAX_DISTANCE_FORWARD);
-            double particleRight = Helper.lerp(particle.getSensorDataSet().getDistanceRight() , MAX_DISTANCE_FORWARD);
-
-            double q1 = Math.min(particleLeft , robotLeft) / Math.max(particleLeft , robotLeft);
-            double q2 = Math.min(particleFront , robotFront) / Math.max(particleFront , robotFront);
-            double q3 = Math.min(particleRight , robotRight) / Math.max(particleRight , robotRight);
-            double bel = q1 * q2 * q3;
-            particle.setBelief(Helper.getWeight(bel));
-        }
-    }
 
     private void resamplePartikels(){
 
-        int reuseParticleCount = (int)Math.ceil(this.partikels.size() * REUSE_GRADE);
-        int renewParticleCount = this.partikels.size() - reuseParticleCount;
+        int particleCount = this.partikels.size();
+        int reuseParticleCount = (int)Math.ceil(particleCount * REUSE_GRADE);
         List<IMoveController> result = resampler.resample(this.partikels, reuseParticleCount);
         this.partikels = result;
 
+        int renewParticleCount = particleCount - this.partikels.size();
         System.out.println("Renewed count: " + renewParticleCount);
 
         while (renewParticleCount > 0) {
@@ -168,6 +169,13 @@ public class MonteCarloAlgorithmen {
         roboter.turnRight(angle);
         for (IMoveController partikel: partikels) {
             partikel.turnRight(angle);
+        }
+    }
+
+    private void calculateWeights() throws ActionException {
+        SensorDataSet currentSensorData = roboter.getSensorDataSet();
+        for (IMoveController particle: this.partikels) {
+            particle.setBelief(calculator.calculateWeight(currentSensorData, particle));
         }
     }
 }

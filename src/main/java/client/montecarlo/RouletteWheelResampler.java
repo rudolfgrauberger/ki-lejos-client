@@ -21,9 +21,14 @@ public class RouletteWheelResampler implements IResampler {
       while (reuse > 0) {
          double z = getRandomDouble();
 
-         resampled.add(getParticleFromRange(z));
+         IMoveController p = getParticleFromRange(z);
 
-         --reuse;
+         // Ist das notwendig?
+         // Laut dem Pseudocode in http://www-home.htwg-konstanz.de/~bittel/msi_robo/Vorlesung/08_MonteCarloLokalisierung.pdf schon...
+         if (!resampled.contains(p))
+            resampled.add(p);
+
+         reuse--;
       }
 
       System.out.println("Resampled count: " + resampled.size());

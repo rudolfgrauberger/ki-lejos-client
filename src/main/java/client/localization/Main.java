@@ -206,22 +206,23 @@ public class Main extends Application implements IMonteEventListener{
 
     private void drawParticle(Particle p) {
        gc.setStroke(p.getColor());
-       System.out.println("Farbe: " + p.getColor().toString());
+       System.out.println("Farbe: (Grün: " + p.getColor().getGreen() + ", Rot: " + p.getColor().getRed() + ")");
        Point absCenter = p.centerPoint;
        Point lineA = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation);
        Point lineB = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation + Math.PI);
        //System.out.println("Rotation: " + particle.currentRotation);
        double maxBeliefSize = 10;
 
-       gc.fillOval(absCenter.x * SCALE_FACTOR - ((p.belief * maxBeliefSize)/2.0), absCenter.y * SCALE_FACTOR - ((maxBeliefSize*p.belief)/2.0), maxBeliefSize*p.belief, maxBeliefSize*p.belief);
-       gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
+       gc.setFill(p.getColor());
+       gc.fillOval(absCenter.x * SCALE_FACTOR - 2.0, absCenter.y * SCALE_FACTOR - 2.0, maxBeliefSize*p.belief, maxBeliefSize*p.belief);
 
-       if (ANALYSE_MODE) {
+       /*if (ANALYSE_MODE) {
+          gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
           gc.strokeLine(lineA.x * SCALE_FACTOR, lineA.y * SCALE_FACTOR, lineB.x * SCALE_FACTOR, lineB.y * SCALE_FACTOR);
           gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.forwardIntersect.point.x * SCALE_FACTOR, p.forwardIntersect.point.y * SCALE_FACTOR);
           gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.leftIntersect.point.x * SCALE_FACTOR, p.leftIntersect.point.y * SCALE_FACTOR);
           gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.rightIntersect.point.x * SCALE_FACTOR, p.rightIntersect.point.y * SCALE_FACTOR);
-       }
+       }*/
 
     }
 

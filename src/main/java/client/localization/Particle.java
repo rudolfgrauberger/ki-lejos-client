@@ -21,9 +21,11 @@ public class Particle implements IMoveController {
     Intersect rightIntersect;
 
     Random r = new Random();
-    double belief = r.nextDouble();
+    double belief = 1d;
 
     boolean isValid = true;
+
+    protected Color color;
 
 
 
@@ -31,6 +33,7 @@ public class Particle implements IMoveController {
         this.map = map;
         this.centerPoint = centerPoint;
         this.currentRotation = rotation;
+        this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
     }
 
     public boolean calculateIntersects(){
@@ -112,7 +115,7 @@ public class Particle implements IMoveController {
 
     @Override
     public Color getColor() {
-        return Color.DARKRED;
+        return color;
     }
 
     @Override

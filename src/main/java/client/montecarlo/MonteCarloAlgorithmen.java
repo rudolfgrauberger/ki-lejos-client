@@ -68,8 +68,8 @@ public class MonteCarloAlgorithmen {
         latestRoboterDataSet = roboter.getSensorDataSet();
 
         moveCommand();
-        resamplePartikels();
         calculateWeights();
+        resamplePartikels();
 
        for (IMoveController p: this.partikels) {
           Particle particle = (Particle)p;

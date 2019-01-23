@@ -19,6 +19,8 @@ public class MonteCarloAlgorithmen {
     private IWeightCalculator calculator;
     private IParticleGenerator generator;
 
+    private SensorDataSet latestRoboterDataSet;
+
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator, IResampler resampler) {
         this.roboter = roboter;
         this.resampler = resampler;
@@ -120,18 +122,9 @@ public class MonteCarloAlgorithmen {
         //get distance
         int distance = 30;
 
-        // Kann/Soll es auch so für den echten Robotor gemacht werden, oder
-        // sollten wir es wie vorher machen?
-        Particle tmp = ParticleFactory.createParticleClone((Particle)roboter);
-        tmp.moveForward(distance);
-
-        if (!tmp.hasValidPosition()) {
-            System.out.println("Distance is not large enough to make the movement.");
-            return;
-        }
 
         //if at end turn around
-        /*if((latestRoboterDataSet.getDistanceFront()*100) < 10)
+        if((latestRoboterDataSet.getDistanceFront()) < 10)
         {
             roboter.turnRight(180);
             for (IMoveController partikel: partikels) {
@@ -142,7 +135,7 @@ public class MonteCarloAlgorithmen {
         else if((latestRoboterDataSet.getDistanceFront()) < distance-5)
         {
             distance = (int)((latestRoboterDataSet.getDistanceFront()*100)-5);
-        }*/
+        }
 
         //move
         roboter.moveForward(distance);

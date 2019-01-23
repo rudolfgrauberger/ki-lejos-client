@@ -1,6 +1,7 @@
 package client.montecarlo.Resample;
 
 import client.localization.Particle;
+import client.localization.ParticleFactory;
 import client.montecarlo.IMoveController;
 import client.montecarlo.IParticleGenerator;
 import client.montecarlo.Interval;
@@ -40,7 +41,12 @@ public class RouletteWheelResampler implements IResampler {
          double z = getRandomDouble();
 
          IMoveController p = getParticleFromRange(z);
-         resampled.add(p);
+         try {
+            resampled.add(ParticleFactory.createParticleClone((Particle) p));
+         }
+         catch (Exception e) {
+            System.out.println("Fehler bei dem Clonen der Partikel.....");
+         }
 
          reuseCount--;
       }

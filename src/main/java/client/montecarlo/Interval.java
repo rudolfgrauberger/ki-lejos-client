@@ -2,7 +2,7 @@ package client.montecarlo;
 
 import client.localization.Particle;
 
-public class Interval {
+public class Interval implements Cloneable {
    private double start;
    private double end;
    private IMoveController particle;
@@ -31,5 +31,10 @@ public class Interval {
 
    public IMoveController getParticle() {
       return this.particle;
+   }
+
+   @Override
+   public Object clone() throws CloneNotSupportedException {
+      return super.clone();
    }
 }

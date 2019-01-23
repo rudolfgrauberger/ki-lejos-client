@@ -76,15 +76,6 @@ public class Particle implements IMoveController {
     private Point absRealPoint ( Point relPoint ){
         return new Point(relPoint.x , relPoint.y);
     }
-    class Intersect{
-        Point point;
-        double distance;
-
-        public Intersect(Point point, double distance) {
-            this.point = point;
-            this.distance = distance;
-        }
-    }
 
     @Override
     public void moveForward(double cm) throws ActionException {

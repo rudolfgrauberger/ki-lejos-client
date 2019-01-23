@@ -83,9 +83,19 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        int commandNumber = random.nextInt(3);
+        double commandNumber = random.nextDouble();
         int angle;
-        switch (commandNumber){
+
+        if ( commandNumber >= 0.0 && commandNumber <= 0.25){
+            turnLeft();
+        }
+        if ( commandNumber > 0.25 && commandNumber <= 0.5){
+            turnRight();
+        }
+        if ( commandNumber > 0.5 && commandNumber <= 1){
+            moveForward();
+        }
+        /*switch (commandNumber){
             //case forward
             case 0:
                 moveForward();
@@ -98,7 +108,7 @@ public class MonteCarloAlgorithmen {
             case 2:
                 turnRight();
                 break;
-        }
+        }*/
     }
 
     private void resamplePartikels(){

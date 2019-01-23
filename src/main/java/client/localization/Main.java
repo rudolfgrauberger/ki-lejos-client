@@ -214,7 +214,7 @@ public class Main extends Application implements IMonteEventListener{
        double maxBeliefSize = 10;
 
        gc.setFill(p.getColor());
-       gc.fillOval(absCenter.x * SCALE_FACTOR - 2.0, absCenter.y * SCALE_FACTOR - 2.0, maxBeliefSize*p.belief, maxBeliefSize*p.belief);
+       gc.fillOval(absCenter.x * SCALE_FACTOR - 2.0, absCenter.y * SCALE_FACTOR - 2.0, maxBeliefSize/**p.belief*/, maxBeliefSize/**p.belief*/);
 
        /*if (ANALYSE_MODE) {
           gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);

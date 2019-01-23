@@ -14,9 +14,16 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
         double r2 = Helper.lerp(robotSensor.getDistanceFront() , 255.0);
         double r3 = Helper.lerp(robotSensor.getDistanceRight(), 255.0);
 
-        double p1 = Helper.lerp(particle.getSensorDataSet().getDistanceLeft() , 255.0);
-        double p2 = Helper.lerp(particle.getSensorDataSet().getDistanceFront() , 255.0);
-        double p3 = Helper.lerp(particle.getSensorDataSet().getDistanceRight() , 255.0);
+        SensorDataSet sd = particle.getSensorDataSet();
+
+        double p1 = Helper.lerp(sd.getDistanceLeft() , 255.0);
+        double p2 = Helper.lerp(sd.getDistanceFront() , 255.0);
+        double p3 = Helper.lerp(sd.getDistanceRight() , 255.0);
+
+        System.out.println("Robotor (Partikel)");
+        System.out.println("Rechts: (" + r3 + ", " + p3 + ")");
+        System.out.println("Vorne: (" + r2 + ", " + p2 + ")");
+        System.out.println("Links: (" + r1 + ", " + p1 + ")");
 
 
         double delta1 = (r1 - p1);

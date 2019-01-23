@@ -3,7 +3,7 @@ package client.montecarlo;
 public class SensorDataSet {
     private double distFront;
     private double distLeft;
-    private Double distRight;
+    private double distRight;
 
     public  SensorDataSet(double distanceFront, double distanceLeft, double distanceRight){
         this.distFront = distanceFront;

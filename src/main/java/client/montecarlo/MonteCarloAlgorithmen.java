@@ -89,7 +89,7 @@ public class MonteCarloAlgorithmen {
         Random random = new Random();
         double commandNumber = random.nextDouble();
 
-        if ( commandNumber < 0.2){
+        if ( commandNumber < 0.51){
 
             turnLeft(180);
         }

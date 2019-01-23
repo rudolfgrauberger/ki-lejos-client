@@ -13,18 +13,6 @@ public class ParticleFactory {
       return createValidInstance(map, true);
    }
 
-   public static Particle createParticleClone(Particle p) {
-      Particle tmp = createInstance(p.map, false);
-      tmp.centerPoint = p.centerPoint;
-      tmp.currentRotation = p.currentRotation;
-      tmp.forwardIntersect = p.forwardIntersect;
-      tmp.leftIntersect = p.leftIntersect;
-      tmp.rightIntersect = p.rightIntersect;
-      tmp.belief = p.belief;
-
-      return tmp;
-   }
-
    private static Particle createValidInstance(Map map, boolean simulate) {
       Particle p = null;
       do {

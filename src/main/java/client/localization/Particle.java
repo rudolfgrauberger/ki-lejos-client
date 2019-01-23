@@ -57,6 +57,7 @@ public class Particle implements IMoveController {
         this.rightIntersect= rightIntersect;
         return true;
     }
+
     public Intersect calculateIntersect(double rotation, ArrayList<Line> lines ){
         Point direction = (Helper.getRotationPoint(centerPoint,1 , rotation));
         ArrayList<Point> intersects = Helper.rayCast(centerPoint , direction , lines);

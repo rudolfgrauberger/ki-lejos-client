@@ -220,9 +220,6 @@ public class Main extends Application implements IMonteEventListener{
        //System.out.println("Rotation: " + particle.currentRotation);
        double maxBeliefSize = 10;
 
-       System.out.println(absCenter.x * SCALE_FACTOR - 2.0);
-        System.out.println(absCenter.y * SCALE_FACTOR - 2.0);
-
        //gc.setFill(p.getColor());
        gc.fillOval(absCenter.x * SCALE_FACTOR - 2.0, absCenter.y * SCALE_FACTOR - 2.0, maxBeliefSize/**p.belief*/, maxBeliefSize/**p.belief*/);
 

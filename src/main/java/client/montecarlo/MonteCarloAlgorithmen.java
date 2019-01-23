@@ -58,7 +58,7 @@ public class MonteCarloAlgorithmen {
         this.partikels = partikels;
         for (IMoveController p: this.partikels) {
            Particle particle = (Particle)p;
-           System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
+           //System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }
 
         //calculateWeights();

@@ -61,7 +61,7 @@ public class MonteCarloAlgorithmen {
            System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
         }
 
-        calculateWeights();
+        //calculateWeights();
         resamplePartikels();
         moveCommand();
         calculateWeights();

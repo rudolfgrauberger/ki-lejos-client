@@ -354,6 +354,6 @@ public class Main extends Application implements IMonteEventListener{
         catch (Exception e){
 
         }
-        runMonteAsync();
+        //runMonteAsync();
     }
 }

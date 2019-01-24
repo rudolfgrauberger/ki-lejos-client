@@ -1,7 +1,6 @@
 package client.montecarlo;
 
 import client.localization.IMonteEventListener;
-import client.localization.Particle;
 import client.montecarlo.ParticleGenerator.IParticleGenerator;
 import client.montecarlo.Resample.IResampler;
 import client.montecarlo.Resample.RouletteWheelResampler;
@@ -132,13 +131,13 @@ public class MonteCarloAlgorithmen {
         System.out.println("forward");
 
         //if at end turn around
-        if((latestRoboterDataSet.getDistanceFront()) < 10)
+        if((latestRoboterDataSet.getDistanceFront()) < 40)
         {
             return;
         }
-        else if((latestRoboterDataSet.getDistanceFront())-5 < distance)
+        else if((latestRoboterDataSet.getDistanceFront())-40 < distance)
         {
-            distance = (int) latestRoboterDataSet.getDistanceFront()-5;
+            distance = (int) latestRoboterDataSet.getDistanceFront()-40;
         }
 
         //move

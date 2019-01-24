@@ -14,10 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -49,7 +46,6 @@ import java.util.List;
 public class Main extends Application implements IMonteEventListener{
 
     public static int SCALE_FACTOR = 2;
-    public static boolean ANALYSE_MODE = false;
     public static boolean SIMULATE_MODE = true;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
@@ -61,6 +57,8 @@ public class Main extends Application implements IMonteEventListener{
 
     Button bConnect;
     Button bLocate;
+
+    CheckBox cAnalysis;
 
     Particle robot;
     LeJOSClient myclient;
@@ -88,6 +86,10 @@ public class Main extends Application implements IMonteEventListener{
         inputs.getChildren().add(new Label("Port:"));
         tfPort = new TextField("6789");
         inputs.getChildren().add(tfPort);
+
+        cAnalysis = new CheckBox("Analysis");
+
+        inputs.getChildren().add(cAnalysis);
 
         bConnect = new Button("Connect");
         bConnect.setDisable(SIMULATE_MODE);
@@ -139,6 +141,8 @@ public class Main extends Application implements IMonteEventListener{
         robot = ParticleFactory.createNewRobot(this.m);
 
         canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
+        root.getChildren().add(getMainLayout());
+
         canvas.setFocusTraversable(true);
         canvas.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> canvas.requestFocus());
         gc = canvas.getGraphicsContext2D();
@@ -151,7 +155,7 @@ public class Main extends Application implements IMonteEventListener{
             monte = new MonteCarloAlgorithmen(myclient, m);
         }
 
-        root.getChildren().add(getMainLayout());
+
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -225,7 +229,7 @@ public class Main extends Application implements IMonteEventListener{
        //gc.setFill(p.getColor());
        gc.fillOval(absCenter.x * SCALE_FACTOR - maxBeliefSize / 2.0, absCenter.y * SCALE_FACTOR - maxBeliefSize / 2.0, maxBeliefSize/**p.belief*/, maxBeliefSize/**p.belief*/);
 
-       if (ANALYSE_MODE) {
+       if (cAnalysis.isSelected()) {
           gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
           gc.strokeLine(lineA.x * SCALE_FACTOR, lineA.y * SCALE_FACTOR, lineB.x * SCALE_FACTOR, lineB.y * SCALE_FACTOR);
           gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.getForwardIntersect().point.x * SCALE_FACTOR, p.getForwardIntersect().point.y * SCALE_FACTOR);

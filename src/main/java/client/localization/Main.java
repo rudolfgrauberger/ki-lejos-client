@@ -1,5 +1,7 @@
 package client.localization;
 
+import client.localization.AbortCondition.IAbortConditionChecker;
+import client.localization.AbortCondition.XValueRangeChecker;
 import client.montecarlo.IMoveController;
 import client.montecarlo.ActionException;
 import client.montecarlo.MonteCarloAlgorithmen;
@@ -66,6 +68,8 @@ public class Main extends Application implements IMonteEventListener{
     NoLogger logger = new NoLogger();
 
     MonteCarloAlgorithmen monte;
+
+    IAbortConditionChecker abortChecker = new XValueRangeChecker(5);
 
     //Locate button
     private boolean locate = false;
@@ -344,6 +348,10 @@ public class Main extends Application implements IMonteEventListener{
         //redraw
         m.setParticles(particles);
         reDraw();
+
+        if (abortChecker.abort(moveables, monte.getUsedRobot()))
+            return;
+
         //run monte again
         //try {
         //    Thread.sleep(1000);

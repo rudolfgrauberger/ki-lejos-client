@@ -1,5 +1,6 @@
 package client.montecarlo;
 
+import client.localization.Intersect;
 import client.localization.Point;
 import client.montecarlo.ActionException;
 import client.montecarlo.SensorDataSet;
@@ -14,8 +15,16 @@ public interface IMoveController {
 
     Point getPoint();
 
+    double getCurrentRotation();
+
     Color getColor();
     double getBelief();
     void setBelief(double belief);
     boolean isValid();
+
+    Intersect getForwardIntersect();
+
+    Intersect getLeftIntersect();
+
+    Intersect getRightIntersect();
 }

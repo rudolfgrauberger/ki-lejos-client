@@ -5,8 +5,15 @@ import client.montecarlo.ActionException;
 import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
 import client.montecarlo.Weight.IWeightCalculator;
+import client.montecarlo.WeightStrategie.Gaussian1;
+import client.montecarlo.WeightStrategie.Gaussian2;
+import client.montecarlo.WeightStrategie.Gaussian3;
+import client.montecarlo.WeightStrategie.IWeightStrategy;
 
 public class AllDistanceWeightCalculator implements IWeightCalculator {
+
+    IWeightStrategy ws = new Gaussian3();
+
     @Override
     public double calculateWeight(SensorDataSet robotSensor, IMoveController particle) throws ActionException {
 
@@ -20,7 +27,7 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
         double p2 = Helper.lerp(sd.getDistanceFront() , MAX_DISTANCE_FORWARD);
         double p3 = Helper.lerp(sd.getDistanceRight() , MAX_DISTANCE_FORWARD);
 
-        System.out.println("Robotor (Partikel)");
+        /*System.out.println("Robotor (Partikel)");
         System.out.println("Rechts: (" + r3 + ", " + p3 + ")");
         System.out.println("Vorne: (" + r2 + ", " + p2 + ")");
         System.out.println("Links: (" + r1 + ", " + p1 + ")");
@@ -32,13 +39,13 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
 
         System.out.println("Partikel Links: " + r1 );
         System.out.println("Partikel Vorne: " + r2 );
-        System.out.println("Partikel Rechts: " + r3);
+        System.out.println("Partikel Rechts: " + r3);*/
 
 
         double delta1 = (r1 - p1);
         //double delta2 = (r2 - p2);
         double delta3 = (r3 - p3);
-        double weight = ( Helper.getWeight(delta1) * Helper.getWeight(delta3));
+        double weight = ( ws.getWeight(delta1) * ws.getWeight(delta3));
 
         return weight;
     }

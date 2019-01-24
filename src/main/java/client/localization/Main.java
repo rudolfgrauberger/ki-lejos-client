@@ -338,7 +338,7 @@ public class Main extends Application implements IMonteEventListener{
                     }
                 }
             }).start();
-            System.out.println("Count: "+ countLocate++);
+            //System.out.println("Count: "+ countLocate++);
         }
     }
 

@@ -1,4 +1,4 @@
-package client.montecarlo;
+package client.montecarlo.ParticleGenerator;
 
 import client.localization.Particle;
 

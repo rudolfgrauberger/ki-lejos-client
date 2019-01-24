@@ -214,9 +214,9 @@ public class Main extends Application implements IMonteEventListener{
 
     private void drawParticle(Particle p) {
        //gc.setStroke(p.getColor());
-       Point absCenter = p.centerPoint;
-       Point lineA = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation);
-       Point lineB = Helper.getRotationPoint(p.centerPoint, 5, p.currentRotation + Math.PI);
+       Point absCenter = p.getPoint();
+       Point lineA = Helper.getRotationPoint(p.getPoint(), 5, p.currentRotation);
+       Point lineB = Helper.getRotationPoint(p.getPoint(), 5, p.currentRotation + Math.PI);
        //System.out.println("Rotation: " + particle.currentRotation);
        double maxBeliefSize = 10;
 

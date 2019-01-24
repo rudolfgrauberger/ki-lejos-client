@@ -1,5 +1,6 @@
 package client.montecarlo;
 
+import client.localization.Point;
 import client.montecarlo.ActionException;
 import client.montecarlo.SensorDataSet;
 import javafx.scene.paint.Color;
@@ -10,6 +11,8 @@ public interface IMoveController {
     void turnLeft ( double angle )throws ActionException;
     void turnRight ( double angle )throws ActionException;
     SensorDataSet getSensorDataSet() throws ActionException;
+
+    Point getPoint();
 
     Color getColor();
     double getBelief();

@@ -14,7 +14,7 @@ public class Particle implements IMoveController {
     public UUID id = UUID.randomUUID();
 
     Map map;
-    public Point centerPoint;
+    private Point centerPoint;
     double currentRotation;
     public Intersect forwardIntersect;
     public Intersect leftIntersect;
@@ -44,6 +44,18 @@ public class Particle implements IMoveController {
         System.out.println("rotation: "+currentRotation);
         //this.currentRotation = rotation;
         //this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
+    }
+
+    public Particle(Particle other) {
+        this(other.map, other.centerPoint, other.currentRotation);
+        this.currentRotation = other.currentRotation;
+        this.forwardIntersect = new Intersect(other.forwardIntersect.point, other.forwardIntersect.distance);
+        this.rightIntersect = new Intersect(other.rightIntersect.point, other.rightIntersect.distance);
+        this.leftIntersect = new Intersect(other.leftIntersect.point, other.leftIntersect.distance);
+        this.belief = other.belief;
+        this.isValid = other.isValid;
+        this.color = other.color;
+        this.r = other.r;
     }
 
     public boolean calculateIntersects(){
@@ -113,6 +125,11 @@ public class Particle implements IMoveController {
     public SensorDataSet getSensorDataSet() throws ActionException {
         SensorDataSet sds = new SensorDataSet(forwardIntersect.distance , leftIntersect.distance , rightIntersect.distance);
         return sds;
+    }
+
+    @Override
+    public Point getPoint() {
+        return centerPoint;
     }
 
     @Override

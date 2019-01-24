@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import client.localization.Point;
 import client.montecarlo.ActionException;
 import client.montecarlo.IMoveController;
 import client.montecarlo.SensorDataSet;
@@ -133,6 +134,11 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 		catch (IOException ex){
 			throw new ActionException("Connection");
 		}
+	}
+
+	@Override
+	public Point getPoint() {
+		return null;
 	}
 
 	@Override

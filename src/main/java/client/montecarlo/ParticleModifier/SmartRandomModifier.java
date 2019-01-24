@@ -6,15 +6,26 @@ import client.montecarlo.ActionException;
 import java.util.Random;
 
 public class SmartRandomModifier implements IParticleModifier {
-    Random r = new Random();
+
+    private final static int MOVEMENT_VALUE = 1;
+    private final static int Y_VALUE = 1;
+    static Random r = new Random();
+
+    public static int randInt(int min, int max) {
+        Random rand;
+        int randomNum = r.nextInt((max - min) + 1) + min;
+        return randomNum;
+    }
 
     @Override
     public Particle modifyParticle(Particle particle) {
-        int randomMovement = (r.nextInt(3)) - 1;
-        double randomRotation = ((r.nextDouble() * Math.PI * 2) / 16) - (Math.PI / 32);
+
+        int randomMovement = randInt(-MOVEMENT_VALUE , MOVEMENT_VALUE);
+        int randomY = randInt(-Y_VALUE , Y_VALUE);
+        //double randomRotation = ((r.nextDouble() * Math.PI * 2) / 16) - (Math.PI / 32);
 
         System.out.println("Random Movement: " + randomMovement);
-        System.out.println("Random Rotation: " + randomRotation);
+        System.out.println("Y Rotation: " + randomY);
         //particle.centerPoint.x += randomMovement;
         //particle.centerPoint.y += randomMovement;
 
@@ -25,7 +36,8 @@ public class SmartRandomModifier implements IParticleModifier {
         } else {
             //particle.turnLeft(Math.abs(randomRotation));
         }*/
-        particle.addYAxis(randomMovement);
+
+        particle.addYAxis(randomY);
 
         try {
             if (randomMovement > 0) {

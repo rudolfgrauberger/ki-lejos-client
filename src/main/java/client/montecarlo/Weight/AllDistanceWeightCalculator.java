@@ -17,15 +17,15 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
     @Override
     public double calculateWeight(SensorDataSet robotSensor, IMoveController particle) throws ActionException {
 
-        double r1 = Helper.lerp(robotSensor.getDistanceLeft() , 255.0);
-        double r2 = Helper.lerp(robotSensor.getDistanceFront() , 255.0);
-        double r3 = Helper.lerp(robotSensor.getDistanceRight(), 255.0);
+        double r1 = Helper.lerp(robotSensor.getDistanceLeft() , MAX_DISTANCE_FORWARD);
+        double r2 = Helper.lerp(robotSensor.getDistanceFront() , MAX_DISTANCE_FORWARD);
+        double r3 = Helper.lerp(robotSensor.getDistanceRight(), MAX_DISTANCE_FORWARD);
 
         SensorDataSet sd = particle.getSensorDataSet();
 
-        double p1 = Helper.lerp(sd.getDistanceLeft() , 255.0);
-        double p2 = Helper.lerp(sd.getDistanceFront() , 255.0);
-        double p3 = Helper.lerp(sd.getDistanceRight() , 255.0);
+        double p1 = Helper.lerp(sd.getDistanceLeft() , MAX_DISTANCE_FORWARD);
+        double p2 = Helper.lerp(sd.getDistanceFront() , MAX_DISTANCE_FORWARD);
+        double p3 = Helper.lerp(sd.getDistanceRight() , MAX_DISTANCE_FORWARD);
 
         /*System.out.println("Robotor (Partikel)");
         System.out.println("Rechts: (" + r3 + ", " + p3 + ")");
@@ -48,9 +48,5 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
         double weight = ( ws.getWeight(delta1) * ws.getWeight(delta3));
 
         return weight;
-        /*double distanceParticle = particle.getSensorDataSet().getDistanceFront();
-        double distanceRobot = robotSensor.getDistanceFront() * 100;
-        double robotFront = Helper.lerp(distanceParticle, distanceRobot);
-        return robotFront;*/
     }
 }

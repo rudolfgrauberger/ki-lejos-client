@@ -124,6 +124,10 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 			if(!moveResult.isSuccess())
 				throw new ActionException("Robot move");
 			distRight = getDoubleFromResult(getSensor(sensorType))*100;
+			//center
+			moveResult = sendLookCenter();
+			if(!moveResult.isSuccess())
+				throw new ActionException("Robot move");
 			return new SensorDataSet(distCenter,distLeft,distRight);
 		}
 		catch (IOException ex){

@@ -200,8 +200,8 @@ public class Main extends Application implements IMonteEventListener{
 
         gc.setLineDashes(10);
         for (Particle particle : m.getParticles()) {
-                gc.setStroke(new Color(1, 0, 0,  particle.getBelief()));
-                gc.setFill(new Color(1, 0, 0,  particle.getBelief()));
+                gc.setStroke(new Color(1, 0, 0,  0.3 * particle.getBelief()));
+                gc.setFill(new Color(1, 0, 0,  0.3 * particle.getBelief()));
                 drawParticle(particle);
         }
 

@@ -182,16 +182,9 @@ public class MonteCarloAlgorithmen {
     }
 
     private void calculateWeights() throws ActionException {
-        RobotSimulator r = (RobotSimulator)roboter;
-        System.out.println("Robotor (" + r + ")");
-        System.out.println("Links: " + r.leftIntersect);
-        System.out.println("Rechts: " + r.rightIntersect);
         latestRoboterDataSet = roboter.getSensorDataSet();
         for (IMoveController particle: this.partikels) {
             Particle p = (Particle)particle;
-            System.out.println("Partikel (" + p + ")");
-            System.out.println("Links: " + p.leftIntersect);
-            System.out.println("Rechts: " + p.rightIntersect);
             particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }
     }

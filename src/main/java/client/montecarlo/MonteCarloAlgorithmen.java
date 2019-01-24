@@ -25,6 +25,8 @@ public class MonteCarloAlgorithmen {
 
     private SensorDataSet latestRoboterDataSet;
 
+    private boolean isRunning = false;
+
     public MonteCarloAlgorithmen(IMoveController roboter, IParticleGenerator generator, IResampler resampler) {
         this.roboter = roboter;
         this.resampler = resampler;
@@ -62,6 +64,7 @@ public class MonteCarloAlgorithmen {
     }
 
     public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
+        this.isRunning = true;
         this.partikels = partikels;
         for (IMoveController p: this.partikels) {
             //partikels
@@ -81,6 +84,7 @@ public class MonteCarloAlgorithmen {
           //System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
        }
 
+       this.isRunning = false;
         return this.partikels;
     }
     public void runAsync (List<IMoveController> partikels, IMonteEventListener listner) throws ActionException{
@@ -191,5 +195,9 @@ public class MonteCarloAlgorithmen {
 
     public IMoveController getUsedRobot() {
         return roboter;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 }

@@ -69,7 +69,7 @@ public class Main extends Application implements IMonteEventListener{
 
     MonteCarloAlgorithmen monte;
 
-    IAbortConditionChecker abortChecker = new XValueRangeChecker(5);
+    IAbortConditionChecker abortChecker = new XValueRangeChecker(2.5);
 
     //Locate button
     private boolean locate = false;
@@ -315,6 +315,9 @@ public class Main extends Application implements IMonteEventListener{
 
     //Monte
     private void runMonteAsync(){
+        if (monte.isRunning())
+            return;
+        
         if(this.locate){
             ArrayList<IMoveController> movables = new ArrayList<>();
             for (Particle p : m.getParticles()) {

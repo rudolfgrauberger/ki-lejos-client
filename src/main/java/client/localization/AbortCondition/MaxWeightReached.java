@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MaxWeightReached implements IAbortConditionChecker {
 
-    public final static double ABORT_WEIGHT = 0.98;
+    public final static double ABORT_WEIGHT = .97d;
 
     @Override
     public boolean abort(List<IMoveController> particles, IMoveController robot) {

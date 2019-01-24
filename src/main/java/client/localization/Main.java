@@ -1,6 +1,7 @@
 package client.localization;
 
 import client.localization.AbortCondition.IAbortConditionChecker;
+import client.localization.AbortCondition.MaxWeightReached;
 import client.localization.AbortCondition.XValueRangeChecker;
 import client.montecarlo.IMoveController;
 import client.montecarlo.ActionException;
@@ -46,7 +47,7 @@ import java.util.List;
 public class Main extends Application implements IMonteEventListener{
 
     public static int SCALE_FACTOR = 2;
-    public static boolean SIMULATE_MODE = true;
+    public static boolean SIMULATE_MODE = false;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
     GraphicsContext gc;
@@ -66,7 +67,7 @@ public class Main extends Application implements IMonteEventListener{
 
     MonteCarloAlgorithmen monte;
 
-    IAbortConditionChecker abortChecker = new XValueRangeChecker(2.5);
+    IAbortConditionChecker abortChecker = new MaxWeightReached();
 
     //Locate button
     private boolean locate = false;

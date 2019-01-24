@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class SmartRandomModifier implements IParticleModifier {
 
-    private final static int MOVEMENT_VALUE = 1;
-    private final static int Y_VALUE = 1;
+    private final static int MOVEMENT_VALUE = 2;
+    private final static int Y_VALUE = 2;
     static Random r = new Random();
 
     public static int randInt(int min, int max) {
@@ -24,8 +24,6 @@ public class SmartRandomModifier implements IParticleModifier {
         int randomY = randInt(-Y_VALUE , Y_VALUE);
         //double randomRotation = ((r.nextDouble() * Math.PI * 2) / 16) - (Math.PI / 32);
 
-        System.out.println("Random Movement: " + randomMovement);
-        System.out.println("Y Rotation: " + randomY);
         //particle.centerPoint.x += randomMovement;
         //particle.centerPoint.y += randomMovement;
 

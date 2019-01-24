@@ -12,7 +12,7 @@ import client.montecarlo.WeightStrategie.IWeightStrategy;
 
 public class AllDistanceWeightCalculator implements IWeightCalculator {
 
-    IWeightStrategy ws = new Gaussian3();
+    IWeightStrategy ws = new Gaussian2();
 
     @Override
     public double calculateWeight(SensorDataSet robotSensor, IMoveController particle) throws ActionException {

@@ -105,6 +105,7 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 
 	@Override
 	public SensorDataSet getSensorDataSet() throws ActionException {
+		System.out.println("getSensorDataSet");
 		String sensorType = "DISTANCE";
 		Double distLeft;
 		Double distRight;
@@ -185,6 +186,7 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 
 	@Override
 	public void moveForward(double cm) throws ActionException {
+		System.out.println("LeJOSClient.moveForward");
 		try {
 			ILeJOSResult result = sendForward((int)cm);
 			if(!result.isSuccess())

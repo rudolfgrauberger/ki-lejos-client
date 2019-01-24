@@ -58,13 +58,16 @@ public class MonteCarloAlgorithmen {
 
     public void setGenerator(IParticleGenerator generator) {
         this.generator = generator;
-        
     }
 
     public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
         this.isRunning = true;
         this.partikels = partikels;
-        this.latestRoboterDataSet = roboter.getSensorDataSet();
+
+        if (latestRoboterDataSet == null) {
+            System.out.println("Init roboter dataset");
+            this.latestRoboterDataSet = roboter.getSensorDataSet();
+        }
 
         moveCommand();
         calculateWeights();
@@ -82,13 +85,13 @@ public class MonteCarloAlgorithmen {
         Random random = new Random();
         double commandNumber = random.nextDouble();
 
-        if ( commandNumber < 0.51){
+        /*if ( commandNumber < 0.07){
 
             turnLeft(180);
         }
-        else{
+        else{*/
             moveForward((int) (commandNumber * 50.0));
-        }
+        //}
 
 
 
@@ -133,6 +136,7 @@ public class MonteCarloAlgorithmen {
         //if at end turn around
         if((latestRoboterDataSet.getDistanceFront()) < 40)
         {
+            turnLeft(180);
             return;
         }
         else if((latestRoboterDataSet.getDistanceFront())-40 < distance)

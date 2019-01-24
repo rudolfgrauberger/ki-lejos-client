@@ -134,14 +134,17 @@ public class MonteCarloAlgorithmen {
         System.out.println("forward");
 
         //if at end turn around
-        if((latestRoboterDataSet.getDistanceFront()) < 40)
+        if(latestRoboterDataSet.getDistanceFront() < 40 )
         {
+            System.out.println("getDistanceFront() < 40 (" + latestRoboterDataSet.getDistanceFront() + ")");
             turnLeft(180);
             return;
         }
-        else if((latestRoboterDataSet.getDistanceFront())-40 < distance)
+        else if((latestRoboterDataSet.getDistanceFront()-40) < distance)
         {
-            distance = (int) latestRoboterDataSet.getDistanceFront()-40;
+            System.out.println("getDistanceFront() - 40 < distance (" + latestRoboterDataSet.getDistanceFront() + ")");
+            turnLeft(180);
+            return;
         }
 
         //move

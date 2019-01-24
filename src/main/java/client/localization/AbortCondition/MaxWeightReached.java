@@ -11,11 +11,12 @@ public class MaxWeightReached implements IAbortConditionChecker {
 
     @Override
     public boolean abort(List<IMoveController> particles, IMoveController robot) {
+
         for (IMoveController p : particles){
-            if ( p.getBelief() > ABORT_WEIGHT ){
-                return true;
+            if ( p.getBelief() < ABORT_WEIGHT ){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }

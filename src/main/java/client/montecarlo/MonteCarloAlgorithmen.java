@@ -90,7 +90,7 @@ public class MonteCarloAlgorithmen {
             turnLeft(180);
         }
         else{*/
-            moveForward((int) (commandNumber * 50.0));
+            moveForward((int) (commandNumber * 20.0));
         //}
 
 
@@ -134,17 +134,23 @@ public class MonteCarloAlgorithmen {
         System.out.println("forward");
 
         //if at end turn around
-        if(latestRoboterDataSet.getDistanceFront() < 40 )
+        if(latestRoboterDataSet.getDistanceFront() < 25 )
         {
-            System.out.println("getDistanceFront() < 40 (d: " + latestRoboterDataSet.getDistanceFront() + ", befehl: " + distance + ")");
+            System.out.println("getDistanceFront() < 25 (d: " + latestRoboterDataSet.getDistanceFront() + ", befehl: " + distance + ")");
             turnLeft(180);
             return;
         }
-        else if((latestRoboterDataSet.getDistanceFront()-40) < distance)
+        else if((latestRoboterDataSet.getDistanceFront()-25) < distance)
         {
-            System.out.println("getDistanceFront() - 40 < distance (d: " + latestRoboterDataSet.getDistanceFront() + ", befehl: " + distance + ")");
-            turnLeft(180);
-            return;
+            System.out.println("getDistanceFront() - 25 < distance (d: " + latestRoboterDataSet.getDistanceFront() + ", befehl: " + distance + ")");
+            distance = (int)Math.ceil(latestRoboterDataSet.getDistanceFront()) - 25;
+
+
+            if (distance < 5) {
+                System.out.println("distance < 5 (d: " + distance + ")");
+                turnLeft(180);
+                return;
+            }
         }
 
         //move

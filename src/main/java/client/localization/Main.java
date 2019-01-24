@@ -6,6 +6,7 @@ import client.localization.AbortCondition.XValueRangeChecker;
 import client.montecarlo.IMoveController;
 import client.montecarlo.ActionException;
 import client.montecarlo.MonteCarloAlgorithmen;
+import client.montecarlo.SensorDataSet;
 import client.net.LeJOSClient;
 import client.util.NoLogger;
 import javafx.application.Application;
@@ -364,5 +365,9 @@ public class Main extends Application implements IMonteEventListener{
 
         //}
         runMonteAsync();
+    }
+
+    private void printSensorDataSet(SensorDataSet s) {
+        System.out.println("Left: " + s.getDistanceLeft() + ", Front: " + s.getDistanceFront() + ", Right: " + s.getDistanceRight());
     }
 }

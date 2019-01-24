@@ -66,25 +66,13 @@ public class MonteCarloAlgorithmen {
     public List<IMoveController> run (List<IMoveController> partikels) throws ActionException{
         this.isRunning = true;
         this.partikels = partikels;
-        for (IMoveController p: this.partikels) {
-            //partikels
-           Particle particle = (Particle)p;
-           //System.out.println("Vorher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
-        }
-
-        latestRoboterDataSet = roboter.getSensorDataSet();
-
+        this.latestRoboterDataSet = roboter.getSensorDataSet();
 
         moveCommand();
         calculateWeights();
         resamplePartikels();
 
-       for (IMoveController p: this.partikels) {
-          Particle particle = (Particle)p;
-          //System.out.println("Nachher (ID: " + particle.id + ") -> " + particle.centerPoint.toString());
-       }
-
-       this.isRunning = false;
+        this.isRunning = false;
         return this.partikels;
     }
     public void runAsync (List<IMoveController> partikels, IMonteEventListener listner) throws ActionException{
@@ -143,9 +131,6 @@ public class MonteCarloAlgorithmen {
     //move controlles
     private void moveForward(int distance) throws ActionException{
         System.out.println("forward");
-        //get distance
-        //int distance = 30;
-
 
         //if at end turn around
         if((latestRoboterDataSet.getDistanceFront()) < 10)
@@ -165,9 +150,7 @@ public class MonteCarloAlgorithmen {
     }
 
     private void turnLeft(int angle) throws ActionException {
-        /*System.out.println("left");
-        Random random = new Random();
-        int angle = random.nextInt(180);*/
+        System.out.println("left");
 
         roboter.turnLeft(angle);
         for (IMoveController partikel: partikels) {
@@ -175,20 +158,18 @@ public class MonteCarloAlgorithmen {
         }
     }
 
-    private void turnRight() throws ActionException {
+    private void turnRight(int angle) throws ActionException {
         System.out.println("right");
-        Random random = new Random();
-        int angle = random.nextInt(180);
+
         roboter.turnRight(angle);
-        for (IMoveController partikel: partikels) {
-            partikel.turnRight(angle);
+        for (IMoveController particle: partikels) {
+            particle.turnRight(angle);
         }
     }
 
     private void calculateWeights() throws ActionException {
         latestRoboterDataSet = roboter.getSensorDataSet();
         for (IMoveController particle: this.partikels) {
-            Particle p = (Particle)particle;
             particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }
     }

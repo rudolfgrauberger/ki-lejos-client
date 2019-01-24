@@ -26,7 +26,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -138,7 +137,6 @@ public class Main extends Application implements IMonteEventListener{
 
         myclient = new LeJOSClient(logger);
         robot = ParticleFactory.createNewRobot(this.m);
-        //robot.centerPoint.y  = 75;
 
         canvas = new Canvas(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
         canvas.setFocusTraversable(true);

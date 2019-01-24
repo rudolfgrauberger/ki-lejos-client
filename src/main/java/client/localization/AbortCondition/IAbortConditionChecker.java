@@ -5,5 +5,5 @@ import client.montecarlo.IMoveController;
 import java.util.List;
 
 public interface IAbortConditionChecker {
-    boolean abort(List<IMoveController> particles);
+    boolean abort(List<IMoveController> particles, IMoveController robot);
 }

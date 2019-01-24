@@ -3,9 +3,11 @@ package client.montecarlo.Resample;
 import client.localization.Particle;
 import client.localization.ParticleFactory;
 import client.montecarlo.IMoveController;
-import client.montecarlo.IParticleGenerator;
+import client.montecarlo.ParticleGenerator.IParticleGenerator;
 import client.montecarlo.Interval;
-import client.montecarlo.Resample.IResampler;
+import client.montecarlo.ParticleModifier.IParticleModifier;
+import client.montecarlo.ParticleModifier.NoModilier;
+import client.montecarlo.ParticleModifier.SmartRandomModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,14 @@ import java.util.Random;
 
 public class RouletteWheelResampler implements IResampler {
 
+   /**
+    *    Define Strategies
+    */
+   private IParticleModifier particleModifier = new SmartRandomModifier();
+
+   /**
+    * Define Instance Variables
+    */
    private double weightSum = .0d;
    private List<Interval> wheel;
    private Random r;
@@ -42,7 +52,8 @@ public class RouletteWheelResampler implements IResampler {
 
          IMoveController p = getParticleFromRange(z);
          try {
-            resampled.add(ParticleFactory.createParticleClone((Particle) p));
+            Particle newParticle = particleModifier.modifyParticle(ParticleFactory.createParticleClone((Particle) p));
+            resampled.add(newParticle);
          }
          catch (Exception e) {
             System.out.println("Fehler bei dem Clonen der Partikel.....");
@@ -51,14 +62,14 @@ public class RouletteWheelResampler implements IResampler {
          reuseCount--;
       }
 
-      System.out.println("Renewed count: " + renewCount);
+      //System.out.println("Renewed count: " + renewCount);
 
       while (renewCount > 0) {
          resampled.add(generator.getRandomParticle());
          --renewCount;
       }
 
-      System.out.println("Resampled count: " + resampled.size());
+      //System.out.println("Resampled count: " + resampled.size());
 
       return resampled;
    }

@@ -41,7 +41,7 @@ public class Particle implements IMoveController {
             this.currentRotation = 2* Helper.QUARTER_CIRCLE;
         }
         //afterMoveEvent();
-        System.out.println("rotation: "+currentRotation);
+        //System.out.println("rotation: "+currentRotation);
         //this.currentRotation = rotation;
         //this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
     }

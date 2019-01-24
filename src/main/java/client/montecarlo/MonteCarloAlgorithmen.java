@@ -2,11 +2,10 @@ package client.montecarlo;
 
 import client.localization.IMonteEventListener;
 import client.localization.Particle;
-import client.localization.RobotSimulator;
+import client.montecarlo.ParticleGenerator.IParticleGenerator;
 import client.montecarlo.Resample.IResampler;
 import client.montecarlo.Resample.RouletteWheelResampler;
 import client.montecarlo.Weight.AllDistanceWeightCalculator;
-import client.montecarlo.Weight.FrontDistanceWeightCalculator;
 import client.montecarlo.Weight.IWeightCalculator;
 
 import java.util.List;

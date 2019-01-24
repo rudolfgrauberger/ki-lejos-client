@@ -15,15 +15,15 @@ public class Particle implements IMoveController {
 
     Map map;
     private Point centerPoint;
-    double currentRotation;
-    public Intersect forwardIntersect;
-    public Intersect leftIntersect;
-    public Intersect rightIntersect;
+    private double currentRotation;
+    private Intersect forwardIntersect;
+    private Intersect leftIntersect;
+    private Intersect rightIntersect;
 
     Random r = new Random();
-    double belief = 1d;
+    private double belief = 1d;
 
-    boolean isValid = true;
+    private boolean isValid = true;
 
     protected Color color;
 
@@ -129,7 +129,12 @@ public class Particle implements IMoveController {
 
     @Override
     public Point getPoint() {
-        return centerPoint;
+        return this.centerPoint;
+    }
+
+    @Override
+    public double getCurrentRotation() {
+        return this.currentRotation;
     }
 
     @Override
@@ -150,6 +155,21 @@ public class Particle implements IMoveController {
     @Override
     public boolean isValid() {
         return isValid;
+    }
+
+    @Override
+    public Intersect getForwardIntersect() {
+        return this.forwardIntersect;
+    }
+
+    @Override
+    public Intersect getLeftIntersect() {
+        return this.leftIntersect;
+    }
+
+    @Override
+    public Intersect getRightIntersect() {
+        return this.rightIntersect;
     }
 
 

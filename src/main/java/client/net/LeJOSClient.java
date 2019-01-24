@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import client.localization.Intersect;
 import client.localization.Point;
 import client.montecarlo.ActionException;
 import client.montecarlo.IMoveController;
@@ -142,6 +143,11 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 	}
 
 	@Override
+	public double getCurrentRotation() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public Color getColor() {
 		return null;
 	}
@@ -159,6 +165,21 @@ public class LeJOSClient implements ILeJOSClientInterface, IMoveController {
 	@Override
 	public boolean isValid() {
 		return true;
+	}
+
+	@Override
+	public Intersect getForwardIntersect() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Intersect getLeftIntersect() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Intersect getRightIntersect() {
+		throw new UnsupportedOperationException();
 	}
 
 

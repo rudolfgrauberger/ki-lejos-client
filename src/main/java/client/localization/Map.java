@@ -1,6 +1,7 @@
 package client.localization;
 
-import client.montecarlo.ParticleGenerator.IParticleGenerator;
+import client.montecarlo.IMoveController;
+import client.montecarlo.IParticleGenerator;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Handler;
 
 public class Map implements IParticleGenerator {
 
@@ -20,7 +22,7 @@ public class Map implements IParticleGenerator {
 
     private ArrayList<Line> lines = new ArrayList<Line>();
     private ArrayList<Point> polygon = new ArrayList<Point>();
-    private List<Particle> particles = new ArrayList<Particle>();
+    private List<IMoveController> particles = new ArrayList<>();
 
     private int x, y;
 
@@ -49,11 +51,11 @@ public class Map implements IParticleGenerator {
         return lines;
     }
 
-    public List<Particle> getParticles() {
+    public List<IMoveController> getParticles() {
         return particles;
     }
 
-    public void setParticles(List<Particle> particles) {
+    public void setParticles(List<IMoveController> particles) {
         this.particles = particles;
     }
 

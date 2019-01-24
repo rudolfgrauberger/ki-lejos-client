@@ -69,7 +69,7 @@ public class Main extends Application implements IMonteEventListener{
 
     MonteCarloAlgorithmen monte;
 
-    IAbortConditionChecker abortChecker = new XValueRangeChecker(5);
+    IAbortConditionChecker abortChecker = new XValueRangeChecker(2.5);
 
     //Locate button
     private boolean locate = false;
@@ -203,7 +203,7 @@ public class Main extends Application implements IMonteEventListener{
         }
 
         gc.setLineDashes(10);
-        for (Particle particle : m.getParticles()) {
+        for (IMoveController particle : m.getParticles()) {
                 gc.setStroke(new Color(1, 0, 0,  0.3 * particle.getBelief()));
                 gc.setFill(new Color(1, 0, 0,  0.3 * particle.getBelief()));
                 drawParticle(particle);
@@ -216,11 +216,11 @@ public class Main extends Application implements IMonteEventListener{
         }
     }
 
-    private void drawParticle(Particle p) {
+    private void drawParticle(IMoveController p) {
        //gc.setStroke(p.getColor());
        Point absCenter = p.getPoint();
-       Point lineA = Helper.getRotationPoint(p.getPoint(), 5, p.currentRotation);
-       Point lineB = Helper.getRotationPoint(p.getPoint(), 5, p.currentRotation + Math.PI);
+       Point lineA = Helper.getRotationPoint(p.getPoint(), 5, p.getCurrentRotation());
+       Point lineB = Helper.getRotationPoint(p.getPoint(), 5, p.getCurrentRotation() + Math.PI);
        //System.out.println("Rotation: " + particle.currentRotation);
        double maxBeliefSize = 10;
 
@@ -230,9 +230,9 @@ public class Main extends Application implements IMonteEventListener{
        if (ANALYSE_MODE) {
           gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
           gc.strokeLine(lineA.x * SCALE_FACTOR, lineA.y * SCALE_FACTOR, lineB.x * SCALE_FACTOR, lineB.y * SCALE_FACTOR);
-          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.forwardIntersect.point.x * SCALE_FACTOR, p.forwardIntersect.point.y * SCALE_FACTOR);
-          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.leftIntersect.point.x * SCALE_FACTOR, p.leftIntersect.point.y * SCALE_FACTOR);
-          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.rightIntersect.point.x * SCALE_FACTOR, p.rightIntersect.point.y * SCALE_FACTOR);
+          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.getForwardIntersect().point.x * SCALE_FACTOR, p.getForwardIntersect().point.y * SCALE_FACTOR);
+          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.getLeftIntersect().point.x * SCALE_FACTOR, p.getLeftIntersect().point.y * SCALE_FACTOR);
+          gc.strokeLine(absCenter.x * SCALE_FACTOR, absCenter.y * SCALE_FACTOR, p.getRightIntersect().point.x * SCALE_FACTOR, p.getRightIntersect().point.y * SCALE_FACTOR);
        }
 
     }
@@ -244,7 +244,7 @@ public class Main extends Application implements IMonteEventListener{
 
     //Moves
     public void moveForward(double cm) {
-        for (Particle particle : m.getParticles()) {
+        for (IMoveController particle : m.getParticles()) {
             try {
                 particle.moveForward(cm);
             } catch (ActionException e) {
@@ -254,7 +254,7 @@ public class Main extends Application implements IMonteEventListener{
     }
 
     public void moveBackward(double cm) {
-        for (Particle particle : m.getParticles()) {
+        for (IMoveController particle : m.getParticles()) {
             try {
                 particle.moveBackward(cm);
             } catch (ActionException e) {
@@ -264,14 +264,22 @@ public class Main extends Application implements IMonteEventListener{
     }
 
     public void turnLeft(double angle) {
-        for (Particle particle : m.getParticles()) {
-            particle.turnLeft(angle);
+        for (IMoveController particle : m.getParticles()) {
+            try {
+                particle.turnLeft(angle);
+            } catch (ActionException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void turnRight(double angle) {
-        for (Particle particle : m.getParticles()) {
-            particle.turnRight(angle);
+        for (IMoveController particle : m.getParticles()) {
+            try {
+                particle.turnRight(angle);
+            } catch (ActionException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -315,19 +323,17 @@ public class Main extends Application implements IMonteEventListener{
 
     //Monte
     private void runMonteAsync(){
+        if (monte.isRunning())
+            return;
+
         if(this.locate){
-            ArrayList<IMoveController> movables = new ArrayList<>();
-            for (Particle p : m.getParticles()) {
-                IMoveController m = p;
-                movables.add(m);
-            }
             //Create new Thread
             IMonteEventListener lister = this;
             new Thread(new Runnable() {
                 public void run()
                 {
                     try {
-                        monte.runAsync(movables, lister);
+                        monte.runAsync(m.getParticles(), lister);
                     }
                     catch (ActionException ex) {
                         System.out.println("Roboter move Error!");
@@ -340,13 +346,8 @@ public class Main extends Application implements IMonteEventListener{
 
     @Override
     public void onMonteDone(List<IMoveController> moveables) {
-        //Transform to partikel map
-        List<Particle> particles = new ArrayList<Particle>();
-        for (IMoveController c : moveables) {
-            particles.add((Particle)c);
-        }
         //redraw
-        m.setParticles(particles);
+        m.setParticles(moveables);
         reDraw();
 
         if (abortChecker.abort(moveables, monte.getUsedRobot()))

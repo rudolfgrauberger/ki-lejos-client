@@ -31,7 +31,6 @@ public class RouletteWheelResampler implements IResampler {
    public List<IMoveController> resample(List<IMoveController> particles, double reuseGrade, IParticleGenerator generator) {
       r = new Random();
 
-
       List<IMoveController> cleanedParticles = new ArrayList<>(); // haöoasnsasadskdskdnkndjusbdkljjkljjhhjgghfjoipoipoiuzuztzvbvbnl.mölöälppilk
 
       for (IMoveController p : particles){

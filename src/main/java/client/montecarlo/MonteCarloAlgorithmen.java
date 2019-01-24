@@ -187,4 +187,8 @@ public class MonteCarloAlgorithmen {
             particle.setBelief(calculator.calculateWeight(latestRoboterDataSet, particle));
         }
     }
+
+    public IMoveController getUsedRobot() {
+        return roboter;
+    }
 }

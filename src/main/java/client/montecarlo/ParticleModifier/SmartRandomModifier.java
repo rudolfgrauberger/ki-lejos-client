@@ -10,7 +10,7 @@ public class SmartRandomModifier implements IParticleModifier {
 
     @Override
     public Particle modifyParticle(Particle particle) {
-        double randomMovement = (r.nextDouble() * 6) - 3;
+        int randomMovement = (r.nextInt(3)) - 1;
         double randomRotation = ((r.nextDouble() * Math.PI * 2) / 16) - (Math.PI / 32);
 
         System.out.println("Random Movement: " + randomMovement);
@@ -18,14 +18,17 @@ public class SmartRandomModifier implements IParticleModifier {
         //particle.centerPoint.x += randomMovement;
         //particle.centerPoint.y += randomMovement;
 
-        if (randomRotation >= 0) {
-            particle.turnRight(randomRotation);
+        /*if (randomRotation > 0) {
+
+            //particle.turnRight(randomRotation);
+            //particle.
         } else {
-            particle.turnLeft(Math.abs(randomRotation));
-        }
+            //particle.turnLeft(Math.abs(randomRotation));
+        }*/
+        particle.addYAxis(randomMovement);
 
         try {
-            if (randomMovement >= 0) {
+            if (randomMovement > 0) {
                 particle.moveForward(randomMovement);
             }
             else{

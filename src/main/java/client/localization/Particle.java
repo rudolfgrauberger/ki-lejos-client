@@ -46,6 +46,11 @@ public class Particle implements IMoveController {
         //this.color = new Color(Color.DARKRED.getRed(), Color.DARKRED.getGreen(), Color.DARKRED.getBlue(), 0.3);
     }
 
+    public void addYAxis(int value){
+        this.centerPoint.y += value;
+        afterMoveEvent();
+    }
+
     public Particle(Particle other) {
         this(other.map, other.centerPoint, other.currentRotation);
         this.currentRotation = other.currentRotation;

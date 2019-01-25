@@ -13,6 +13,8 @@ import java.util.Random;
 public class MonteCarloAlgorithmen {
 
     private static double REUSE_GRADE = 1d;
+    private static int MIN_DISTANCE = 5;
+    private static int MAX_DISTANCE = 20;
 
     private IMoveController roboter;
     private List<IMoveController> partikels;
@@ -83,43 +85,9 @@ public class MonteCarloAlgorithmen {
 
     private void moveCommand() throws ActionException{
         Random random = new Random();
-        double commandNumber = random.nextDouble();
+        int length = random.nextInt((MAX_DISTANCE - MIN_DISTANCE) + 1) + MIN_DISTANCE;
 
-        /*if ( commandNumber < 0.07){
-
-            turnLeft(180);
-        }
-        else{*/
-            moveForward((int) (commandNumber * 20.0));
-        //}
-
-
-
-        /*int angle;
-
-        if ( commandNumber >= 0.0 && commandNumber <= 0.25){
-            turnLeft();
-        }
-        if ( commandNumber > 0.25 && commandNumber <= 0.5){
-            turnRight();
-        }
-        if ( commandNumber > 0.5 && commandNumber <= 1){
-            moveForward();
-        }*/
-        /*switch (commandNumber){
-            //case forward
-            case 0:
-                moveForward();
-                break;
-            //turn left
-            case 1:
-                turnLeft();
-                break;
-            //turn right
-            case 2:
-                turnRight();
-                break;
-        }*/
+        moveForward(length);
     }
 
     private void resamplePartikels(){

@@ -45,7 +45,7 @@ public class AllDistanceWeightCalculator implements IWeightCalculator {
         double delta1 = (r1 - p1);
         //double delta2 = (r2 - p2);
         double delta3 = (r3 - p3);
-        double weight = ( ws.getWeight(delta1) * ws.getWeight(delta3));
+        double weight = ( ws.getWeight(delta1) * /*ws.getWeight(delta2) **/  ws.getWeight(delta3));
 
         return weight;
     }

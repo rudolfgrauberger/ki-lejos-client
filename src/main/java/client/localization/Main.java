@@ -1,5 +1,6 @@
 package client.localization;
 
+import client.localization.AbortCondition.AverageWeightChecker;
 import client.localization.AbortCondition.IAbortConditionChecker;
 import client.localization.AbortCondition.MaxWeightReached;
 import client.localization.AbortCondition.XValueRangeChecker;
@@ -27,28 +28,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-
-/**
- * SAMPLE -->
- * <p>
- * <p>
- * <p>
- * Ablauf:
- * 1. Initialer Belief
- * k Samples auf dem Bildschirm erstellen, die Gleichverteilt auf allen Möglichen Positionen verteilt sind
- * Der importance factor ist 1/k.
- * Ein Partikel ( Sample ) repräsentiert eine Position
- * <p>
- * Ziel: Partikel ( Samples ) zu generieren, welche am ( Hochpunkt ) der Wahrscheinlichkeitsdichte liegen
- * <p>
- * 2. Belief aktualisieren
- * Ein Sample wird zufällig aus der Menge genommen
- * Der importance factor gibt die Auswahlwahrscheinlichkeit.
- */
 public class Main extends Application implements IMonteEventListener{
 
     public static int SCALE_FACTOR = 2;
-    public static boolean SIMULATE_MODE = false;
+    public static boolean SIMULATE_MODE = true;
     Map m = new Map(Helper.BUILDING_WIDTH_CM * SCALE_FACTOR, Helper.BUILDING_HEIGHT_CM * SCALE_FACTOR);
 
     GraphicsContext gc;
@@ -68,11 +51,10 @@ public class Main extends Application implements IMonteEventListener{
 
     MonteCarloAlgorithmen monte;
 
-    IAbortConditionChecker abortChecker = new MaxWeightReached();
+    IAbortConditionChecker abortChecker = new AverageWeightChecker();
 
     //Locate button
     private boolean locate = false;
-    private int countLocate = 0;
     //Frame and Layout
 
     private VBox getMainLayout() {
@@ -83,10 +65,12 @@ public class Main extends Application implements IMonteEventListener{
 
         inputs.getChildren().add(new Label("Host:"));
         tfHost = new TextField("10.0.1.15");
+        tfHost.setDisable(SIMULATE_MODE);
         inputs.getChildren().add(tfHost);
 
         inputs.getChildren().add(new Label("Port:"));
         tfPort = new TextField("6789");
+        tfPort.setDisable(SIMULATE_MODE);
         inputs.getChildren().add(tfPort);
 
         cAnalysis = new CheckBox("Analysis");
@@ -162,7 +146,6 @@ public class Main extends Application implements IMonteEventListener{
         primaryStage.show();
 
         scene.setOnKeyPressed(event -> {
-            //System.out.println("press");
             KeyCode w = KeyCode.W;
             KeyCode a = KeyCode.A;
             KeyCode s = KeyCode.S;
@@ -206,9 +189,10 @@ public class Main extends Application implements IMonteEventListener{
 
         gc.setLineDashes(10);
         for (IMoveController particle : m.getParticles()) {
-                gc.setStroke(new Color(1, 0, 0,  0.3 * particle.getBelief()));
-                gc.setFill(new Color(1, 0, 0,  0.3 * particle.getBelief()));
-                drawParticle(particle);
+            double opacity = Math.min(0.3 + particle.getBelief(), 1d);
+            gc.setStroke(new Color(1, 0, 0,  opacity));
+            gc.setFill(new Color(1, 0, 0,  opacity));
+            drawParticle(particle);
         }
 
         if (SIMULATE_MODE) {
@@ -219,15 +203,12 @@ public class Main extends Application implements IMonteEventListener{
     }
 
     private void drawParticle(IMoveController p) {
-       //gc.setStroke(p.getColor());
        Point absCenter = p.getPoint();
        Point lineA = Helper.getRotationPoint(p.getPoint(), 5, p.getCurrentRotation());
        Point lineB = Helper.getRotationPoint(p.getPoint(), 5, p.getCurrentRotation() + Math.PI);
-       //System.out.println("Rotation: " + particle.currentRotation);
        double maxBeliefSize = 10;
 
-       //gc.setFill(p.getColor());
-       gc.fillOval(absCenter.x * SCALE_FACTOR - maxBeliefSize / 2.0, absCenter.y * SCALE_FACTOR - maxBeliefSize / 2.0, maxBeliefSize/**p.belief*/, maxBeliefSize/**p.belief*/);
+       gc.fillOval(absCenter.x * SCALE_FACTOR - maxBeliefSize / 2.0, absCenter.y * SCALE_FACTOR - maxBeliefSize / 2.0, maxBeliefSize, maxBeliefSize);
 
        if (cAnalysis.isSelected()) {
           gc.fillOval(lineA.x * SCALE_FACTOR - 2, lineA.y * SCALE_FACTOR - 2, 4, 4);
@@ -238,7 +219,6 @@ public class Main extends Application implements IMonteEventListener{
        }
 
     }
-
 
     public static void main(String[] args) {
         launch(args);
@@ -342,7 +322,6 @@ public class Main extends Application implements IMonteEventListener{
                     }
                 }
             }).start();
-            //System.out.println("Count: "+ countLocate++);
         }
     }
 
@@ -355,17 +334,14 @@ public class Main extends Application implements IMonteEventListener{
         if (abortChecker.abort(moveables, monte.getUsedRobot()))
             return;
 
-        //run monte again
-        //try {
-        //    Thread.sleep(1000);
-        //}
-        //catch (Exception e){
+        if (SIMULATE_MODE) {
+            try {
+                Thread.sleep(300);
+            } catch (Exception e) {
 
-        //}
+            }
+        }
+
         runMonteAsync();
-    }
-
-    private void printSensorDataSet(SensorDataSet s) {
-        System.out.println("Left: " + s.getDistanceLeft() + ", Front: " + s.getDistanceFront() + ", Right: " + s.getDistanceRight());
     }
 }

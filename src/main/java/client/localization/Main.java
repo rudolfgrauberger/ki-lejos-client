@@ -331,8 +331,14 @@ public class Main extends Application implements IMonteEventListener{
         m.setParticles(moveables);
         reDraw();
 
-        if (abortChecker.abort(moveables, monte.getUsedRobot()))
+        if (abortChecker.abort(moveables, monte.getUsedRobot())) {
+            Platform.runLater(() ->
+            {
+                this.locate = false;
+                bLocate.setText("Locate");
+            });
             return;
+        }
 
         if (SIMULATE_MODE) {
             try {

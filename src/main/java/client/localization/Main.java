@@ -157,8 +157,6 @@ public class Main extends Application implements IMonteEventListener{
             monte = new MonteCarloAlgorithmen(myclient, m);
         }
 
-
-
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();

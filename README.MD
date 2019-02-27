@@ -50,5 +50,5 @@ So sieht die Simulation aus:
 public static boolean SIMULATE_MODE = false;
 ```
 
-So sieht es es Client dann aus (leider kein Video, wie der Roboter sich tatsächlich dazu in der Welt bewegt hat)
+So sieht es dann im Client aus (leider kein Video, wie der Roboter sich tatsächlich dazu in der Welt bewegt hat)
 ![Robot locatization](doc/img/RobotLocalization.gif)
